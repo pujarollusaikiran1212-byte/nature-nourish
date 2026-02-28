@@ -443,16 +443,29 @@ function submitCustomerOrder(event) {
 
     console.log('Customer Portal Order:', order);
 
-    // Send to backend API - use relative path
-    fetch('/api/orders', {
+    // Debug: Log what's being sent
+    console.log('Sending order to API:', JSON.stringify(order));
+
+    // Send to backend API - use Railway URL for deployed version
+    const apiUrl = window.location.hostname.includes('railway')
+        ? 'https://nature-nourish-production.up.railway.app/api/orders'
+        : '/api/orders';
+
+    console.log('API URL:', apiUrl);
+
+    fetch(apiUrl, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(order)
     })
-        .then(response => response.json())
+        .then(response => {
+            console.log('Response status:', response.status);
+            return response.json();
+        })
         .then(data => {
+            console.log('API Response:', data);
             // Show success message
             const successModal = document.getElementById('success-modal');
             const successMessage = document.getElementById('success-message');

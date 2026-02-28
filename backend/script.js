@@ -9,6 +9,11 @@ let reviews = [];
 console.log("🧼 Premium Soap Website Loaded Successfully!");
 
 // ============================================
+// API URL - Use relative path for backend
+// ============================================
+const API_URL = ''; // Empty string means same domain/port
+
+// ============================================
 // INDIAN CITIES BY STATE
 // ============================================
 
@@ -438,8 +443,8 @@ function submitCustomerOrder(event) {
 
     console.log('Customer Portal Order:', order);
 
-    // Send to backend API
-    fetch('https://nature-nourish-production.up.railway.app/api/orders', {
+    // Send to backend API - use relative path
+    fetch('/api/orders', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -626,47 +631,61 @@ function submitAgentOrder(event) {
 
     console.log('Delivery Order Registered by Agent:', deliveryOrder);
 
-    // Show success message
-    const successModal = document.getElementById('success-modal');
-    const successMessage = document.getElementById('success-message');
+    // Send to backend API - use relative path
+    fetch('/api/orders', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(deliveryOrder)
+    })
+        .then(response => response.json())
+        .then(data => {
+            // Show success message
+            const successModal = document.getElementById('success-modal');
+            const successMessage = document.getElementById('success-message');
 
-    successMessage.innerHTML = `
-        <strong>Delivery Order ID:</strong> ${deliveryOrder.id}<br><br>
-        <strong>Agent Details:</strong><br>
-        <strong>Agent Name:</strong> ${deliveryOrder.agentName}<br>
-        <strong>Agent ID:</strong> ${deliveryOrder.agentId}<br><br>
-        <strong>Customer Details:</strong><br>
-        <strong>Name:</strong> ${deliveryOrder.customerName}<br>
-        <strong>Email:</strong> ${deliveryOrder.customerEmail}<br>
-        <strong>Mobile:</strong> ${deliveryOrder.customerMobile}<br>
-        <strong>Address:</strong> ${deliveryOrder.address}<br>
-        <strong>City:</strong> ${deliveryOrder.city}<br>
-        <strong>State:</strong> ${deliveryOrder.state}<br>
-        <strong>PIN Code:</strong> ${deliveryOrder.pin}<br><br>
-        <strong>Order Details:</strong><br>
-        <strong>Product:</strong> ${deliveryOrder.productName}<br>
-        <strong>Quantity:</strong> ${deliveryOrder.quantity}<br>
-        <strong>Unit Price:</strong> ₹${deliveryOrder.unitPrice}<br>
-        <strong>Total Amount:</strong> ₹${deliveryOrder.totalAmount}<br>
-        <strong>Payment Method:</strong> ${deliveryOrder.paymentMethod}<br>
-        <strong>Delivery Status:</strong> ${deliveryOrder.deliveryStatus}<br>
-        <strong>Registered Date:</strong> ${deliveryOrder.date}<br><br>
-        <p style="color: #28a745; font-weight: bold;">✅ Delivery order registered successfully!</p>
-    `;
+            successMessage.innerHTML = `
+                <strong>Delivery Order ID:</strong> ${data.orderId || deliveryOrder.id}<br><br>
+                <strong>Agent Details:</strong><br>
+                <strong>Agent Name:</strong> ${agentName}<br>
+                <strong>Agent ID:</strong> ${agentId}<br><br>
+                <strong>Customer Details:</strong><br>
+                <strong>Name:</strong> ${customerName}<br>
+                <strong>Email:</strong> ${customerEmail}<br>
+                <strong>Mobile:</strong> ${customerMobile}<br>
+                <strong>Address:</strong> ${address}<br>
+                <strong>City:</strong> ${city}<br>
+                <strong>State:</strong> ${state}<br>
+                <strong>PIN Code:</strong> ${pin}<br><br>
+                <strong>Order Details:</strong><br>
+                <strong>Product:</strong> ${productName}<br>
+                <strong>Quantity:</strong> ${quantity}<br>
+                <strong>Unit Price:</strong> ₹${price}<br>
+                <strong>Total Amount:</strong> ₹${totalAmount}<br>
+                <strong>Payment Method:</strong> Cash on Delivery<br>
+                <strong>Delivery Status:</strong> ${status}<br><br>
+                <p style="color: #28a745; font-weight: bold;">✅ Delivery order registered successfully!</p>
+            `;
 
-    successModal.style.display = 'block';
+            successModal.style.display = 'block';
 
-    // Close agent portal
-    const agentModal = document.getElementById('agent-portal-modal');
-    if (agentModal) {
-        agentModal.style.display = 'none';
-    }
+            // Close agent portal
+            const agentModal = document.getElementById('agent-portal-modal');
+            if (agentModal) {
+                agentModal.style.display = 'none';
+            }
 
-    // Reset form
-    const agentForm = document.getElementById('agent-form');
-    if (agentForm) {
-        agentForm.reset();
-    }
+            // Reset form
+            const agentForm = document.getElementById('agent-form');
+            if (agentForm) {
+                agentForm.reset();
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Failed to submit order. Please try again.');
+        });
 }
 
 // ============================================

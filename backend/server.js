@@ -38,6 +38,11 @@ app.get('/admin', (req, res) => {
     res.sendFile(path.join(__dirname, 'admin.html'));
 });
 
+// Serve customer-portal.html for /customer-portal route
+app.get('/customer-portal', (req, res) => {
+    res.sendFile(path.join(__dirname, 'customer-portal.html'));
+});
+
 // Error handling middleware
 app.use((err, req, res, next) => {
     console.error('Error:', err.stack);

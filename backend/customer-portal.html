@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Portal - Nature Nourish</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #667eea;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            flex: 1;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e1e1e1;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .success-message {
+            display: none;
+            text-align: center;
+            padding: 30px;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        .success-message h2 {
+            color: #28a745;
+            margin-bottom: 20px;
+        }
+
+        .order-details {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: left;
+            margin: 20px 0;
+        }
+
+        .order-details p {
+            margin: 8px 0;
+            color: #333;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        @media (max-width: 600px) {
+            .form-row {
+                flex-direction: column;
+            }
+
+            .container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container" id="mainContainer">
+        <div class="header">
+            <h1>📋 Customer Portal</h1>
+            <p>Place Cash on Delivery orders for customers</p>
+        </div>
+
+        <form id="customerForm" onsubmit="submitOrder(event)">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Staff Name *</label>
+                    <input type="text" id="staffName" placeholder="Your name" required>
+                </div>
+                <div class="form-group">
+                    <label>Staff ID *</label>
+                    <input type="text" id="staffId" placeholder="Your staff ID" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Product Name *</label>
+                <select id="product" required>
+                    <option value="">-- Select Product --</option>
+                    <option value="Solar Calm">Solar Calm (₹100)</option>
+                    <option value="Clearwave">Clearwave (₹100)</option>
+                    <option value="Milk Cloud">Milk Cloud (₹100)</option>
+                    <option value="Glow Dust">Glow Dust (₹100)</option>
+                </select>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Customer Name *</label>
+                    <input type="text" id="customerName" placeholder="Full name" required>
+                </div>
+                <div class="form-group">
+                    <label>Mobile Number *</label>
+                    <input type="tel" id="mobile" placeholder="10-digit mobile" pattern="[0-9]{10}" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Email Address</label>
+                <input type="email" id="email" placeholder="Email address">
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>State *</label>
+                    <select id="state" onchange="updateCities()" required>
+                        <option value="">-- Select State --</option>
+                        <option value="Andhra Pradesh">Andhra Pradesh</option>
+                        <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                        <option value="Assam">Assam</option>
+                        <option value="Bihar">Bihar</option>
+                        <option value="Chhattisgarh">Chhattisgarh</option>
+                        <option value="Goa">Goa</option>
+                        <option value="Gujarat">Gujarat</option>
+                        <option value="Haryana">Haryana</option>
+                        <option value="Himachal Pradesh">Himachal Pradesh</option>
+                        <option value="Jharkhand">Jharkhand</option>
+                        <option value="Karnataka">Karnataka</option>
+                        <option value="Kerala">Kerala</option>
+                        <option value="Madhya Pradesh">Madhya Pradesh</option>
+                        <option value="Maharashtra">Maharashtra</option>
+                        <option value="Manipur">Manipur</option>
+                        <option value="Meghalaya">Meghalaya</option>
+                        <option value="Mizoram">Mizoram</option>
+                        <option value="Nagaland">Nagaland</option>
+                        <option value="Odisha">Odisha</option>
+                        <option value="Punjab">Punjab</option>
+                        <option value="Rajasthan">Rajasthan</option>
+                        <option value="Sikkim">Sikkim</option>
+                        <option value="Tamil Nadu">Tamil Nadu</option>
+                        <option value="Telangana">Telangana</option>
+                        <option value="Tripura">Tripura</option>
+                        <option value="Uttar Pradesh">Uttar Pradesh</option>
+                        <option value="Uttarakhand">Uttarakhand</option>
+                        <option value="West Bengal">West Bengal</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>City *</label>
+                    <select id="city" required>
+                        <option value="">-- Select State First --</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Complete Address *</label>
+                <textarea id="address" placeholder="Street address, house number, locality" rows="3"
+                    required></textarea>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>PIN Code *</label>
+                    <input type="text" id="pinCode" placeholder="6-digit PIN code" pattern="[0-9]{6}" required>
+                </div>
+                <div class="form-group">
+                    <label>Quantity *</label>
+                    <input type="number" id="quantity" value="1" min="1" required>
+                </div>
+            </div>
+
+            <button type="submit" class="btn" id="submitBtn">Submit Order</button>
+        </form>
+    </div>
+
+    <div class="container success-message" id="successMessage">
+        <h2>✅ Order Placed Successfully!</h2>
+        <div class="order-details" id="orderDetails"></div>
+        <button class="btn" onclick="resetForm()">Place Another Order</button>
+        <a href="/customer-portal" class="back-link">Back to Customer Portal</a>
+    </div>
+
+    <script>
+        const citiesByState = {
+            "Andhra Pradesh": ["Hyderabad", "Vijayawada", "Visakhapatnam", "Tirupati", "Kurnool"],
+            "Arunachal Pradesh": ["Itanagar", "Naharlagun", "Papum Pare", "Pasighat"],
+            "Assam": ["Guwahati", "Dibrugarh", "Silchar", "Nagaon", "Barpeta"],
+            "Bihar": ["Patna", "Gaya", "Bhagalpur", "Muzaffarpur", "Darbhanga"],
+            "Chhattisgarh": ["Raipur", "Bilaspur", "Durg", "Rajnandgaon", "Kabirdham"],
+            "Goa": ["Panaji", "Margao", "Vasco da Gama", "Ponda"],
+            "Gujarat": ["Ahmedabad", "Surat", "Vadodara", "Rajkot", "Gandhinagar"],
+            "Haryana": ["Faridabad", "Gurgaon", "Hisar", "Ambala", "Yamunanagar"],
+            "Himachal Pradesh": ["Shimla", "Solan", "Mandi", "Kangra", "Kullu"],
+            "Jharkhand": ["Ranchi", "Dhanbad", "Giridih", "East Singhbhum", "Jamshedpur"],
+            "Karnataka": ["Bangalore", "Mysore", "Pune", "Belgaum", "Hubli"],
+            "Kerala": ["Kochi", "Thiruvananthapuram", "Kozhikode", "Kottayam", "Alappuzha"],
+            "Madhya Pradesh": ["Bhopal", "Indore", "Jabalpur", "Ujjain", "Gwalior"],
+            "Maharashtra": ["Mumbai", "Pune", "Nagpur", "Aurangabad", "Kolhapur"],
+            "Manipur": ["Imphal", "Bishnupur", "Moirang", "Kakching"],
+            "Meghalaya": ["Shillong", "Tura", "Jowai", "Nongpoh"],
+            "Mizoram": ["Aizawl", "Lunglei", "Saiha"],
+            "Nagaland": ["Kohima", "Dimapur", "Mokokchung", "Wokha"],
+            "Odisha": ["Bhubaneswar", "Cuttack", "Rourkela", "Sambalpur", "Balasore"],
+            "Punjab": ["Chandigarh", "Ludhiana", "Amritsar", "Jalandhar", "Patiala"],
+            "Rajasthan": ["Jaipur", "Jodhpur", "Kota", "Ajmer", "Udaipur"],
+            "Sikkim": ["Gangtok", "Namchi", "Geyzing"],
+            "Tamil Nadu": ["Chennai", "Coimbatore", "Madurai", "Salem", "Tiruchirappalli"],
+            "Telangana": ["Hyderabad", "Warangal", "Nizamabad", "Khammam", "Karimnagar"],
+            "Tripura": ["Agartala", "Udaipur", "Ambassa", "Dharmanagar"],
+            "Uttar Pradesh": ["Lucknow", "Kanpur", "Varanasi", "Agra", "Meerut"],
+            "Uttarakhand": ["Dehradun", "Haridwar", "Nainital", "Rishikesh", "Udham Singh Nagar"],
+            "West Bengal": ["Kolkata", "Darjeeling", "Asansol", "Durgapur", "West Midnapore"]
+        };
+
+        const productPrices = {
+            'Solar Calm': 100,
+            'Clearwave': 100,
+            'Milk Cloud': 100,
+            'Glow Dust': 100
+        };
+
+        function updateCities() {
+            const stateDropdown = document.getElementById('state');
+            const cityDropdown = document.getElementById('city');
+            const selectedState = stateDropdown.value;
+
+            cityDropdown.innerHTML = '<option value="">-- Select City --</option>';
+
+            if (selectedState && citiesByState[selectedState]) {
+                const cities = citiesByState[selectedState];
+                cities.forEach(city => {
+                    const option = document.createElement('option');
+                    option.value = city;
+                    option.textContent = city;
+                    cityDropdown.appendChild(option);
+                });
+            }
+        }
+
+        async function submitOrder(event) {
+            event.preventDefault();
+
+            const btn = document.getElementById('submitBtn');
+            btn.disabled = true;
+            btn.textContent = 'Submitting...';
+
+            const productName = document.getElementById('product').value;
+            const quantity = parseInt(document.getElementById('quantity').value);
+            const unitPrice = productPrices[productName] || 100;
+            const totalAmount = unitPrice * quantity;
+
+            const order = {
+                orderId: 'ORD-' + Date.now(),
+                products: [{
+                    name: productName,
+                    price: unitPrice,
+                    quantity: quantity
+                }],
+                customer: {
+                    name: document.getElementById('customerName').value,
+                    email: document.getElementById('email').value,
+                    mobile: document.getElementById('mobile').value,
+                    address: document.getElementById('address').value,
+                    city: document.getElementById('city').value,
+                    state: document.getElementById('state').value,
+                    pinCode: document.getElementById('pinCode').value
+                },
+                staff: {
+                    name: document.getElementById('staffName').value,
+                    id: document.getElementById('staffId').value
+                },
+                subtotal: totalAmount,
+                shipping: 0,
+                total: totalAmount,
+                paymentMethod: 'Cash on Delivery',
+                paymentStatus: 'Pending',
+                orderStatus: 'Pending',
+                deliveryStatus: 'Pending Delivery',
+                orderSource: 'Customer Portal',
+                createdAt: new Date().toISOString()
+            };
+
+            try {
+                const response = await fetch('https://nature-nourish-production.up.railway.app/api/orders', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(order)
+                });
+
+                const data = await response.json();
+
+                document.getElementById('orderDetails').innerHTML = `
+                    <p><strong>Order ID:</strong> ${data.orderId || order.orderId}</p>
+                    <p><strong>Staff Name:</strong> ${order.staff.name}</p>
+                    <p><strong>Staff ID:</strong> ${order.staff.id}</p>
+                    <hr style="margin: 10px 0; border: none; border-top: 1px solid #ddd;">
+                    <p><strong>Customer:</strong> ${order.customer.name}</p>
+                    <p><strong>Mobile:</strong> ${order.customer.mobile}</p>
+                    <p><strong>Address:</strong> ${order.customer.address}, ${order.customer.city}, ${order.customer.state} - ${order.customer.pinCode}</p>
+                    <hr style="margin: 10px 0; border: none; border-top: 1px solid #ddd;">
+                    <p><strong>Product:</strong> ${productName}</p>
+                    <p><strong>Quantity:</strong> ${quantity}</p>
+                    <p><strong>Total Amount:</strong> ₹${totalAmount}</p>
+                    <p><strong>Payment:</strong> Cash on Delivery</p>
+                `;
+
+                document.getElementById('mainContainer').style.display = 'none';
+                document.getElementById('successMessage').classList.add('show');
+
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Failed to submit order. Please try again.');
+                btn.disabled = false;
+                btn.textContent = 'Submit Order';
+            }
+        }
+
+        function resetForm() {
+            document.getElementById('customerForm').reset();
+            document.getElementById('city').innerHTML = '<option value="">-- Select State First --</option>';
+            document.getElementById('successMessage').classList.remove('show');
+            document.getElementById('mainContainer').style.display = 'block';
+            document.getElementById('submitBtn').disabled = false;
+            document.getElementById('submitBtn').textContent = 'Submit Order';
+        }
+    </script>
+</body>
+
+</html>

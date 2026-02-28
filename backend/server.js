@@ -1,13 +1,10 @@
-require('dotenv').config();
+require('dotenv').config({ path: __dirname + '/.env' });
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-const connectDB = require('./src/config/db');
+const { connectDB, getConnectionStatus } = require('./src/config/db');
 
 const app = express();
-
-// Connect to MongoDB
-connectDB();
 
 // Middleware
 app.use(cors());
@@ -22,9 +19,14 @@ app.use('/api/products', require('./src/routes/productRoutes'));
 app.use('/api/orders', require('./src/routes/orderRoutes'));
 app.use('/api/proformas', require('./src/routes/proformaRoutes'));
 
-// Health check route
+// Health check route - now includes DB status
 app.get('/api/health', (req, res) => {
-    res.json({ status: 'OK', message: 'Nature Nourish API is running' });
+    const dbStatus = getConnectionStatus();
+    res.json({
+        status: 'OK',
+        message: 'Nature Nourish API is running',
+        database: dbStatus ? 'Connected' : 'Disconnected'
+    });
 });
 
 // Serve index.html for the root route
@@ -44,6 +46,9 @@ app.use((req, res) => {
 });
 
 const PORT = process.env.PORT || 5000;
+
+// Connect to MongoDB (non-blocking - server starts regardless)
+connectDB();
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);

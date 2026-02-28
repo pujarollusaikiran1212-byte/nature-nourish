@@ -1,90 +1,69 @@
 const express = require('express');
 const router = express.Router();
-
-// Mock data for testing without database
-let mockOrders = [
-    {
-        _id: '507f1f77bcf86cd799439011',
-        orderId: 'ORD-001',
-        products: [{
-            name: 'Solar Calm',
-            price: 100,
-            quantity: 1
-        }],
-        customer: {
-            name: 'John Doe',
-            email: 'john@example.com',
-            mobile: '9876543210',
-            address: '123 Main St',
-            city: 'Mumbai',
-            state: 'Maharashtra',
-            pinCode: '400001'
-        },
-        staff: {
-            name: 'Staff Member',
-            id: 'STAFF-001'
-        },
-        subtotal: 100,
-        shipping: 0,
-        total: 100,
-        paymentMethod: 'Cash on Delivery',
-        paymentStatus: 'Pending',
-        orderStatus: 'Pending',
-        deliveryStatus: 'Pending Delivery',
-        orderSource: 'Customer Portal',
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
-    }
-];
+const Order = require('../models/Order');
 
 // Get all orders
-router.get('/', (req, res) => {
-    res.json(mockOrders);
+router.get('/', async (req, res) => {
+    try {
+        const orders = await Order.find().sort({ createdAt: -1 });
+        res.json(orders);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
 });
 
 // Get single order
-router.get('/:id', (req, res) => {
-    const order = mockOrders.find(o => o._id === req.params.id);
-    if (!order) {
-        return res.status(404).json({ message: 'Order not found' });
+router.get('/:id', async (req, res) => {
+    try {
+        const order = await Order.findOne({ orderId: req.params.id });
+        if (!order) {
+            return res.status(404).json({ message: 'Order not found' });
+        }
+        res.json(order);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
     }
-    res.json(order);
 });
 
 // Create new order
-router.post('/', (req, res) => {
-    const newOrder = {
-        _id: Date.now().toString(),
-        ...req.body,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
-    };
-    mockOrders.push(newOrder);
-    res.status(201).json(newOrder);
+router.post('/', async (req, res) => {
+    try {
+        const newOrder = new Order(req.body);
+        const savedOrder = await newOrder.save();
+        res.status(201).json(savedOrder);
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
 });
 
 // Update order
-router.put('/:id', (req, res) => {
-    const orderIndex = mockOrders.findIndex(o => o._id === req.params.id);
-    if (orderIndex === -1) {
-        return res.status(404).json({ message: 'Order not found' });
+router.put('/:id', async (req, res) => {
+    try {
+        const order = await Order.findOneAndUpdate(
+            { orderId: req.params.id },
+            { ...req.body, updatedAt: Date.now() },
+            { new: true }
+        );
+        if (!order) {
+            return res.status(404).json({ message: 'Order not found' });
+        }
+        res.json(order);
+    } catch (error) {
+        res.status(400).json({ message: error.message });
     }
-    mockOrders[orderIndex] = {
-        ...mockOrders[orderIndex],
-        ...req.body,
-        updatedAt: new Date().toISOString()
-    };
-    res.json(mockOrders[orderIndex]);
 });
 
 // Delete order
-router.delete('/:id', (req, res) => {
-    const orderIndex = mockOrders.findIndex(o => o._id === req.params.id);
-    if (orderIndex === -1) {
-        return res.status(404).json({ message: 'Order not found' });
+router.delete('/:id', async (req, res) => {
+    try {
+        const order = await Order.findOneAndDelete({ orderId: req.params.id });
+        if (!order) {
+            return res.status(404).json({ message: 'Order not found' });
+        }
+        res.json({ message: 'Order deleted successfully' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
     }
-    mockOrders.splice(orderIndex, 1);
-    res.json({ message: 'Order deleted successfully' });
 });
 
 module.exports = router;

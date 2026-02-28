@@ -33,6 +33,7 @@
                 <a href="#contact">Contact</a>
                 <a href="#cart" class="cart-icon">🛒 Cart (<span id="cart-count">0</span>)</a>
                 <button class="btn btn-customer-portal" onclick="openCustomerPortal()">Customer Portal</button>
+                <button class="btn btn-customer-portal" onclick="openAgentPortal()">Agent Portal</button>
             </nav>
         </div>
     </header>
@@ -72,12 +73,12 @@
                             <span class="rating-count">(245 reviews)</span>
                         </div>
                         <div class="price-section">
-                            <span class="price">₹100</span>
+                            <span class="price">₹299</span>
                         </div>
                     </div>
                     <div class="product-actions">
-                        <button class="btn btn-add-cart" onclick="addToCart('Solar Calm', 100)">Add to Cart</button>
-                        <button class="btn btn-cod" onclick="openCODForm('Solar Calm', 100)">Buy Now - COD</button>
+                        <button class="btn btn-add-cart" onclick="addToCart('Solar Calm', 299)">Add to Cart</button>
+                        <button class="btn btn-cod" onclick="openCODForm('Solar Calm', 299)">Buy Now - COD</button>
                     </div>
                 </div>
 
@@ -99,12 +100,12 @@
                             <span class="rating-count">(398 reviews)</span>
                         </div>
                         <div class="price-section">
-                            <span class="price">₹100</span>
+                            <span class="price">₹349</span>
                         </div>
                     </div>
                     <div class="product-actions">
-                        <button class="btn btn-add-cart" onclick="addToCart('Clearwave', 100)">Add to Cart</button>
-                        <button class="btn btn-cod" onclick="openCODForm('Clearwave', 100)">Buy Now - COD</button>
+                        <button class="btn btn-add-cart" onclick="addToCart('Clearwave', 349)">Add to Cart</button>
+                        <button class="btn btn-cod" onclick="openCODForm('Clearwave', 349)">Buy Now - COD</button>
                     </div>
                 </div>
 
@@ -127,12 +128,12 @@
                             <span class="rating-count">(156 reviews)</span>
                         </div>
                         <div class="price-section">
-                            <span class="price">₹100</span>
+                            <span class="price">₹249</span>
                         </div>
                     </div>
                     <div class="product-actions">
-                        <button class="btn btn-add-cart" onclick="addToCart('Milk Cloud', 100)">Add to Cart</button>
-                        <button class="btn btn-cod" onclick="openCODForm('Milk Cloud', 100)">Buy Now - COD</button>
+                        <button class="btn btn-add-cart" onclick="addToCart('Milk Cloud', 249)">Add to Cart</button>
+                        <button class="btn btn-cod" onclick="openCODForm('Milk Cloud', 249)">Buy Now - COD</button>
                     </div>
                 </div>
 
@@ -154,12 +155,12 @@
                             <span class="rating-count">(312 reviews)</span>
                         </div>
                         <div class="price-section">
-                            <span class="price">₹100</span>
+                            <span class="price">₹379</span>
                         </div>
                     </div>
                     <div class="product-actions">
-                        <button class="btn btn-add-cart" onclick="addToCart('Glow Dust', 100)">Add to Cart</button>
-                        <button class="btn btn-cod" onclick="openCODForm('Glow Dust', 100)">Buy Now - COD</button>
+                        <button class="btn btn-add-cart" onclick="addToCart('Glow Dust', 379)">Add to Cart</button>
+                        <button class="btn btn-cod" onclick="openCODForm('Glow Dust', 379)">Buy Now - COD</button>
                     </div>
                 </div>
 
@@ -446,10 +447,10 @@
                     <label>Product Name:</label>
                     <select id="customer-product" required>
                         <option value="">-- Select Product --</option>
-                        <option value="Solar Calm">Solar Calm (₹100)</option>
-                        <option value="Clearwave">Clearwave (₹100)</option>
-                        <option value="Milk Cloud">Milk Cloud (₹100)</option>
-                        <option value="Glow Dust">Glow Dust (₹100)</option>
+                        <option value="Solar Calm">Solar Calm (₹299)</option>
+                        <option value="Clearwave">Clearwave (₹349)</option>
+                        <option value="Milk Cloud">Milk Cloud (₹249)</option>
+                        <option value="Glow Dust">Glow Dust (₹379)</option>
                     </select>
                 </div>
 
@@ -542,6 +543,138 @@
 
                 <button type="submit" class="btn btn-confirm-order" style="width: 100%; margin-top: 1.5rem;">Register
                     COD Delivery</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Agent Portal Modal -->
+    <div id="agent-portal-modal" class="modal">
+        <div class="modal-content customer-content">
+            <span class="close" onclick="closeAgentPortal()">&times;</span>
+            <h2>🚚 Agent Portal - Delivery Order Entry</h2>
+            <p style="color: #666; margin-bottom: 1.5rem;">Register delivery orders as an agent</p>
+
+            <form id="agent-form" onsubmit="submitAgentOrder(event)">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Agent Name:</label>
+                        <input type="text" id="agent-name" placeholder="Your name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Agent ID:</label>
+                        <input type="text" id="agent-id" placeholder="Your agent ID" required>
+                    </div>
+                </div>
+
+                <hr style="margin: 1.5rem 0; border: none; border-top: 1px solid #ddd;">
+
+                <h3 style="color: #667eea; margin-bottom: 1rem;">Order Details</h3>
+
+                <div class="form-group">
+                    <label>Product Name:</label>
+                    <select id="agent-product" required>
+                        <option value="">-- Select Product --</option>
+                        <option value="Solar Calm">Solar Calm (₹299)</option>
+                        <option value="Clearwave">Clearwave (₹349)</option>
+                        <option value="Milk Cloud">Milk Cloud (₹249)</option>
+                        <option value="Glow Dust">Glow Dust (₹379)</option>
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Quantity:</label>
+                        <input type="number" id="agent-quantity" value="1" min="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Delivery Status:</label>
+                        <select id="agent-status" required>
+                            <option value="Pending">Pending Delivery</option>
+                            <option value="In Transit">In Transit</option>
+                            <option value="Delivered">Delivered</option>
+                        </select>
+                    </div>
+                </div>
+
+                <hr style="margin: 1.5rem 0; border: none; border-top: 1px solid #ddd;">
+
+                <h3 style="color: #667eea; margin-bottom: 1rem;">Customer Details</h3>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Customer Name:</label>
+                        <input type="text" id="agent-customer-name" placeholder="Full name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email Address:</label>
+                        <input type="email" id="agent-customer-email" placeholder="Email address" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Mobile Number:</label>
+                        <input type="tel" id="agent-customer-mobile" placeholder="10-digit mobile" pattern="[0-9]{10}"
+                            required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Select State:</label>
+                        <select id="agent-state" onchange="updateAgentCities()" required>
+                            <option value="">-- Select State --</option>
+                            <option value="Andhra Pradesh">Andhra Pradesh</option>
+                            <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                            <option value="Assam">Assam</option>
+                            <option value="Bihar">Bihar</option>
+                            <option value="Chhattisgarh">Chhattisgarh</option>
+                            <option value="Goa">Goa</option>
+                            <option value="Gujarat">Gujarat</option>
+                            <option value="Haryana">Haryana</option>
+                            <option value="Himachal Pradesh">Himachal Pradesh</option>
+                            <option value="Jharkhand">Jharkhand</option>
+                            <option value="Karnataka">Karnataka</option>
+                            <option value="Kerala">Kerala</option>
+                            <option value="Madhya Pradesh">Madhya Pradesh</option>
+                            <option value="Maharashtra">Maharashtra</option>
+                            <option value="Manipur">Manipur</option>
+                            <option value="Meghalaya">Meghalaya</option>
+                            <option value="Mizoram">Mizoram</option>
+                            <option value="Nagaland">Nagaland</option>
+                            <option value="Odisha">Odisha</option>
+                            <option value="Punjab">Punjab</option>
+                            <option value="Rajasthan">Rajasthan</option>
+                            <option value="Sikkim">Sikkim</option>
+                            <option value="Tamil Nadu">Tamil Nadu</option>
+                            <option value="Telangana">Telangana</option>
+                            <option value="Tripura">Tripura</option>
+                            <option value="Uttar Pradesh">Uttar Pradesh</option>
+                            <option value="Uttarakhand">Uttarakhand</option>
+                            <option value="West Bengal">West Bengal</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Select City:</label>
+                        <select id="agent-city" required>
+                            <option value="">-- Select State First --</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Complete Address:</label>
+                    <textarea id="agent-address" placeholder="Street address, house number, locality" rows="3"
+                        required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>PIN Code:</label>
+                    <input type="text" id="agent-pin" placeholder="6-digit PIN code" pattern="[0-9]{6}" required>
+                </div>
+
+                <button type="submit" class="btn btn-confirm-order" style="width: 100%; margin-top: 1.5rem;">Register
+                    Delivery Order</button>
             </form>
         </div>
     </div>

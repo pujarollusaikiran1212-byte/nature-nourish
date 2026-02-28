@@ -3,7 +3,7 @@ const http = require('http');
 console.log('Testing API endpoints...\n');
 
 // Test health endpoint
-http.get('http://localhost:3000/api/health', (res) => {
+http.get('http://localhost:5000/api/health', (res) => {
     let data = '';
     res.on('data', (chunk) => { data += chunk; });
     res.on('end', () => {
@@ -16,7 +16,7 @@ http.get('http://localhost:3000/api/health', (res) => {
 
 // Test products endpoint
 setTimeout(() => {
-    http.get('http://localhost:3000/api/products', (res) => {
+    http.get('http://localhost:5000/api/products', (res) => {
         let data = '';
         res.on('data', (chunk) => { data += chunk; });
         res.on('end', () => {

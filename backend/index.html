@@ -25,16 +25,24 @@
     <header class="navbar">
         <div class="container">
             <div class="logo">🌿 Nature Nourish</div>
-            <nav class="nav-links">
-                <a href="#home">Home</a>
-                <a href="#products">Products</a>
-                <a href="#about">About</a>
-                <a href="#reviews">Reviews</a>
-                <a href="#contact">Contact</a>
-                <a href="#cart" class="cart-icon">🛒 Cart (<span id="cart-count">0</span>)</a>
-                <button class="btn btn-customer-portal" onclick="openCustomerPortal()">Customer Portal</button>
-                <button class="btn btn-customer-portal" onclick="openAgentPortal()">Agent Portal</button>
-                <a href="/admin" target="_blank" class="btn btn-admin"
+            <button class="hamburger" onclick="toggleMobileMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <nav class="nav-links" id="navLinks">
+                <a href="#home" onclick="closeMobileMenu()">Home</a>
+                <a href="#products" onclick="closeMobileMenu()">Products</a>
+                <a href="#about" onclick="closeMobileMenu()">About</a>
+                <a href="#reviews" onclick="closeMobileMenu()">Reviews</a>
+                <a href="#contact" onclick="closeMobileMenu()">Contact</a>
+                <a href="#cart" class="cart-icon" onclick="closeMobileMenu()">🛒 Cart (<span
+                        id="cart-count">0</span>)</a>
+                <button class="btn btn-customer-portal" onclick="openCustomerPortal(); closeMobileMenu();">Customer
+                    Portal</button>
+                <button class="btn btn-customer-portal" onclick="openAgentPortal(); closeMobileMenu();">Agent
+                    Portal</button>
+                <a href="https://nature-nourish-production.up.railway.app/admin" target="_blank" class="btn btn-admin"
                     style="background: #2d3748; color: white; padding: 8px 16px; border-radius: 6px; text-decoration: none;">Admin</a>
             </nav>
         </div>
@@ -618,8 +626,8 @@
                 <div class="form-group">
                     <label>Product Name:</label>
                     <select id="agent-product" required>
-                        <option value="">-- Select>
-                        <option Product --</option value="Solar Calm">Solar Calm (₹100)</option>
+                        <option value="">-- Select Product --</option>
+                        <option value="Solar Calm">Solar Calm (₹100)</option>
                         <option value="Clearwave">Clearwave (₹100)</option>
                         <option value="Milk Cloud">Milk Cloud (₹100)</option>
                         <option value="Glow Dust">Glow Dust (₹100)</option>

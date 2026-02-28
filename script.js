@@ -771,4 +771,40 @@ if (reviewForm) {
     reviewForm.addEventListener('submit', submitReview);
 }
 
+// ============================================
+// MOBILE MENU FUNCTIONS
+// ============================================
+
+function toggleMobileMenu() {
+    const navLinks = document.getElementById('navLinks');
+    const hamburger = document.querySelector('.hamburger');
+
+    if (navLinks) {
+        navLinks.classList.toggle('active');
+        hamburger.classList.toggle('active');
+    }
+}
+
+function closeMobileMenu() {
+    const navLinks = document.getElementById('navLinks');
+    const hamburger = document.querySelector('.hamburger');
+
+    if (navLinks && navLinks.classList.contains('active')) {
+        navLinks.classList.remove('active');
+        hamburger.classList.remove('active');
+    }
+}
+
+// Close mobile menu when clicking outside
+document.addEventListener('click', function (event) {
+    const navLinks = document.getElementById('navLinks');
+    const hamburger = document.querySelector('.hamburger');
+
+    if (navLinks && navLinks.classList.contains('active')) {
+        if (!navLinks.contains(event.target) && !hamburger.contains(event.target)) {
+            closeMobileMenu();
+        }
+    }
+});
+
 console.log('🧼 All event listeners activated!');

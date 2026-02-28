@@ -58,7 +58,6 @@ const productPrices = {
 // SHOPPING CART FUNCTIONS
 // ============================================
 
-// Add product to cart
 function addToCart(productName, price) {
     cart.push({
         id: Date.now(),
@@ -70,7 +69,6 @@ function addToCart(productName, price) {
     updateCartCount();
     updateCartDisplay();
 
-    // Visual feedback - find the button that was clicked
     const button = event.currentTarget || event.target;
     if (button) {
         const originalText = button.textContent;
@@ -90,13 +88,11 @@ function addToCart(productName, price) {
     console.log(`${productName} added to cart. Total items: ${cart.length}`);
 }
 
-// Update cart count in navbar
 function updateCartCount() {
     const cartBadge = document.getElementById('cart-count');
     cartBadge.textContent = cart.length;
 }
 
-// Update cart display
 function updateCartDisplay() {
     const cartContainer = document.getElementById('cart-items-container');
     const cartSummary = document.getElementById('cart-summary');
@@ -136,7 +132,6 @@ function updateCartDisplay() {
 
     cartContainer.innerHTML = cartHTML;
 
-    // Update summary - Fixed cart amount display
     const subtotal = parseFloat(total).toFixed(2);
     const shipping = 0;
     const finalTotal = (parseFloat(subtotal) + shipping).toFixed(2);
@@ -148,7 +143,6 @@ function updateCartDisplay() {
     console.log(`Cart updated: ${cart.length} items, Total: ₹${finalTotal}`);
 }
 
-// Get product image filename
 function getProductImage(productName) {
     const images = {
         'Solar Calm': 'solar-calm.jpg',
@@ -159,13 +153,11 @@ function getProductImage(productName) {
     return images[productName] || 'placeholder.jpg';
 }
 
-// Increase quantity
 function increaseQuantity(index) {
     cart[index].quantity += 1;
     updateCartDisplay();
 }
 
-// Decrease quantity
 function decreaseQuantity(index) {
     if (cart[index].quantity > 1) {
         cart[index].quantity -= 1;
@@ -173,7 +165,6 @@ function decreaseQuantity(index) {
     }
 }
 
-// Remove from cart
 function removeFromCart(index) {
     const removedItem = cart[index].name;
     cart.splice(index, 1);
@@ -182,7 +173,6 @@ function removeFromCart(index) {
     console.log(`${removedItem} removed from cart.`);
 }
 
-// Proceed to checkout
 function proceedToCheckout() {
     if (cart.length === 0) {
         alert('Your cart is empty!');
@@ -196,18 +186,15 @@ function proceedToCheckout() {
 // CASH ON DELIVERY (COD) FUNCTIONS
 // ============================================
 
-// Open COD form modal
 function openCODForm(productName, price) {
     const modal = document.getElementById('cod-modal');
     document.getElementById('cod-product').value = productName;
     document.getElementById('cod-price').value = '₹' + price;
 
-    // Reset delivery options and calculate total
     const deliveryOption = document.querySelector('input[name="delivery-option"]:checked');
     const deliveryCharge = deliveryOption ? parseInt(deliveryOption.value) : 0;
     document.getElementById('cod-delivery-charge').value = '₹' + deliveryCharge;
 
-    // Calculate total amount
     const productPrice = parseInt(price);
     const totalAmount = productPrice + deliveryCharge;
     document.getElementById('cod-total-amount').value = '₹' + totalAmount;
@@ -215,7 +202,6 @@ function openCODForm(productName, price) {
     modal.style.display = 'block';
 }
 
-// Update delivery charge when option changes
 function updateDeliveryCharge() {
     const priceText = document.getElementById('cod-price').value;
     const productPrice = parseInt(priceText.replace('₹', '')) || 0;
@@ -225,23 +211,19 @@ function updateDeliveryCharge() {
 
     document.getElementById('cod-delivery-charge').value = '₹' + deliveryCharge;
 
-    // Calculate total amount
     const totalAmount = productPrice + deliveryCharge;
     document.getElementById('cod-total-amount').value = '₹' + totalAmount;
 }
 
-// Close COD form modal
 function closeCODForm() {
     document.getElementById('cod-modal').style.display = 'none';
 }
 
-// Update cities based on selected state
 function updateCities() {
     const stateDropdown = document.getElementById('cod-state');
     const cityDropdown = document.getElementById('cod-city');
     const selectedState = stateDropdown.value;
 
-    // Clear previous cities
     cityDropdown.innerHTML = '';
 
     if (selectedState && citiesByState[selectedState]) {
@@ -259,7 +241,7 @@ function updateCities() {
     }
 }
 
-// Submit COD order
+// FIXED: Submit COD order - NOW sends to backend!
 function submitCODOrder(event) {
     event.preventDefault();
 
@@ -271,73 +253,102 @@ function submitCODOrder(event) {
     const address = document.getElementById('cod-address').value;
     const pin = document.getElementById('cod-pin').value;
     const productName = document.getElementById('cod-product').value;
-    const price = document.getElementById('cod-price').value;
+    const priceText = document.getElementById('cod-price').value;
 
-    // Validate
+    const unitPrice = parseInt(priceText.replace('₹', '')) || 100;
+    const quantity = 1;
+    const totalAmount = unitPrice * quantity;
+
     if (!name || !email || !mobile || !state || !city || !address || !pin) {
         alert('Please fill in all fields correctly');
         return;
     }
 
-    // Create order object
+    // Create order object in the format the backend expects
     const order = {
-        id: 'ORD-' + Date.now(),
-        productName: productName,
-        price: price,
-        customerName: name,
-        email: email,
-        mobile: mobile,
-        state: state,
-        city: city,
-        address: address,
-        pin: pin,
-        date: new Date().toLocaleString(),
-        paymentMethod: 'Cash on Delivery'
+        orderId: 'ORD-' + Date.now(),
+        products: [{
+            name: productName,
+            price: unitPrice,
+            quantity: quantity
+        }],
+        customer: {
+            name: name,
+            email: email,
+            mobile: mobile,
+            address: address,
+            city: city,
+            state: state,
+            pinCode: pin
+        },
+        staff: {
+            name: 'Website Customer',
+            id: 'N/A'
+        },
+        subtotal: totalAmount,
+        shipping: 0,
+        total: totalAmount,
+        paymentMethod: 'Cash on Delivery',
+        paymentStatus: 'Pending',
+        orderStatus: 'Pending',
+        deliveryStatus: 'Pending Delivery',
+        orderSource: 'Website',
+        createdAt: new Date().toISOString()
     };
 
-    console.log('Order Placed:', order);
+    console.log('Submitting Website Order to Backend:', order);
 
-    // Show success message
-    const successModal = document.getElementById('success-modal');
-    const successMessage = document.getElementById('success-message');
+    // Send to backend API
+    fetch('https://nature-nourish-production.up.railway.app/api/orders', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(order)
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Order saved to backend:', data);
 
-    successMessage.innerHTML = `
-        <strong>Order ID:</strong> ${order.id}<br>
-        <strong>Product:</strong> ${order.productName}<br>
-        <strong>Amount:</strong> ${order.price}<br><br>
-        <strong>Customer Details:</strong><br>
-        <strong>Name:</strong> ${order.customerName}<br>
-        <strong>Email:</strong> ${order.email}<br>
-        <strong>Mobile:</strong> ${order.mobile}<br>
-        <strong>Address:</strong> ${order.address}<br>
-        <strong>City:</strong> ${order.city}<br>
-        <strong>State:</strong> ${order.state}<br>
-        <strong>PIN Code:</strong> ${order.pin}<br><br>
-        <strong>Payment Method:</strong> ${order.paymentMethod}<br>
-        <strong>Order Date:</strong> ${order.date}<br><br>
-        <p style="color: #28a745; font-weight: bold;">✅ Your order has been placed successfully!</p>
-        <p>Our delivery team will contact you within 24 hours to confirm delivery details.</p>
-    `;
+            const successModal = document.getElementById('success-modal');
+            const successMessage = document.getElementById('success-message');
 
-    successModal.style.display = 'block';
+            successMessage.innerHTML = `
+            <strong>Order ID:</strong> ${data.orderId || order.orderId}<br>
+            <strong>Product:</strong> ${productName}<br>
+            <strong>Amount:</strong> ₹${totalAmount}<br><br>
+            <strong>Customer Details:</strong><br>
+            <strong>Name:</strong> ${name}<br>
+            <strong>Email:</strong> ${email}<br>
+            <strong>Mobile:</strong> ${mobile}<br>
+            <strong>Address:</strong> ${address}<br>
+            <strong>City:</strong> ${city}<br>
+            <strong>State:</strong> ${state}<br>
+            <strong>PIN Code:</strong> ${pin}<br><br>
+            <strong>Payment Method:</strong> Cash on Delivery<br>
+            <strong>Order Date:</strong> ${new Date().toLocaleString()}<br><br>
+            <p style="color: #28a745; font-weight: bold;">✅ Your order has been placed successfully!</p>
+            <p>Our delivery team will contact you within 24 hours to confirm delivery details.</p>
+        `;
 
-    // Close COD form
-    document.getElementById('cod-modal').style.display = 'none';
-
-    // Reset form
-    document.getElementById('cod-form').reset();
+            successModal.style.display = 'block';
+            document.getElementById('cod-modal').style.display = 'none';
+            document.getElementById('cod-form').reset();
+        })
+        .catch(error => {
+            console.error('Error submitting order:', error);
+            alert('Failed to submit order. Please try again.');
+        });
 }
 
-// Close success modal
 function closeSuccessModal() {
     document.getElementById('success-modal').style.display = 'none';
 }
 
 // ============================================
-// CUSTOMER PORTAL FUNCTIONS (NEWLY ADDED)
+// CUSTOMER PORTAL FUNCTIONS
 // ============================================
 
-// Open customer portal modal
 function openCustomerPortal() {
     const modal = document.getElementById('customer-portal-modal');
     if (modal) {
@@ -345,7 +356,6 @@ function openCustomerPortal() {
     }
 }
 
-// Close customer portal modal
 function closeCustomerPortal() {
     const modal = document.getElementById('customer-portal-modal');
     if (modal) {
@@ -353,13 +363,11 @@ function closeCustomerPortal() {
     }
 }
 
-// Update customer cities based on state
 function updateCustomerCities() {
     const stateDropdown = document.getElementById('customer-state');
     const cityDropdown = document.getElementById('customer-city');
     const selectedState = stateDropdown.value;
 
-    // Clear previous cities
     cityDropdown.innerHTML = '';
 
     if (selectedState && citiesByState[selectedState]) {
@@ -377,7 +385,6 @@ function updateCustomerCities() {
     }
 }
 
-// Submit customer order via portal
 function submitCustomerOrder(event) {
     event.preventDefault();
 
@@ -394,17 +401,14 @@ function submitCustomerOrder(event) {
     const pin = document.getElementById('customer-pin').value;
     const deliveryStatus = document.getElementById('customer-status').value;
 
-    // Validate
     if (!staffName || !staffId || !productName || !customerName || !customerEmail || !customerMobile || !state || !city || !address || !pin) {
         alert('Please fill in all fields');
         return;
     }
 
-    // Get product price
     const unitPrice = productPrices[productName] || 0;
     const totalAmount = unitPrice * quantity;
 
-    // Create order object
     const order = {
         orderId: 'ORD-' + Date.now(),
         products: [{
@@ -438,7 +442,6 @@ function submitCustomerOrder(event) {
 
     console.log('Customer Portal Order:', order);
 
-    // Send to backend API
     fetch('https://nature-nourish-production.up.railway.app/api/orders', {
         method: 'POST',
         headers: {
@@ -448,7 +451,6 @@ function submitCustomerOrder(event) {
     })
         .then(response => response.json())
         .then(data => {
-            // Show success message
             const successModal = document.getElementById('success-modal');
             const successMessage = document.getElementById('success-message');
 
@@ -475,11 +477,7 @@ function submitCustomerOrder(event) {
         `;
 
             successModal.style.display = 'block';
-
-            // Close customer portal
             document.getElementById('customer-portal-modal').style.display = 'none';
-
-            // Reset form
             document.getElementById('customer-form').reset();
         })
         .catch(error => {
@@ -489,14 +487,12 @@ function submitCustomerOrder(event) {
 }
 
 // ============================================
-// REVIEW FUNCTIONS (FIXED)
+// REVIEW FUNCTIONS
 // ============================================
 
-// Submit review - Fixed to use correct element IDs
 function submitReview(event) {
     event.preventDefault();
 
-    // Get form elements with correct IDs from index.html
     const nameInput = document.querySelector('#review-form input[type="text"]');
     const ratingSelect = document.getElementById('rating');
     const messageTextarea = document.querySelector('#review-form textarea');
@@ -510,10 +506,8 @@ function submitReview(event) {
         return;
     }
 
-    // Create star display
     const starDisplay = '★'.repeat(stars) + '☆'.repeat(5 - parseInt(stars));
 
-    // Create review object
     const review = {
         name: name,
         stars: stars,
@@ -525,10 +519,8 @@ function submitReview(event) {
     reviews.push(review);
     console.log('Review submitted:', review);
 
-    // Show success message
     alert(`Thank you ${name}! Your ${stars}-star review has been submitted.`);
 
-    // Reset form
     document.getElementById('review-form').reset();
 }
 
@@ -536,7 +528,6 @@ function submitReview(event) {
 // AGENT PORTAL FUNCTIONS
 // ============================================
 
-// Open agent portal modal
 function openAgentPortal() {
     const modal = document.getElementById('agent-portal-modal');
     if (modal) {
@@ -544,7 +535,6 @@ function openAgentPortal() {
     }
 }
 
-// Close agent portal modal
 function closeAgentPortal() {
     const modal = document.getElementById('agent-portal-modal');
     if (modal) {
@@ -552,13 +542,11 @@ function closeAgentPortal() {
     }
 }
 
-// Update agent cities based on state
 function updateAgentCities() {
     const stateDropdown = document.getElementById('agent-state');
     const cityDropdown = document.getElementById('agent-city');
     const selectedState = stateDropdown.value;
 
-    // Clear previous cities
     cityDropdown.innerHTML = '';
 
     if (selectedState && citiesByState[selectedState]) {
@@ -576,7 +564,7 @@ function updateAgentCities() {
     }
 }
 
-// Submit agent order
+// FIXED: Submit agent order - NOW sends to backend!
 function submitAgentOrder(event) {
     event.preventDefault();
 
@@ -593,87 +581,109 @@ function submitAgentOrder(event) {
     const pin = document.getElementById('agent-pin').value;
     const status = document.getElementById('agent-status').value;
 
-    // Validate
     if (!agentName || !agentId || !productName || !customerName || !customerEmail || !customerMobile || !state || !city || !address || !pin) {
         alert('Please fill in all fields');
         return;
     }
 
-    // Get product price
-    const price = productPrices[productName] || 0;
-    const totalAmount = price * parseInt(quantity);
+    const unitPrice = productPrices[productName] || 0;
+    const totalAmount = unitPrice * parseInt(quantity);
 
-    // Create delivery order object
-    const deliveryOrder = {
-        id: 'DEL-' + Date.now(),
-        agentName: agentName,
-        agentId: agentId,
-        productName: productName,
-        quantity: quantity,
-        unitPrice: price,
-        totalAmount: totalAmount,
-        customerName: customerName,
-        customerEmail: customerEmail,
-        customerMobile: customerMobile,
-        state: state,
-        city: city,
-        address: address,
-        pin: pin,
+    // Create order object in the format the backend expects
+    const order = {
+        orderId: 'ORD-' + Date.now(),
+        products: [{
+            name: productName,
+            price: unitPrice,
+            quantity: parseInt(quantity)
+        }],
+        customer: {
+            name: customerName,
+            email: customerEmail,
+            mobile: customerMobile,
+            address: address,
+            city: city,
+            state: state,
+            pinCode: pin
+        },
+        staff: {
+            name: agentName,
+            id: agentId
+        },
+        subtotal: totalAmount,
+        shipping: 0,
+        total: totalAmount,
+        paymentMethod: 'Cash on Delivery',
+        paymentStatus: 'Pending',
+        orderStatus: 'Pending',
         deliveryStatus: status,
-        date: new Date().toLocaleString(),
-        paymentMethod: 'Cash on Delivery'
+        orderSource: 'Agent Portal',
+        createdAt: new Date().toISOString()
     };
 
-    console.log('Delivery Order Registered by Agent:', deliveryOrder);
+    console.log('Submitting Agent Order to Backend:', order);
 
-    // Show success message
-    const successModal = document.getElementById('success-modal');
-    const successMessage = document.getElementById('success-message');
+    // Send to backend API
+    fetch('https://nature-nourish-production.up.railway.app/api/orders', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(order)
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Agent order saved to backend:', data);
 
-    successMessage.innerHTML = `
-        <strong>Delivery Order ID:</strong> ${deliveryOrder.id}<br><br>
-        <strong>Agent Details:</strong><br>
-        <strong>Agent Name:</strong> ${deliveryOrder.agentName}<br>
-        <strong>Agent ID:</strong> ${deliveryOrder.agentId}<br><br>
-        <strong>Customer Details:</strong><br>
-        <strong>Name:</strong> ${deliveryOrder.customerName}<br>
-        <strong>Email:</strong> ${deliveryOrder.customerEmail}<br>
-        <strong>Mobile:</strong> ${deliveryOrder.customerMobile}<br>
-        <strong>Address:</strong> ${deliveryOrder.address}<br>
-        <strong>City:</strong> ${deliveryOrder.city}<br>
-        <strong>State:</strong> ${deliveryOrder.state}<br>
-        <strong>PIN Code:</strong> ${deliveryOrder.pin}<br><br>
-        <strong>Order Details:</strong><br>
-        <strong>Product:</strong> ${deliveryOrder.productName}<br>
-        <strong>Quantity:</strong> ${deliveryOrder.quantity}<br>
-        <strong>Unit Price:</strong> ₹${deliveryOrder.unitPrice}<br>
-        <strong>Total Amount:</strong> ₹${deliveryOrder.totalAmount}<br>
-        <strong>Payment Method:</strong> ${deliveryOrder.paymentMethod}<br>
-        <strong>Delivery Status:</strong> ${deliveryOrder.deliveryStatus}<br>
-        <strong>Registered Date:</strong> ${deliveryOrder.date}<br><br>
-        <p style="color: #28a745; font-weight: bold;">✅ Delivery order registered successfully!</p>
-    `;
+            const successModal = document.getElementById('success-modal');
+            const successMessage = document.getElementById('success-message');
 
-    successModal.style.display = 'block';
+            successMessage.innerHTML = `
+            <strong>Delivery Order ID:</strong> ${data.orderId || order.orderId}<br><br>
+            <strong>Agent Details:</strong><br>
+            <strong>Agent Name:</strong> ${agentName}<br>
+            <strong>Agent ID:</strong> ${agentId}<br><br>
+            <strong>Customer Details:</strong><br>
+            <strong>Name:</strong> ${customerName}<br>
+            <strong>Email:</strong> ${customerEmail}<br>
+            <strong>Mobile:</strong> ${customerMobile}<br>
+            <strong>Address:</strong> ${address}<br>
+            <strong>City:</strong> ${city}<br>
+            <strong>State:</strong> ${state}<br>
+            <strong>PIN Code:</strong> ${pin}<br><br>
+            <strong>Order Details:</strong><br>
+            <strong>Product:</strong> ${productName}<br>
+            <strong>Quantity:</strong> ${quantity}<br>
+            <strong>Unit Price:</strong> ₹${unitPrice}<br>
+            <strong>Total Amount:</strong> ₹${totalAmount}<br>
+            <strong>Payment Method:</strong> Cash on Delivery<br>
+            <strong>Delivery Status:</strong> ${status}<br>
+            <strong>Registered Date:</strong> ${new Date().toLocaleString()}<br><br>
+            <p style="color: #28a745; font-weight: bold;">✅ Delivery order registered successfully!</p>
+        `;
 
-    // Close agent portal
-    const agentModal = document.getElementById('agent-portal-modal');
-    if (agentModal) {
-        agentModal.style.display = 'none';
-    }
+            successModal.style.display = 'block';
 
-    // Reset form
-    const agentForm = document.getElementById('agent-form');
-    if (agentForm) {
-        agentForm.reset();
-    }
+            const agentModal = document.getElementById('agent-portal-modal');
+            if (agentModal) {
+                agentModal.style.display = 'none';
+            }
+
+            const agentForm = document.getElementById('agent-form');
+            if (agentForm) {
+                agentForm.reset();
+            }
+        })
+        .catch(error => {
+            console.error('Error submitting agent order:', error);
+            alert('Failed to submit order. Please try again.');
+        });
 }
 
 // ============================================
 // MODAL CLOSE HANDLERS
 // ============================================
 
-// Close modal when clicking outside
 window.onclick = function (event) {
     const codModal = document.getElementById('cod-modal');
     const successModal = document.getElementById('success-modal');
@@ -729,7 +739,6 @@ if (ctaBtn) {
 // CONTACT FORM HANDLER
 // ============================================
 
-// Add event listener for contact form if it exists
 const contactForm = document.querySelector('.contact-form');
 if (contactForm) {
     contactForm.addEventListener('submit', function (event) {
@@ -739,7 +748,6 @@ if (contactForm) {
         const email = this.querySelector('input[type="email"]').value;
         const message = this.querySelector('textarea').value;
 
-        // Create contact object
         const contactData = {
             name: name,
             email: email,
@@ -748,16 +756,14 @@ if (contactForm) {
 
         console.log('Contact Form Submitted:', contactData);
 
-        // Show success message
         alert('Thank you for contacting us! We will get back to you soon.');
 
-        // Reset form
         this.reset();
     });
 }
 
 // ============================================
-// REVIEW FORM EVENT LISTENER (NEWLY ADDED)
+// REVIEW FORM EVENT LISTENER
 // ============================================
 
 const reviewForm = document.getElementById('review-form');

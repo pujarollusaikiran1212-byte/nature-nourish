@@ -273,6 +273,44 @@
     </div>
 
     <script>
+        // API Base URL
+        const API_URL = 'https://nature-nourish-production.up.railway.app/api';
+
+        // Load products from database on page load
+        let productPrices = {};
+
+        async function loadProducts() {
+            try {
+                const response = await fetch(`${API_URL}/products`);
+                const products = await response.json();
+
+                const productSelect = document.getElementById('product');
+                productSelect.innerHTML = '<option value="">-- Select Product --</option>';
+
+                products.forEach(product => {
+                    const option = document.createElement('option');
+                    option.value = product.name;
+                    option.textContent = `${product.name} (₹${product.price})`;
+                    productSelect.appendChild(option);
+
+                    // Store price for this product
+                    productPrices[product.name] = product.price;
+                });
+            } catch (error) {
+                console.error('Error loading products:', error);
+                // Fallback to default products
+                productPrices = {
+                    'Solar Calm': 100,
+                    'Clearwave': 100,
+                    'Milk Cloud': 100,
+                    'Glow Dust': 100
+                };
+            }
+        }
+
+        // Load products when page loads
+        window.onload = loadProducts;
+
         const citiesByState = {
             "Andhra Pradesh": ["Hyderabad", "Vijayawada", "Visakhapatnam", "Tirupati", "Kurnool"],
             "Arunachal Pradesh": ["Itanagar", "Naharlagun", "Papum Pare", "Pasighat"],
@@ -304,7 +342,7 @@
             "West Bengal": ["Kolkata", "Darjeeling", "Asansol", "Durgapur", "West Midnapore"]
         };
 
-        const productPrices = {
+        const defaultProductPrices = {
             'Solar Calm': 100,
             'Clearwave': 100,
             'Milk Cloud': 100,
@@ -338,7 +376,7 @@
 
             const productName = document.getElementById('product').value;
             const quantity = parseInt(document.getElementById('quantity').value);
-            const unitPrice = productPrices[productName] || 100;
+            const unitPrice = productPrices[productName] || defaultProductPrices[productName] || 100;
             const totalAmount = unitPrice * quantity;
 
             const order = {

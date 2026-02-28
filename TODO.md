@@ -21,10 +21,10 @@
 - DELETE /api/orders/:id - Delete order ✅
 
 ### 4. Proforma Routes
-- [ ] Create `backend/src/routes/proformaRoutes.js`
-- GET /api/proformas - Get all proformas
-- GET /api/proformas/:id - Get single proforma
-- POST /api/proformas - Create new proforma
+- [x] Create `backend/src/routes/proformaRoutes.js`
+- GET /api/proformas - Get all proformas ✅
+- GET /api/proformas/:id - Get single proforma ✅
+- POST /api/proformas - Create new proforma ✅
 
 ## Phase 3: Update Server
 
@@ -38,15 +38,27 @@
 - [x] Update `backend/src/routes/productRoutes.js` to work with database
 - [x] Add CRUD operations using Product model
 
-## Status: Phase 1-4 Complete ✅
+## Status: Phase 1-5 Complete ✅
 
 ## What's Working Now:
 - ✅ MongoDB Connection
 - ✅ Products CRUD (Create, Read, Update, Delete)
 - ✅ Orders CRUD (Create, Read, Update, Delete)
+- ✅ Proformas CRUD (Create, Read, Update, Delete)
 - ✅ 4 Products in database (Solar Calm, Clearwave, Milk Cloud, Glow Dust)
 - ✅ Orders saved to database
 
-## Remaining Tasks:
-- Proforma Routes Implementation
-- Frontend Integration with Database
+## NEW: Admin Portal ✅
+- Created `backend/admin.html`
+- Login with password (default: admin123)
+- View all customer orders with statistics
+- Filter orders by status, source, date
+- Search orders by order ID or customer name
+- View detailed order information
+- Update delivery status
+- View products list
+- View proformas list
+
+## Access Admin Portal:
+- Direct URL: backend/admin.html
+- Or click "Admin" button in website navigation

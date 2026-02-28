@@ -6,16 +6,12 @@ const { connectDB, getConnectionStatus } = require('./src/config/db');
 
 const app = express();
 
-// Current directory (where server.js is located)
-const serverDir = __dirname;
-console.log('Server directory:', serverDir);
-
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Serve static files from server directory (backend folder)
-app.use(express.static(serverDir));
+// Serve static files from backend folder
+app.use(express.static(__dirname));
 
 // API Routes
 app.use('/api/products', require('./src/routes/productRoutes'));
@@ -32,11 +28,14 @@ app.get('/api/health', (req, res) => {
     });
 });
 
-// Serve index.html for the root route
+// Serve index.html for root route
 app.get('/', (req, res) => {
-    const indexPath = path.join(serverDir, 'index.html');
-    console.log('Serving index.html from:', indexPath);
-    res.sendFile(indexPath);
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+// Serve admin.html for /admin route
+app.get('/admin', (req, res) => {
+    res.sendFile(path.join(__dirname, 'admin.html'));
 });
 
 // Error handling middleware

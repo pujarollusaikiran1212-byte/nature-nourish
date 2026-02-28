@@ -1,11 +1,8 @@
 /* ============================================
-   NATURE NOURISH - FRONTEND WITH BACKEND API
+   SOAP PRODUCT COLLECTION - JAVASCRIPT
    ============================================ */
 
-// API Base URL - Update this when deploying to production
-const API_BASE_URL = 'http://localhost:3000/api';
-
-// Initialize cart and reviews arrays
+// Initialize cart array
 let cart = [];
 let reviews = [];
 
@@ -51,97 +48,11 @@ const citiesByState = {
 // ============================================
 
 const productPrices = {
-    'Solar Calm': 299,
-    'Clearwave': 349,
-    'Milk Cloud': 249,
-    'Glow Dust': 379
+    'Solar Calm': 100,
+    'Clearwave': 100,
+    'Milk Cloud': 100,
+    'Glow Dust': 100
 };
-
-// ============================================
-// API HELPER FUNCTIONS
-// ============================================
-
-async function fetchAPI(endpoint, options = {}) {
-    const url = `${API_BASE_URL}${endpoint}`;
-    const defaultOptions = {
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    };
-
-    const config = { ...defaultOptions, ...options };
-
-    try {
-        const response = await fetch(url, config);
-        const data = await response.json();
-
-        if (!response.ok) {
-            throw new Error(data.message || 'Something went wrong');
-        }
-
-        return data;
-    } catch (error) {
-        console.error('API Error:', error);
-        throw error;
-    }
-}
-
-// ============================================
-// PRODUCT FUNCTIONS
-// ============================================
-
-// Load products from backend
-async function loadProducts() {
-    try {
-        const products = await fetchAPI('/products');
-        return products;
-    } catch (error) {
-        console.error('Error loading products:', error);
-        // Fallback to hardcoded products
-        return [
-            {
-                name: 'Solar Calm',
-                subtitle: 'Tan Correcting Body Soap',
-                description: 'Specially formulated to reduce tan and brighten your skin.',
-                price: 299,
-                image: 'https://via.placeholder.com/200x200/b19cd9/ffffff?text=Solar+Calm',
-                badge: 'Popular',
-                rating: 5,
-                reviewCount: 245
-            },
-            {
-                name: 'Clearwave',
-                subtitle: 'Body Acne Control Soap',
-                description: 'Formulated to treat and prevent body acne effectively.',
-                price: 349,
-                image: 'https://via.placeholder.com/200x200/98ff98/ffffff?text=Clearwave',
-                badge: 'Best Seller',
-                rating: 5,
-                reviewCount: 398
-            },
-            {
-                name: 'Milk Cloud',
-                subtitle: 'Gentle Daily Body Soap',
-                description: 'Ultra-gentle formula perfect for daily use and sensitive skin.',
-                price: 249,
-                image: 'https://via.placeholder.com/200x200/ffb6c1/ffffff?text=Milk+Cloud',
-                badge: 'New',
-                rating: 4,
-                reviewCount: 156
-            },
-            {
-                name: 'Glow Dust',
-                subtitle: 'Exfoliating Body Soap',
-                description: 'Premium exfoliating soap with natural scrub particles.',
-                price: 379,
-                image: 'https://via.placeholder.com/200x200/90ee90/ffffff?text=Glow+Dust',
-                badge: 'Premium',
-                rating: 5,
-                reviewCount: 312
-            }
-        ];
-    }
-}
 
 // ============================================
 // SHOPPING CART FUNCTIONS
@@ -158,7 +69,6 @@ function addToCart(productName, price) {
     updateCartCount();
     updateCartDisplay();
 
-    // Visual feedback
     const button = event.currentTarget || event.target;
     if (button) {
         const originalText = button.textContent;
@@ -280,7 +190,29 @@ function openCODForm(productName, price) {
     const modal = document.getElementById('cod-modal');
     document.getElementById('cod-product').value = productName;
     document.getElementById('cod-price').value = '₹' + price;
+
+    const deliveryOption = document.querySelector('input[name="delivery-option"]:checked');
+    const deliveryCharge = deliveryOption ? parseInt(deliveryOption.value) : 0;
+    document.getElementById('cod-delivery-charge').value = '₹' + deliveryCharge;
+
+    const productPrice = parseInt(price);
+    const totalAmount = productPrice + deliveryCharge;
+    document.getElementById('cod-total-amount').value = '₹' + totalAmount;
+
     modal.style.display = 'block';
+}
+
+function updateDeliveryCharge() {
+    const priceText = document.getElementById('cod-price').value;
+    const productPrice = parseInt(priceText.replace('₹', '')) || 0;
+
+    const deliveryOption = document.querySelector('input[name="delivery-option"]:checked');
+    const deliveryCharge = deliveryOption ? parseInt(deliveryOption.value) : 0;
+
+    document.getElementById('cod-delivery-charge').value = '₹' + deliveryCharge;
+
+    const totalAmount = productPrice + deliveryCharge;
+    document.getElementById('cod-total-amount').value = '₹' + totalAmount;
 }
 
 function closeCODForm() {
@@ -309,7 +241,8 @@ function updateCities() {
     }
 }
 
-async function submitCODOrder(event) {
+// FIXED: Submit COD order - NOW sends to backend!
+function submitCODOrder(event) {
     event.preventDefault();
 
     const name = document.getElementById('cod-name').value;
@@ -321,18 +254,23 @@ async function submitCODOrder(event) {
     const pin = document.getElementById('cod-pin').value;
     const productName = document.getElementById('cod-product').value;
     const priceText = document.getElementById('cod-price').value;
-    const price = parseInt(priceText.replace('₹', ''));
+
+    const unitPrice = parseInt(priceText.replace('₹', '')) || 100;
+    const quantity = 1;
+    const totalAmount = unitPrice * quantity;
 
     if (!name || !email || !mobile || !state || !city || !address || !pin) {
         alert('Please fill in all fields correctly');
         return;
     }
 
-    const orderData = {
+    // Create order object in the format the backend expects
+    const order = {
+        orderId: 'ORD-' + Date.now(),
         products: [{
             name: productName,
-            price: price,
-            quantity: 1
+            price: unitPrice,
+            quantity: quantity
         }],
         customer: {
             name: name,
@@ -343,97 +281,68 @@ async function submitCODOrder(event) {
             state: state,
             pinCode: pin
         },
-        subtotal: price,
+        staff: {
+            name: 'Website Customer',
+            id: 'N/A'
+        },
+        subtotal: totalAmount,
         shipping: 0,
-        total: price,
+        total: totalAmount,
         paymentMethod: 'Cash on Delivery',
-        orderSource: 'Website COD'
+        paymentStatus: 'Pending',
+        orderStatus: 'Pending',
+        deliveryStatus: 'Pending Delivery',
+        orderSource: 'Website',
+        createdAt: new Date().toISOString()
     };
 
-    try {
-        const order = await fetchAPI('/orders', {
-            method: 'POST',
-            body: JSON.stringify(orderData)
+    console.log('Submitting Website Order to Backend:', order);
+
+    // Send to backend API
+    fetch('https://nature-nourish-production.up.railway.app/api/orders', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(order)
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Order saved to backend:', data);
+
+            const successModal = document.getElementById('success-modal');
+            const successMessage = document.getElementById('success-message');
+
+            successMessage.innerHTML = `
+            <strong>Order ID:</strong> ${data.orderId || order.orderId}<br>
+            <strong>Product:</strong> ${productName}<br>
+            <strong>Amount:</strong> ₹${totalAmount}<br><br>
+            <strong>Customer Details:</strong><br>
+            <strong>Name:</strong> ${name}<br>
+            <strong>Email:</strong> ${email}<br>
+            <strong>Mobile:</strong> ${mobile}<br>
+            <strong>Address:</strong> ${address}<br>
+            <strong>City:</strong> ${city}<br>
+            <strong>State:</strong> ${state}<br>
+            <strong>PIN Code:</strong> ${pin}<br><br>
+            <strong>Payment Method:</strong> Cash on Delivery<br>
+            <strong>Order Date:</strong> ${new Date().toLocaleString()}<br><br>
+            <p style="color: #28a745; font-weight: bold;">✅ Your order has been placed successfully!</p>
+            <p>Our delivery team will contact you within 24 hours to confirm delivery details.</p>
+        `;
+
+            successModal.style.display = 'block';
+            document.getElementById('cod-modal').style.display = 'none';
+            document.getElementById('cod-form').reset();
+        })
+        .catch(error => {
+            console.error('Error submitting order:', error);
+            alert('Failed to submit order. Please try again.');
         });
-
-        showSuccessMessage(order);
-    } catch (error) {
-        // Fallback: show success message anyway (for demo purposes)
-        console.log('Order would be saved to backend:', orderData);
-        showSuccessMessage({
-            orderId: 'ORD-' + Date.now(),
-            ...orderData
-        });
-    }
-
-    document.getElementById('cod-modal').style.display = 'none';
-    document.getElementById('cod-form').reset();
-}
-
-function showSuccessMessage(order) {
-    const successModal = document.getElementById('success-modal');
-    const successMessage = document.getElementById('success-message');
-
-    successMessage.innerHTML = `
-        <strong>Order ID:</strong> ${order.orderId || 'N/A'}<br>
-        <strong>Product:</strong> ${order.products[0].name}<br>
-        <strong>Amount:</strong> ₹${order.total}<br><br>
-        <strong>Customer Details:</strong><br>
-        <strong>Name:</strong> ${order.customer.name}<br>
-        <strong>Email:</strong> ${order.customer.email}<br>
-        <strong>Mobile:</strong> ${order.customer.mobile}<br>
-        <strong>Address:</strong> ${order.customer.address}<br>
-        <strong>City:</strong> ${order.customer.city}<br>
-        <strong>State:</strong> ${order.customer.state}<br>
-        <strong>PIN Code:</strong> ${order.customer.pinCode}<br><br>
-        <strong>Payment Method:</strong> ${order.paymentMethod}<br>
-        <strong>Order Date:</strong> ${new Date().toLocaleString()}<br><br>
-        <p style="color: #28a745; font-weight: bold;">✅ Your order has been placed successfully!</p>
-        <p>Our delivery team will contact you within 24 hours to confirm delivery details.</p>
-    `;
-
-    successModal.style.display = 'block';
 }
 
 function closeSuccessModal() {
     document.getElementById('success-modal').style.display = 'none';
-}
-
-// ============================================
-// REVIEW FUNCTIONS
-// ============================================
-
-async function submitReview(event) {
-    event.preventDefault();
-
-    const name = document.getElementById('reviewer-name')?.value || document.querySelector('#review-form input[type="text"]')?.value;
-    const rating = document.getElementById('rating')?.value || document.querySelector('#review-form select')?.value;
-    const text = document.querySelector('#review-form textarea')?.value;
-
-    if (!name || !rating || !text) {
-        alert('Please fill in all fields');
-        return;
-    }
-
-    const reviewData = {
-        reviewerName: name,
-        rating: parseInt(rating),
-        reviewText: text
-    };
-
-    try {
-        await fetchAPI('/reviews', {
-            method: 'POST',
-            body: JSON.stringify(reviewData)
-        });
-    } catch (error) {
-        console.log('Review would be saved to backend:', reviewData);
-    }
-
-    alert(`Thank you ${name}! Your ${rating}-star review has been submitted.`);
-
-    const form = document.getElementById('review-form');
-    if (form) form.reset();
 }
 
 // ============================================
@@ -476,7 +385,7 @@ function updateCustomerCities() {
     }
 }
 
-async function submitCustomerOrder(event) {
+function submitCustomerOrder(event) {
     event.preventDefault();
 
     const staffName = document.getElementById('customer-staff-name').value;
@@ -490,7 +399,7 @@ async function submitCustomerOrder(event) {
     const city = document.getElementById('customer-city').value;
     const address = document.getElementById('customer-address').value;
     const pin = document.getElementById('customer-pin').value;
-    const status = document.getElementById('customer-status').value;
+    const deliveryStatus = document.getElementById('customer-status').value;
 
     if (!staffName || !staffId || !productName || !customerName || !customerEmail || !customerMobile || !state || !city || !address || !pin) {
         alert('Please fill in all fields');
@@ -498,9 +407,10 @@ async function submitCustomerOrder(event) {
     }
 
     const unitPrice = productPrices[productName] || 0;
-    const total = unitPrice * quantity;
+    const totalAmount = unitPrice * quantity;
 
-    const orderData = {
+    const order = {
+        orderId: 'ORD-' + Date.now(),
         products: [{
             name: productName,
             price: unitPrice,
@@ -519,60 +429,255 @@ async function submitCustomerOrder(event) {
             name: staffName,
             id: staffId
         },
-        subtotal: total,
+        subtotal: totalAmount,
         shipping: 0,
-        total: total,
+        total: totalAmount,
         paymentMethod: 'Cash on Delivery',
-        deliveryStatus: status,
-        orderSource: 'Customer Portal'
+        paymentStatus: 'Pending',
+        orderStatus: 'Pending',
+        deliveryStatus: deliveryStatus,
+        orderSource: 'Customer Portal',
+        createdAt: new Date().toISOString()
     };
 
-    try {
-        const order = await fetchAPI('/orders', {
-            method: 'POST',
-            body: JSON.stringify(orderData)
-        });
+    console.log('Customer Portal Order:', order);
 
-        showCustomerPortalSuccess(order);
-    } catch (error) {
-        console.log('Order would be saved to backend:', orderData);
-        showCustomerPortalSuccess({
-            orderId: 'ORD-' + Date.now(),
-            ...orderData
-        });
-    }
+    fetch('https://nature-nourish-production.up.railway.app/api/orders', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(order)
+    })
+        .then(response => response.json())
+        .then(data => {
+            const successModal = document.getElementById('success-modal');
+            const successMessage = document.getElementById('success-message');
 
-    document.getElementById('customer-portal-modal').style.display = 'none';
-    document.getElementById('customer-form').reset();
+            successMessage.innerHTML = `
+            <strong>✅ Order Registered Successfully!</strong><br><br>
+            <strong>Order ID:</strong> ${data.orderId || order.orderId}<br>
+            <strong>Staff Name:</strong> ${staffName}<br>
+            <strong>Staff ID:</strong> ${staffId}<br><br>
+            <strong>Customer Details:</strong><br>
+            <strong>Name:</strong> ${customerName}<br>
+            <strong>Email:</strong> ${customerEmail}<br>
+            <strong>Mobile:</strong> ${customerMobile}<br>
+            <strong>Address:</strong> ${address}<br>
+            <strong>City:</strong> ${city}<br>
+            <strong>State:</strong> ${state}<br>
+            <strong>PIN Code:</strong> ${pin}<br><br>
+            <strong>Order Details:</strong><br>
+            <strong>Product:</strong> ${productName}<br>
+            <strong>Quantity:</strong> ${quantity}<br>
+            <strong>Unit Price:</strong> ₹${unitPrice}<br>
+            <strong>Total Amount:</strong> ₹${totalAmount}<br>
+            <strong>Delivery Status:</strong> ${deliveryStatus}<br><br>
+            <p style="color: #28a745; font-weight: bold;">✅ Order has been registered successfully!</p>
+        `;
+
+            successModal.style.display = 'block';
+            document.getElementById('customer-portal-modal').style.display = 'none';
+            document.getElementById('customer-form').reset();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Failed to submit order. Please try again.');
+        });
 }
 
-function showCustomerPortalSuccess(order) {
-    const successModal = document.getElementById('success-modal');
-    const successMessage = document.getElementById('success-message');
+// ============================================
+// REVIEW FUNCTIONS
+// ============================================
 
-    successMessage.innerHTML = `
-        <strong>Order ID:</strong> ${order.orderId}<br><br>
-        <strong>Staff Details:</strong><br>
-        <strong>Staff Name:</strong> ${order.staff.name}<br>
-        <strong>Staff ID:</strong> ${order.staff.id}<br><br>
-        <strong>Customer Details:</strong><br>
-        <strong>Name:</strong> ${order.customer.name}<br>
-        <strong>Email:</strong> ${order.customer.email}<br>
-        <strong>Mobile:</strong> ${order.customer.mobile}<br>
-        <strong>Address:</strong> ${order.customer.address}<br>
-        <strong>City:</strong> ${order.customer.city}<br>
-        <strong>State:</strong> ${order.customer.state}<br>
-        <strong>PIN Code:</strong> ${order.customer.pinCode}<br><br>
-        <strong>Order Details:</strong><br>
-        <strong>Product:</strong> ${order.products[0].name}<br>
-        <strong>Quantity:</strong> ${order.products[0].quantity}<br>
-        <strong>Total Amount:</strong> ₹${order.total}<br>
-        <strong>Delivery Status:</strong> ${order.deliveryStatus}<br>
-        <strong>Payment Method:</strong> ${order.paymentMethod}<br><br>
-        <p style="color: #28a745; font-weight: bold;">✅ Customer order registered successfully!</p>
-    `;
+function submitReview(event) {
+    event.preventDefault();
 
-    successModal.style.display = 'block';
+    const nameInput = document.querySelector('#review-form input[type="text"]');
+    const ratingSelect = document.getElementById('rating');
+    const messageTextarea = document.querySelector('#review-form textarea');
+
+    const name = nameInput ? nameInput.value : '';
+    const stars = ratingSelect ? ratingSelect.value : '';
+    const text = messageTextarea ? messageTextarea.value : '';
+
+    if (!name || !stars || !text) {
+        alert('Please fill in all fields');
+        return;
+    }
+
+    const starDisplay = '★'.repeat(stars) + '☆'.repeat(5 - parseInt(stars));
+
+    const review = {
+        name: name,
+        stars: stars,
+        starDisplay: starDisplay,
+        text: text,
+        date: new Date().toLocaleDateString()
+    };
+
+    reviews.push(review);
+    console.log('Review submitted:', review);
+
+    alert(`Thank you ${name}! Your ${stars}-star review has been submitted.`);
+
+    document.getElementById('review-form').reset();
+}
+
+// ============================================
+// AGENT PORTAL FUNCTIONS
+// ============================================
+
+function openAgentPortal() {
+    const modal = document.getElementById('agent-portal-modal');
+    if (modal) {
+        modal.style.display = 'block';
+    }
+}
+
+function closeAgentPortal() {
+    const modal = document.getElementById('agent-portal-modal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+}
+
+function updateAgentCities() {
+    const stateDropdown = document.getElementById('agent-state');
+    const cityDropdown = document.getElementById('agent-city');
+    const selectedState = stateDropdown.value;
+
+    cityDropdown.innerHTML = '';
+
+    if (selectedState && citiesByState[selectedState]) {
+        const cities = citiesByState[selectedState];
+        cityDropdown.innerHTML = '<option value="">-- Select City --</option>';
+
+        cities.forEach(city => {
+            const option = document.createElement('option');
+            option.value = city;
+            option.textContent = city;
+            cityDropdown.appendChild(option);
+        });
+    } else {
+        cityDropdown.innerHTML = '<option value="">-- Select State First --</option>';
+    }
+}
+
+// FIXED: Submit agent order - NOW sends to backend!
+function submitAgentOrder(event) {
+    event.preventDefault();
+
+    const agentName = document.getElementById('agent-name').value;
+    const agentId = document.getElementById('agent-id').value;
+    const productName = document.getElementById('agent-product').value;
+    const quantity = document.getElementById('agent-quantity').value;
+    const customerName = document.getElementById('agent-customer-name').value;
+    const customerEmail = document.getElementById('agent-customer-email').value;
+    const customerMobile = document.getElementById('agent-customer-mobile').value;
+    const state = document.getElementById('agent-state').value;
+    const city = document.getElementById('agent-city').value;
+    const address = document.getElementById('agent-address').value;
+    const pin = document.getElementById('agent-pin').value;
+    const status = document.getElementById('agent-status').value;
+
+    if (!agentName || !agentId || !productName || !customerName || !customerEmail || !customerMobile || !state || !city || !address || !pin) {
+        alert('Please fill in all fields');
+        return;
+    }
+
+    const unitPrice = productPrices[productName] || 0;
+    const totalAmount = unitPrice * parseInt(quantity);
+
+    // Create order object in the format the backend expects
+    const order = {
+        orderId: 'ORD-' + Date.now(),
+        products: [{
+            name: productName,
+            price: unitPrice,
+            quantity: parseInt(quantity)
+        }],
+        customer: {
+            name: customerName,
+            email: customerEmail,
+            mobile: customerMobile,
+            address: address,
+            city: city,
+            state: state,
+            pinCode: pin
+        },
+        staff: {
+            name: agentName,
+            id: agentId
+        },
+        subtotal: totalAmount,
+        shipping: 0,
+        total: totalAmount,
+        paymentMethod: 'Cash on Delivery',
+        paymentStatus: 'Pending',
+        orderStatus: 'Pending',
+        deliveryStatus: status,
+        orderSource: 'Agent Portal',
+        createdAt: new Date().toISOString()
+    };
+
+    console.log('Submitting Agent Order to Backend:', order);
+
+    // Send to backend API
+    fetch('https://nature-nourish-production.up.railway.app/api/orders', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(order)
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Agent order saved to backend:', data);
+
+            const successModal = document.getElementById('success-modal');
+            const successMessage = document.getElementById('success-message');
+
+            successMessage.innerHTML = `
+            <strong>Delivery Order ID:</strong> ${data.orderId || order.orderId}<br><br>
+            <strong>Agent Details:</strong><br>
+            <strong>Agent Name:</strong> ${agentName}<br>
+            <strong>Agent ID:</strong> ${agentId}<br><br>
+            <strong>Customer Details:</strong><br>
+            <strong>Name:</strong> ${customerName}<br>
+            <strong>Email:</strong> ${customerEmail}<br>
+            <strong>Mobile:</strong> ${customerMobile}<br>
+            <strong>Address:</strong> ${address}<br>
+            <strong>City:</strong> ${city}<br>
+            <strong>State:</strong> ${state}<br>
+            <strong>PIN Code:</strong> ${pin}<br><br>
+            <strong>Order Details:</strong><br>
+            <strong>Product:</strong> ${productName}<br>
+            <strong>Quantity:</strong> ${quantity}<br>
+            <strong>Unit Price:</strong> ₹${unitPrice}<br>
+            <strong>Total Amount:</strong> ₹${totalAmount}<br>
+            <strong>Payment Method:</strong> Cash on Delivery<br>
+            <strong>Delivery Status:</strong> ${status}<br>
+            <strong>Registered Date:</strong> ${new Date().toLocaleString()}<br><br>
+            <p style="color: #28a745; font-weight: bold;">✅ Delivery order registered successfully!</p>
+        `;
+
+            successModal.style.display = 'block';
+
+            const agentModal = document.getElementById('agent-portal-modal');
+            if (agentModal) {
+                agentModal.style.display = 'none';
+            }
+
+            const agentForm = document.getElementById('agent-form');
+            if (agentForm) {
+                agentForm.reset();
+            }
+        })
+        .catch(error => {
+            console.error('Error submitting agent order:', error);
+            alert('Failed to submit order. Please try again.');
+        });
 }
 
 // ============================================
@@ -583,6 +688,7 @@ window.onclick = function (event) {
     const codModal = document.getElementById('cod-modal');
     const successModal = document.getElementById('success-modal');
     const customerModal = document.getElementById('customer-portal-modal');
+    const agentModal = document.getElementById('agent-portal-modal');
 
     if (event.target === codModal) {
         codModal.style.display = 'none';
@@ -592,6 +698,9 @@ window.onclick = function (event) {
     }
     if (event.target === customerModal) {
         customerModal.style.display = 'none';
+    }
+    if (event.target === agentModal) {
+        agentModal.style.display = 'none';
     }
 }
 
@@ -619,9 +728,47 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 const ctaBtn = document.querySelector('.cta-btn');
 if (ctaBtn) {
     ctaBtn.addEventListener('click', function () {
-        document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
+        const productsSection = document.getElementById('products');
+        if (productsSection) {
+            productsSection.scrollIntoView({ behavior: 'smooth' });
+        }
     });
 }
 
+// ============================================
+// CONTACT FORM HANDLER
+// ============================================
+
+const contactForm = document.querySelector('.contact-form');
+if (contactForm) {
+    contactForm.addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        const name = this.querySelector('input[type="text"]').value;
+        const email = this.querySelector('input[type="email"]').value;
+        const message = this.querySelector('textarea').value;
+
+        const contactData = {
+            name: name,
+            email: email,
+            message: message
+        };
+
+        console.log('Contact Form Submitted:', contactData);
+
+        alert('Thank you for contacting us! We will get back to you soon.');
+
+        this.reset();
+    });
+}
+
+// ============================================
+// REVIEW FORM EVENT LISTENER
+// ============================================
+
+const reviewForm = document.getElementById('review-form');
+if (reviewForm) {
+    reviewForm.addEventListener('submit', submitReview);
+}
+
 console.log('🧼 All event listeners activated!');
-console.log('🔗 API Base URL:', API_BASE_URL);

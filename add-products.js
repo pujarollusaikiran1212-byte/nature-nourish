@@ -2,39 +2,51 @@ const axios = require('axios');
 
 const products = [
     {
-        name: "Lavender Bliss Soap",
-        subtitle: "Calming & Relaxing",
-        description: "Natural lavender essential oil soap for stress relief",
-        price: 100,
-        image: "https://via.placeholder.com/300",
-        category: "soap",
-        badge: "Best Seller",
-        rating: 4.8,
-        reviewCount: 120,
-        inStock: true
-    },
-    {
-        name: "Aloe Vera Glow",
-        subtitle: "Skin Healing & Moisturizing",
-        description: "Pure aloe vera soap for sensitive skin",
-        price: 100,
-        image: "https://via.placeholder.com/300",
+        name: "Solar Calm",
+        subtitle: "Tan Correcting Body Soap",
+        description: "Specially formulated to reduce tan and brighten your skin.",
+        price: 299,
+        image: "https://via.placeholder.com/200x200/b19cd9/ffffff?text=Solar+Calm",
         category: "soap",
         badge: "Popular",
-        rating: 4.5,
-        reviewCount: 85,
+        rating: 5,
+        reviewCount: 245,
         inStock: true
     },
     {
-        name: "Lemon Zest Refresh",
-        subtitle: "Energizing & Refreshing",
-        description: "Fresh lemon oil soap for revitalizing bath experience",
-        price: 100,
-        image: "https://via.placeholder.com/300",
+        name: "Clearwave",
+        subtitle: "Body Acne Control Soap",
+        description: "Formulated to treat and prevent body acne effectively.",
+        price: 349,
+        image: "https://via.placeholder.com/200x200/98ff98/ffffff?text=Clearwave",
+        category: "soap",
+        badge: "Best Seller",
+        rating: 5,
+        reviewCount: 398,
+        inStock: true
+    },
+    {
+        name: "Milk Cloud",
+        subtitle: "Gentle Daily Body Soap",
+        description: "Ultra-gentle formula perfect for daily use and sensitive skin.",
+        price: 249,
+        image: "https://via.placeholder.com/200x200/ffb6c1/ffffff?text=Milk+Cloud",
         category: "soap",
         badge: "New",
-        rating: 4.6,
-        reviewCount: 65,
+        rating: 4,
+        reviewCount: 156,
+        inStock: true
+    },
+    {
+        name: "Glow Dust",
+        subtitle: "Exfoliating Body Soap",
+        description: "Premium exfoliating soap with natural scrub particles.",
+        price: 379,
+        image: "https://via.placeholder.com/200x200/90ee90/ffffff?text=Glow+Dust",
+        category: "soap",
+        badge: "Premium",
+        rating: 5,
+        reviewCount: 312,
         inStock: true
     }
 ];

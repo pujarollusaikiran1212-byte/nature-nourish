@@ -311,6 +311,14 @@
             color: #333;
         }
 
+        .action-btn.delete {
+            background: #dc3545;
+        }
+
+        .action-btn.delete:hover {
+            background: #c82333;
+        }
+
         /* Order Details Modal */
         .modal {
             display: none;
@@ -781,9 +789,10 @@
                         <td><span class="source-badge">${order.orderSource || 'Website'}</span></td>
                         <td><span class="status-badge ${statusClass}">${order.deliveryStatus || 'Pending'}</span></td>
                         <td>${date}</td>
-                        <td>
+<td>
                             <button class="action-btn view" onclick="viewOrder('${order.orderId}')">View</button>
                             <button class="action-btn update" onclick="updateOrderStatus('${order.orderId}')">Update</button>
+                            <button class="action-btn delete" onclick="deleteOrder('${order.orderId}')">Delete</button>
                         </td>
                     </tr>
                 `;
@@ -990,6 +999,29 @@
             } catch (error) {
                 console.error('Error updating order:', error);
                 alert('Error updating order status');
+            }
+        }
+
+        // Delete order
+        async function deleteOrder(orderId) {
+            if (!confirm('Are you sure you want to delete this order? This action cannot be undone.')) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/orders/${orderId}`, {
+                    method: 'DELETE'
+                });
+
+                if (response.ok) {
+                    alert('Order deleted successfully!');
+                    loadOrders();
+                } else {
+                    alert('Error deleting order');
+                }
+            } catch (error) {
+                console.error('Error deleting order:', error);
+                alert('Error deleting order');
             }
         }
 

@@ -700,8 +700,16 @@
         // Load Orders
         async function loadOrders() {
             try {
+                console.log('Loading orders from:', API_URL + '/orders');
                 const response = await fetch(`${API_URL}/orders`);
+                console.log('Response status:', response.status);
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch orders. Status: ' + response.status);
+                }
+
                 const orders = await response.json();
+                console.log('Orders loaded:', orders.length);
 
                 allOrders = orders;
                 updateStats(orders);
@@ -712,7 +720,9 @@
                     <tr>
                         <td colspan="8" class="empty-state">
                             <h3>Error loading orders</h3>
+                            <p style="color: red;">Error: ${error.message}</p>
                             <p>Please check if the backend server is running.</p>
+                            <button onclick="loadOrders()">Try Again</button>
                         </td>
                     </tr>
                 `;

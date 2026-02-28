@@ -1,8 +1,4 @@
 const mongoose = require('mongoose');
-const dns = require('dns');
-
-// Fix DNS issue - use Google DNS for SRV lookups
-dns.setServers(['8.8.8.8']);
 
 let isConnected = false;
 
@@ -16,10 +12,11 @@ const connectDB = async () => {
             retryReads: true
         };
 
-        // MongoDB Atlas connection string with correct credentials
-        const mongoURI = 'mongodb+srv://asus:bpPcyAafw4jOZlq8@cluster1.mpartvh.mongodb.net/SoapWebsite?appName=Cluster1';
+        // Use environment variable for MongoDB URI, fallback to local for development
+        const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/natureNourish';
 
-        console.log('Attempting to connect to MongoDB Atlas...');
+        console.log('Attempting to connect to MongoDB...');
+        console.log('MongoDB URI:', mongoURI.replace(/\/\/.*:.*@/, '//****:****@')); // Hide credentials in log
 
         await mongoose.connect(mongoURI, options);
         isConnected = true;

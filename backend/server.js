@@ -1,4 +1,4 @@
-require('dotenv').config({ path: __dirname + '/.env' });
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
@@ -50,7 +50,7 @@ const PORT = process.env.PORT || 5000;
 // Connect to MongoDB (non-blocking - server starts regardless)
 connectDB();
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server running on port ${PORT}`);
     console.log(`Health check: http://localhost:${PORT}/api/health`);
     console.log(`Frontend: http://localhost:${PORT}/`);

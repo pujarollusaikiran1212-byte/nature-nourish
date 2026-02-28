@@ -1,5 +1,23 @@
 # Railway Deployment Guide
 
+## IMPORTANT: Keep Service Awake (Prevents "Site Can't Be Reached")
+
+Railway's free tier puts services to sleep after 30 minutes of inactivity. This causes "site can't be reached" errors. To prevent this:
+
+### Solution: Set Up UptimeRobot (Free)
+
+1. **Sign up at** https://uptimerobot.com
+2. **Add New Monitor**:
+   - Monitor Type: **HTTP(s)**
+   - Friendly Name: `Nature Nourish API`
+   - URL: `https://nature-nourish-production.up.railway.app/api/health`
+   - Monitoring Interval: **5 minutes** (recommended)
+3. **That's it!** UptimeRobot will ping your site every 5 minutes, keeping it awake
+
+**Note:** The `/api/health` endpoint already exists in your backend and returns JSON, which is perfect for monitoring.
+
+---
+
 ## Problem
 The URL `nature-nourish-production.up.railway.app` shows `DNS_PROBE_FINISHED_NXDOMAIN` - this means Railway cannot find your project.
 

@@ -220,14 +220,28 @@ function closeCODForm() {
 }
 
 function updateCities() {
+    console.log("updateCities called!");
     const stateDropdown = document.getElementById('cod-state');
     const cityDropdown = document.getElementById('cod-city');
+
+    console.log("stateDropdown:", stateDropdown);
+    console.log("cityDropdown:", cityDropdown);
+
+    if (!stateDropdown || !cityDropdown) {
+        console.error("Dropdowns not found! cod-state or cod-city elements missing.");
+        return;
+    }
+
     const selectedState = stateDropdown.value;
+    console.log("Selected state:", selectedState);
+    console.log("citiesByState object:", citiesByState);
+    console.log("Has state in citiesByState:", citiesByState.hasOwnProperty(selectedState));
 
     cityDropdown.innerHTML = '';
 
     if (selectedState && citiesByState[selectedState]) {
         const cities = citiesByState[selectedState];
+        console.log("Cities for selected state:", cities);
         cityDropdown.innerHTML = '<option value="">-- Select City --</option>';
 
         cities.forEach(city => {
@@ -236,7 +250,10 @@ function updateCities() {
             option.textContent = city;
             cityDropdown.appendChild(option);
         });
+
+        console.log("City dropdown updated with", cities.length, "cities");
     } else {
+        console.log("No cities found for state:", selectedState);
         cityDropdown.innerHTML = '<option value="">-- Select State First --</option>';
     }
 }

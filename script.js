@@ -136,7 +136,7 @@ function updateCartDisplay() {
     cartContainer.innerHTML = cartHTML;
 
     const subtotal = parseFloat(total).toFixed(2);
-    const shipping = 0;
+    const shipping = 30;
     const finalTotal = (parseFloat(subtotal) + shipping).toFixed(2);
 
     document.getElementById('subtotal').textContent = '₹' + subtotal;
@@ -306,8 +306,8 @@ function submitCODOrder(event) {
             id: 'N/A'
         },
         subtotal: totalAmount,
-        shipping: 0,
-        total: totalAmount,
+        shipping: 30,
+        total: totalAmount + 30,
         paymentMethod: 'Cash on Delivery',
         paymentStatus: 'Pending',
         orderStatus: 'Pending',
@@ -450,8 +450,8 @@ function submitCustomerOrder(event) {
             id: staffId
         },
         subtotal: totalAmount,
-        shipping: 0,
-        total: totalAmount,
+        shipping: 30,
+        total: totalAmount + 30,
         paymentMethod: 'Cash on Delivery',
         paymentStatus: 'Pending',
         orderStatus: 'Pending',
@@ -631,8 +631,8 @@ function submitAgentOrder(event) {
             id: agentId
         },
         subtotal: totalAmount,
-        shipping: 0,
-        total: totalAmount,
+        shipping: 30,
+        total: totalAmount + 30,
         paymentMethod: 'Cash on Delivery',
         paymentStatus: 'Pending',
         orderStatus: 'Pending',

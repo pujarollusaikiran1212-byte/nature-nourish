@@ -305,10 +305,10 @@ function submitCODOrder(event) {
             name: 'Website Customer',
             id: 'N/A'
         },
-        subtotal: productPrice,
+        subtotal: unitPrice,
         shipping: 30,
-        deliveryCharge: deliveryCharge,
-        total: totalAmount + 30,
+        deliveryCharge: parseInt(document.getElementById('cod-delivery-charge').value.replace('₹', '')) || 0,
+        total: unitPrice + (parseInt(document.getElementById('cod-delivery-charge').value.replace('₹', '')) || 0),
         paymentMethod: 'Cash on Delivery',
         paymentStatus: 'Pending',
         orderStatus: 'Pending',

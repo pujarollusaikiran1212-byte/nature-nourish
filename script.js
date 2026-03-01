@@ -305,8 +305,9 @@ function submitCODOrder(event) {
             name: 'Website Customer',
             id: 'N/A'
         },
-        subtotal: totalAmount,
+        subtotal: productPrice,
         shipping: 30,
+        deliveryCharge: deliveryCharge,
         total: totalAmount + 30,
         paymentMethod: 'Cash on Delivery',
         paymentStatus: 'Pending',

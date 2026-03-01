@@ -350,20 +350,35 @@
         };
 
         function updateCities() {
+            console.log("updateCities called in customer-portal!");
             const stateDropdown = document.getElementById('state');
             const cityDropdown = document.getElementById('city');
+
+            console.log("stateDropdown:", stateDropdown);
+            console.log("cityDropdown:", cityDropdown);
+
+            if (!stateDropdown || !cityDropdown) {
+                console.error("Dropdowns not found!");
+                return;
+            }
+
             const selectedState = stateDropdown.value;
+            console.log("Selected state:", selectedState);
+            console.log("citiesByState:", citiesByState);
 
             cityDropdown.innerHTML = '<option value="">-- Select City --</option>';
 
             if (selectedState && citiesByState[selectedState]) {
                 const cities = citiesByState[selectedState];
+                console.log("Cities found:", cities);
                 cities.forEach(city => {
                     const option = document.createElement('option');
                     option.value = city;
                     option.textContent = city;
                     cityDropdown.appendChild(option);
                 });
+            } else {
+                console.log("No cities found for state:", selectedState);
             }
         }
 

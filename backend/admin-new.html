@@ -494,6 +494,30 @@
             display: block;
         }
 
+        /* PDF Button */
+        .pdf-btn {
+            padding: 10px 20px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.3s;
+        }
+
+        .pdf-btn:hover {
+            background: #218838;
+        }
+
+        .modal-header-actions {
+            display: flex;
+            gap: 10px;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .admin-content {
@@ -523,6 +547,16 @@
                 font-size: 18px;
             }
 
+            .modal-header-actions {
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .pdf-btn {
+                padding: 8px 12px;
+                font-size: 12px;
+            }
+
             .detail-section h3 {
                 font-size: 14px;
             }
@@ -531,34 +565,6 @@
                 padding: 5px 8px;
                 font-size: 11px;
             }
-
-            .pdf-btn {
-                padding: 8px 12px;
-                font-size: 12px;
-            }
-        }
-
-        .pdf-btn {
-            padding: 10px 20px;
-            background: #28a745;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 500;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: background 0.3s;
-        }
-
-        .pdf-btn:hover {
-            background: #218838;
-        }
-
-        .modal-header-actions {
-            display: flex;
-            gap: 10px;
         }
     </style>
 </head>
@@ -704,7 +710,12 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h2>📋 Order Details</h2>
-                <span class="close" onclick="closeModal()">&times;</span>
+                <div class="modal-header-actions">
+                    <button class="pdf-btn" id="downloadPdfBtn" onclick="downloadPDF()" style="display: none;">
+                        📄 Download PDF
+                    </button>
+                    <span class="close" onclick="closeModal()">&times;</span>
+                </div>
             </div>
             <div id="orderDetails">
                 <!-- Order details will be loaded here -->
@@ -837,7 +848,7 @@
                         <td><span class="source-badge">${order.orderSource || 'Website'}</span></td>
                         <td><span class="status-badge ${statusClass}">${order.deliveryStatus || 'Pending'}</span></td>
                         <td>${date}</td>
-<td>
+                        <td>
                             <button class="action-btn view" onclick="viewOrder('${order.orderId}')">View</button>
                             <button class="action-btn update" onclick="updateOrderStatus('${order.orderId}')">Update</button>
                             <button class="action-btn delete" onclick="deleteOrder('${order.orderId}')">Delete</button>
@@ -892,6 +903,11 @@
                     </div>
                 `).join('') : 'N/A';
 
+                // Build full address
+                const fullAddress = order.customer ?
+                    `${order.customer.address || ''}, ${order.customer.city || ''}, ${order.customer.state || ''} - ${order.customer.pinCode || ''}`
+                    : 'N/A';
+
                 document.getElementById('orderDetails').innerHTML = `
                     <div class="detail-section">
                         <h3>Order Information</h3>
@@ -917,7 +933,7 @@
                                 <span>${order.orderStatus || 'Pending'}</span>
                             </div>
                             <div class="detail-item">
-                                <label>Created Date</label>
+                                <label>Date & Time of Order</label>
                                 <span>${order.createdAt ? new Date(order.createdAt).toLocaleString() : 'N/A'}</span>
                             </div>
                         </div>
@@ -927,7 +943,7 @@
                         <h3>Customer Information</h3>
                         <div class="detail-grid">
                             <div class="detail-item">
-                                <label>Name</label>
+                                <label>Full Name</label>
                                 <span>${order.customer ? order.customer.name : 'N/A'}</span>
                             </div>
                             <div class="detail-item">
@@ -935,24 +951,12 @@
                                 <span>${order.customer ? order.customer.email : 'N/A'}</span>
                             </div>
                             <div class="detail-item">
-                                <label>Mobile</label>
+                                <label>Phone Number</label>
                                 <span>${order.customer ? order.customer.mobile : 'N/A'}</span>
                             </div>
                             <div class="detail-item">
-                                <label>Address</label>
-                                <span>${order.customer ? order.customer.address : 'N/A'}</span>
-                            </div>
-                            <div class="detail-item">
-                                <label>City</label>
-                                <span>${order.customer ? order.customer.city : 'N/A'}</span>
-                            </div>
-                            <div class="detail-item">
-                                <label>State</label>
-                                <span>${order.customer ? order.customer.state : 'N/A'}</span>
-                            </div>
-                            <div class="detail-item">
-                                <label>PIN Code</label>
-                                <span>${order.customer ? order.customer.pinCode : 'N/A'}</span>
+                                <label>Full Address</label>
+                                <span>${fullAddress}</span>
                             </div>
                         </div>
                     </div>
@@ -974,7 +978,7 @@
                     ` : ''}
 
                     <div class="detail-section">
-                        <h3>Products</h3>
+                        <h3>Items Ordered</h3>
                         <div class="products-list">
                             ${productsHTML}
                         </div>
@@ -992,7 +996,7 @@
                                 <span>₹${order.shipping || 0}</span>
                             </div>
                             <div class="detail-item">
-                                <label>Total</label>
+                                <label>Total Amount</label>
                                 <span style="font-size: 18px; color: #667eea; font-weight: 700;">₹${order.total || 0}</span>
                             </div>
                         </div>
@@ -1009,11 +1013,203 @@
                     </div>
                 `;
 
+                // Show PDF download button
+                document.getElementById('downloadPdfBtn').style.display = 'inline-flex';
+
                 document.getElementById('orderModal').style.display = 'block';
             } catch (error) {
                 console.error('Error loading order details:', error);
                 alert('Error loading order details');
             }
+        }
+
+        // Download PDF function
+        function downloadPDF() {
+            if (!currentOrder) {
+                alert('No order selected');
+                return;
+            }
+
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            const order = currentOrder;
+
+            // Colors
+            const primaryColor = [102, 126, 234];
+            const textColor = [51, 51, 51];
+            const lightGray = [240, 240, 240];
+
+            // Header
+            doc.setFillColor(...primaryColor);
+            doc.rect(0, 0, 210, 35, 'F');
+
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(22);
+            doc.setFont('helvetica', 'bold');
+            doc.text('Nature Nourish', 15, 18);
+
+            doc.setFontSize(12);
+            doc.setFont('helvetica', 'normal');
+            doc.text('Order Details - Delivery Slip', 15, 28);
+
+            // Order ID badge
+            doc.setFillColor(40, 167, 69);
+            doc.roundedRect(150, 8, 45, 18, 3, 3, 'F');
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(10);
+            doc.text(`Order: ${order.orderId || 'N/A'}`, 155, 18);
+
+            let yPos = 45;
+
+            // Order Information Section
+            doc.setTextColor(...primaryColor);
+            doc.setFontSize(14);
+            doc.setFont('helvetica', 'bold');
+            doc.text('Order Information', 15, yPos);
+            yPos += 8;
+
+            doc.setDrawColor(...primaryColor);
+            doc.line(15, yPos, 195, yPos);
+            yPos += 10;
+
+            doc.setTextColor(...textColor);
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'normal');
+
+            const orderInfo = [
+                ['Order ID:', order.orderId || 'N/A'],
+                ['Date & Time:', order.createdAt ? new Date(order.createdAt).toLocaleString() : 'N/A'],
+                ['Order Source:', order.orderSource || 'Website'],
+                ['Payment Method:', order.paymentMethod || 'N/A'],
+                ['Payment Status:', order.paymentStatus || 'Pending'],
+                ['Delivery Status:', order.deliveryStatus || 'Pending Delivery']
+            ];
+
+            orderInfo.forEach(([label, value]) => {
+                doc.setFont('helvetica', 'bold');
+                doc.text(label, 15, yPos);
+                doc.setFont('helvetica', 'normal');
+                doc.text(value, 55, yPos);
+                yPos += 7;
+            });
+
+            yPos += 10;
+
+            // Customer Information Section
+            doc.setTextColor(...primaryColor);
+            doc.setFontSize(14);
+            doc.setFont('helvetica', 'bold');
+            doc.text('Customer Information', 15, yPos);
+            yPos += 8;
+
+            doc.setDrawColor(...primaryColor);
+            doc.line(15, yPos, 195, yPos);
+            yPos += 10;
+
+            doc.setTextColor(...textColor);
+            doc.setFontSize(10);
+
+            const customer = order.customer || {};
+            const fullAddress = `${customer.address || ''}, ${customer.city || ''}, ${customer.state || ''} - ${customer.pinCode || ''}`;
+
+            const customerInfo = [
+                ['Full Name:', customer.name || 'N/A'],
+                ['Email:', customer.email || 'N/A'],
+                ['Phone Number:', customer.mobile || 'N/A'],
+                ['Full Address:', fullAddress]
+            ];
+
+            customerInfo.forEach(([label, value]) => {
+                doc.setFont('helvetica', 'bold');
+                doc.text(label, 15, yPos);
+                doc.setFont('helvetica', 'normal');
+
+                // Handle long addresses
+                const maxWidth = 130;
+                const lines = doc.splitTextToSize(value, maxWidth);
+                doc.text(lines, 55, yPos);
+                yPos += 7 * lines.length;
+            });
+
+            yPos += 10;
+
+            // Items Ordered Section
+            doc.setTextColor(...primaryColor);
+            doc.setFontSize(14);
+            doc.setFont('helvetica', 'bold');
+            doc.text('Items Ordered', 15, yPos);
+            yPos += 8;
+
+            doc.setDrawColor(...primaryColor);
+            doc.line(15, yPos, 195, yPos);
+            yPos += 10;
+
+            // Table header
+            doc.setFillColor(...lightGray);
+            doc.rect(15, yPos - 5, 180, 8, 'F');
+
+            doc.setTextColor(...textColor);
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'bold');
+            doc.text('Item', 18, yPos);
+            doc.text('Price', 100, yPos);
+            doc.text('Qty', 130, yPos);
+            doc.text('Amount', 155, yPos);
+            yPos += 10;
+
+            doc.setFont('helvetica', 'normal');
+
+            if (order.products && order.products.length > 0) {
+                order.products.forEach(product => {
+                    const itemTotal = (product.price || 0) * (product.quantity || 0);
+                    doc.text(product.name || 'N/A', 18, yPos);
+                    doc.text(`₹${product.price || 0}`, 100, yPos);
+                    doc.text(`${product.quantity || 0}`, 130, yPos);
+                    doc.text(`₹${itemTotal}`, 155, yPos);
+                    yPos += 7;
+                });
+            } else {
+                doc.text('No items', 18, yPos);
+                yPos += 7;
+            }
+
+            yPos += 5;
+
+            // Total Amount Section
+            doc.setDrawColor(200, 200, 200);
+            doc.line(120, yPos, 195, yPos);
+            yPos += 10;
+
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(12);
+            doc.text('Subtotal:', 130, yPos);
+            doc.text(`₹${order.subtotal || 0}`, 170, yPos);
+            yPos += 7;
+
+            doc.text('Shipping:', 130, yPos);
+            doc.text(`₹${order.shipping || 0}`, 170, yPos);
+            yPos += 10;
+
+            doc.setFillColor(...primaryColor);
+            doc.rect(125, yPos - 5, 70, 10, 'F');
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(12);
+            doc.text('Total Amount:', 130, yPos + 2);
+            doc.text(`₹${order.total || 0}`, 170, yPos + 2);
+
+            yPos += 25;
+
+            // Footer
+            doc.setTextColor(150, 150, 150);
+            doc.setFontSize(8);
+            doc.setFont('helvetica', 'normal');
+            doc.text('This is a computer-generated document. No signature required.', 105, yPos, { align: 'center' });
+            doc.text(`Generated on: ${new Date().toLocaleString()}`, 105, yPos + 5, { align: 'center' });
+
+            // Save the PDF
+            const fileName = `Order_${order.orderId || 'Details'}_${new Date().toISOString().split('T')[0]}.pdf`;
+            doc.save(fileName);
         }
 
         // Update order status
@@ -1026,8 +1222,9 @@
             const newStatus = document.getElementById('newDeliveryStatus').value;
 
             try {
-                const response = await fetch(`${API_URL}/orders/${orderId}`, {
-                    method: 'PUT',
+                const response = await fetch(`${API_URLId}`, {
+                } / orders / ${
+                    order method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json'
                     },
@@ -1076,6 +1273,7 @@
         // Close modal
         function closeModal() {
             document.getElementById('orderModal').style.display = 'none';
+            document.getElementById('downloadPdfBtn').style.display = 'none';
         }
 
         // Load Products

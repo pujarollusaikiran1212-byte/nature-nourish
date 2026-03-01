@@ -3,6 +3,7 @@ services:
     name: nature-nourish-backend
     env: node
     region: oregon
+    rootDir: backend
     buildCommand: npm install --omit=dev
     startCommand: node server.js
     envVars:

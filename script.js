@@ -2,11 +2,21 @@
    SOAP PRODUCT COLLECTION - JAVASCRIPT
    ============================================ */
 
+// Global error handler to catch any JavaScript errors
+window.onerror = function (message, source, lineno, colno, error) {
+    console.error("JavaScript Error:", message);
+    console.error("Source:", source);
+    console.error("Line:", lineno, "Column:", colno);
+    console.error("Error object:", error);
+    return false;
+};
+
+// Log when script loads
+console.log("🧼 Script.js loaded successfully!");
+
 // Initialize cart array
 let cart = [];
 let reviews = [];
-
-console.log("🧼 Premium Soap Website Loaded Successfully!");
 
 // ============================================
 // INDIAN CITIES BY STATE

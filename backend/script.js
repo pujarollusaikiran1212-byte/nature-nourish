@@ -1,4 +1,4 @@
-/* ============================================
+itmm/* ============================================
    SOAP PRODUCT COLLECTION - JAVASCRIPT
    ============================================ */
 
@@ -299,7 +299,7 @@ function submitCODOrder(event) {
     console.log('Submitting Website Order to Backend:', order);
 
     // Send to backend API
-    fetch('https://nature-nourish-production.up.railway.app/api/orders', {
+    fetch('https://nature-nourish.onrender.com/api/orders', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -442,7 +442,7 @@ function submitCustomerOrder(event) {
 
     console.log('Customer Portal Order:', order);
 
-    fetch('https://nature-nourish-production.up.railway.app/api/orders', {
+    fetch('https://nature-nourish.onrender.com/api/orders', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -624,7 +624,7 @@ function submitAgentOrder(event) {
     console.log('Submitting Agent Order to Backend:', order);
 
     // Send to backend API
-    fetch('https://nature-nourish-production.up.railway.app/api/orders', {
+    fetch('https://nature-nourish.onrender.com/api/orders', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

@@ -273,15 +273,15 @@
     </div>
 
     <script>
-        // API Base URL
-        const API_URL = 'https://nature-nourish.onrender.com/api';
+        // Railway API Base URL
+        const RAILWAY_API_URL = 'https://nature-nourish-production.up.railway.app';
 
         // Load products from database on page load
         let productPrices = {};
 
         async function loadProducts() {
             try {
-                const response = await fetch(`${API_URL}/products`);
+                const response = await fetch(`${RAILWAY_API_URL}/api/products`);
                 const products = await response.json();
 
                 const productSelect = document.getElementById('product');
@@ -426,7 +426,7 @@
             };
 
             try {
-                const response = await fetch('https://nature-nourish.onrender.com/api/orders', {
+                const response = await fetch(`${RAILWAY_API_URL}/api/orders`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

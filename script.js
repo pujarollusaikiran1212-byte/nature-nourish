@@ -1,4 +1,4 @@
-itmm/* ============================================
+/* ============================================
    SOAP PRODUCT COLLECTION - JAVASCRIPT
    ============================================ */
 
@@ -53,6 +53,9 @@ const productPrices = {
     'Milk Cloud': 100,
     'Glow Dust': 100
 };
+
+// Railway API Base URL
+const RAILWAY_API_URL = 'https://nature-nourish-production.up.railway.app';
 
 // ============================================
 // SHOPPING CART FUNCTIONS
@@ -258,7 +261,7 @@ function updateCities() {
     }
 }
 
-// FIXED: Submit COD order - NOW sends to backend!
+// Submit COD order - sends to Railway backend!
 function submitCODOrder(event) {
     event.preventDefault();
 
@@ -315,8 +318,8 @@ function submitCODOrder(event) {
 
     console.log('Submitting Website Order to Backend:', order);
 
-    // Send to backend API
-    fetch('https://nature-nourish.onrender.com/api/orders', {
+    // Send to Railway backend API
+    fetch(`${RAILWAY_API_URL}/api/orders`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -459,7 +462,7 @@ function submitCustomerOrder(event) {
 
     console.log('Customer Portal Order:', order);
 
-    fetch('https://nature-nourish.onrender.com/api/orders', {
+    fetch(`${RAILWAY_API_URL}/api/orders`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -581,7 +584,7 @@ function updateAgentCities() {
     }
 }
 
-// FIXED: Submit agent order - NOW sends to backend!
+// Submit agent order - sends to Railway backend!
 function submitAgentOrder(event) {
     event.preventDefault();
 
@@ -640,8 +643,8 @@ function submitAgentOrder(event) {
 
     console.log('Submitting Agent Order to Backend:', order);
 
-    // Send to backend API
-    fetch('https://nature-nourish.onrender.com/api/orders', {
+    // Send to Railway backend API
+    fetch(`${RAILWAY_API_URL}/api/orders`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

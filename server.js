@@ -18,6 +18,11 @@ app.use('/api/products', require('./src/routes/productRoutes'));
 app.use('/api/orders', require('./src/routes/orderRoutes'));
 app.use('/api/proformas', require('./src/routes/proformaRoutes'));
 
+// Default health check route
+app.get('/', (req, res) => {
+    res.send('API is running...');
+});
+
 // Health check route
 app.get('/api/health', (req, res) => {
     const dbStatus = getConnectionStatus();
@@ -28,8 +33,8 @@ app.get('/api/health', (req, res) => {
     });
 });
 
-// Serve index.html for root route
-app.get('/', (req, res) => {
+// Serve index.html for root route (for browser access)
+app.get('/home', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 

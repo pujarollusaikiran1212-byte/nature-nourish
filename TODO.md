@@ -1,15 +1,14 @@
-# TODO: Render Deployment Setup
+# TODO: Railway Deployment
 
 ## Completed:
-- [x] Analyze project structure and identify tech stack
-- [x] Get GitHub repo link and environment variable details
-- [x] Create render.yaml file for Render deployment
-- [x] Document environment variables for Render dashboard
-- [x] Provide MongoDB Atlas IP whitelist instructions
-- [x] Provide UptimeRobot setup instructions for Render
+- [x] Updated all frontend files to use Railway URL
+- [x] Removed Render configuration files (render.yaml)
+- [x] Removed Vercel configuration files (vercel.json)
 
 ## Pending:
-- [x] Push changes to GitHub (Verified: render.yaml is on GitHub - commit 384957d)
+- [ ] Push changes to GitHub
+- [ ] Railway will auto-deploy from GitHub
+- [ ] Set up keep-awake service (cron-job.org or UptimeRobot)
 
 ---
 
@@ -18,63 +17,48 @@
 - **Framework**: Express.js
 - **Database**: MongoDB (Mongoose) - MongoDB Atlas
 - **Frontend**: HTML/CSS/JS (static files served from backend)
-- **Backend Location**: `backend/` folder
-- **Entry Point**: `backend/server.js`
+- **Entry Point**: `server.js`
 
-## GitHub Repository:
-- https://github.com/pujarollosaikiran1212-byte/nature-nourish (Public)
-
----
-
-## ✅ render.yaml Created: backend/render.yaml
-
-### Environment Variables to Add in Render Dashboard:
-
-| Key | Value | Notes |
-|-----|-------|-------|
-| MONGODB_URI | mongodb+srv://<user>:<password>@cluster.mongodb.net/<dbname> | Same as Railway |
-| PORT | 10000 | Render assigns this port automatically |
-| NODE_ENV | production | Optional but recommended |
-
-### Steps to Connect MongoDB Atlas with Render:
-
-1. Go to MongoDB Atlas: https://cloud.mongodb.com
-2. Navigate to Network Access → IP Access List
-3. Add IP Address: Click "Add IP Address"
-4. Enter: 0.0.0.0/0 (allows access from anywhere)
-5. Click Confirm
+## Railway URLs:
+- **API Base**: `https://nature-nourish-production.up.railway.app/api`
+- **Admin Panel**: `https://nature-nourish-production.up.railway.app/admin`
 
 ---
 
-## UptimeRobot Setup for Render:
+## Keep-Awake Setup (Important!)
 
-1. Sign up at https://uptimerobot.com
-2. Add New Monitor:
-   - Monitor Type: HTTP(s)
-   - Friendly Name: Nature Nourish API (Render)
-   - URL: https://your-app.onrender.com/api.health
-     (Replace with your actual Render URL after deployment)
-   - Monitoring Interval: 5 minutes
-3. Click Create Monitor
+Railway free tier puts apps to sleep after 7 days. Set up a free ping service:
+
+### Option 1: cron-job.org
+1. Go to https://cron-job.org
+2. Create free account
+3. Create new cron job:
+   - URL: `https://nature-nourish-production.up.railway.app/api/health`
+   - Schedule: Every 5 minutes
+
+### Option 2: UptimeRobot
+1. Go to https://uptimerobot.com
+2. Create free account
+3. Add monitor:
+   - URL: `https://nature-nourish-production.up.railway.app/api/health`
+   - Interval: 5 minutes
 
 ---
 
 ## Next Steps:
 
-1. Push to GitHub:
-
-git add backend/render.yaml
-git commit -m "Add Render deployment configuration"
+1. **Push to GitHub:**
+```
+bash
+git add .
+git commit -m "Update to Railway - remove Render config"
 git push origin main
+```
 
-2. Connect to Render:
-   - Go to https://dashboard.render.com
-   - Click "New Web Service"
-   - Connect your GitHub repository
-   - Select the backend folder
-   - Add the environment variables (MONGODB_URI)
-   - Click "Deploy"
+2. **Wait for Railway to deploy** - It will automatically rebuild from GitHub
 
-3. MongoDB Atlas: Whitelist IP 0.0.0.0/0
+3. **Set up keep-awake** - Use cron-job.org or UptimeRobot
 
-4. UptimeRobot: Set up monitor with your Render URL
+4. **Test your site:**
+   - API: `https://nature-nourish-production.up.railway.app/api/health`
+   - Admin: `https://nature-nourish-production.up.railway.app/admin`

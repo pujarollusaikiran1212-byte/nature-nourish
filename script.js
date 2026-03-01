@@ -868,3 +868,4 @@ document.addEventListener('click', function (event) {
 });
 
 console.log('🧼 All event listeners activated!');
+// Force fresh deploy

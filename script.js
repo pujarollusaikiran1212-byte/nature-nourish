@@ -14,6 +14,39 @@ window.onerror = function (message, source, lineno, colno, error) {
 // Log when script loads
 console.log("🧼 Script.js loaded successfully!");
 
+// Also log when DOM is ready
+document.addEventListener('DOMContentLoaded', function () {
+    console.log("🧼 DOM is ready!");
+
+    // Add event listeners programmatically for the state dropdowns
+    const codStateDropdown = document.getElementById('cod-state');
+    if (codStateDropdown) {
+        codStateDropdown.addEventListener('change', function () {
+            console.log("COD State dropdown changed to:", this.value);
+            updateCities();
+        });
+        console.log("✅ Added event listener to cod-state dropdown");
+    }
+
+    const customerStateDropdown = document.getElementById('customer-state');
+    if (customerStateDropdown) {
+        customerStateDropdown.addEventListener('change', function () {
+            console.log("Customer State dropdown changed to:", this.value);
+            updateCustomerCities();
+        });
+        console.log("✅ Added event listener to customer-state dropdown");
+    }
+
+    const agentStateDropdown = document.getElementById('agent-state');
+    if (agentStateDropdown) {
+        agentStateDropdown.addEventListener('change', function () {
+            console.log("Agent State dropdown changed to:", this.value);
+            updateAgentCities();
+        });
+        console.log("✅ Added event listener to agent-state dropdown");
+    }
+});
+
 // Initialize cart array
 let cart = [];
 let reviews = [];

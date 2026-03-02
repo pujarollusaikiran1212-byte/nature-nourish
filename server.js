@@ -17,6 +17,7 @@ app.use(express.static(__dirname));
 app.use('/api/products', require('./src/routes/productRoutes'));
 app.use('/api/orders', require('./src/routes/orderRoutes'));
 app.use('/api/proformas', require('./src/routes/proformaRoutes'));
+app.use('/api/reviews', require('./src/routes/reviewRoutes'));
 
 // Default health check route
 app.get('/', (req, res) => {

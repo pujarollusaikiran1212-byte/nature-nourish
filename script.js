@@ -1,6 +1,6 @@
 /* ============================================
-   SOAP PRODUCT COLLECTION - JAVASCRIPT
-   ============================================ */
+  SOAP PRODUCT COLLECTION - JAVASCRIPT
+  ============================================ */
 
 // Initialize cart array
 let cart = [];
@@ -511,6 +511,37 @@ function submitCustomerOrder(event) {
 // REVIEW FUNCTIONS
 // ============================================
 
+// Fetch reviews from backend and display them
+async function fetchReviews() {
+    const reviewsGrid = document.getElementById('reviews-grid');
+    if (!reviewsGrid) return;
+
+    try {
+        const response = await fetch(`${RAILWAY_API_URL}/api/reviews`);
+        const data = await response.json();
+
+        if (data && data.length > 0) {
+            reviewsGrid.innerHTML = data.map(review => {
+                const stars = '★'.repeat(review.rating) + '☆'.repeat(5 - review.rating);
+                const date = new Date(review.createdAt).toLocaleDateString();
+                return `
+                    <div class="review-card">
+                        <div class="stars">${stars}</div>
+                        <p class="review-text">"${review.text}"</p>
+                        <p class="reviewer-name">- ${review.name}</p>
+                        <p class="review-date">${date}</p>
+                    </div>
+                `;
+            }).join('');
+        } else {
+            reviewsGrid.innerHTML = '<p class="no-reviews">No reviews yet. Be the first to share your experience!</p>';
+        }
+    } catch (error) {
+        console.error('Error fetching reviews:', error);
+        reviewsGrid.innerHTML = '<p class="error-message">Unable to load reviews. Please try again later.</p>';
+    }
+}
+
 function submitReview(event) {
     event.preventDefault();
 
@@ -527,23 +558,39 @@ function submitReview(event) {
         return;
     }
 
-    const starDisplay = '★'.repeat(stars) + '☆'.repeat(5 - parseInt(stars));
-
+    // Create review object for the backend
     const review = {
         name: name,
-        stars: stars,
-        starDisplay: starDisplay,
-        text: text,
-        date: new Date().toLocaleDateString()
+        rating: parseInt(stars),
+        text: text
     };
 
-    reviews.push(review);
-    console.log('Review submitted:', review);
-
-    alert(`Thank you ${name}! Your ${stars}-star review has been submitted.`);
-
-    document.getElementById('review-form').reset();
+    // Send to backend API
+    fetch(`${RAILWAY_API_URL}/api/reviews`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(review)
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Review saved to backend:', data);
+            alert(`Thank you ${name}! Your ${stars}-star review has been submitted.`);
+            document.getElementById('review-form').reset();
+            // Refresh reviews to show the new one
+            fetchReviews();
+        })
+        .catch(error => {
+            console.error('Error submitting review:', error);
+            alert('Failed to submit review. Please try again.');
+        });
 }
+
+// Load reviews when page loads
+document.addEventListener('DOMContentLoaded', function () {
+    fetchReviews();
+});
 
 // ============================================
 // AGENT PORTAL FUNCTIONS

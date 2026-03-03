@@ -245,12 +245,33 @@ p {
     font-family: 'Cormorant Garamond', serif;
 }
 
+/* Products Grid - Horizontal Scrollable Layout */
 .products-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    display: flex;
+    overflow-x: auto;
     gap: 20px;
+    padding: 20px 10px;
     max-width: 1200px;
     margin: 0 auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: thin;
+    scrollbar-color: var(--brown-luxury) var(--bg-secondary);
+}
+
+/* Custom scrollbar for horizontal scroll */
+.products-grid::-webkit-scrollbar {
+    height: 8px;
+}
+
+.products-grid::-webkit-scrollbar-track {
+    background: var(--bg-secondary);
+    border-radius: 4px;
+}
+
+.products-grid::-webkit-scrollbar-thumb {
+    background: var(--brown-luxury);
+    border-radius: 4px;
 }
 
 .product-card {
@@ -259,6 +280,8 @@ p {
     transition: var(--transition-normal);
     box-shadow: var(--shadow-soft);
     overflow: hidden;
+    flex: 0 0 280px;
+    scroll-snap-align: start;
 }
 
 .product-card:hover {
@@ -1083,8 +1106,13 @@ p {
     }
 
     .products-grid {
-        grid-template-columns: 1fr;
-        gap: 24px;
+        flex-direction: row;
+        gap: 16px;
+        padding: 16px 10px;
+    }
+
+    .product-card {
+        flex: 0 0 260px;
     }
 
     .features {

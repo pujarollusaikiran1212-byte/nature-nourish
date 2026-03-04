@@ -245,6 +245,40 @@ p {
     font-family: 'Cormorant Garamond', serif;
 }
 
+/* Category filter buttons */
+.category-filters {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.category-btn {
+    background: var(--brown-luxury);
+    color: var(--bg-white);
+    border: none;
+    padding: 10px 18px;
+    margin: 0 6px 6px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: var(--transition-normal);
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.category-btn.active {
+    background: var(--brown-dark);
+}
+
+.category-btn:hover {
+    opacity: 0.9;
+}
+
+.coming-soon {
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    margin: 2rem 0;
+    text-align: center;
+}
+
 /* Products Grid - Horizontal Scrollable Layout */
 .products-grid {
     display: flex;

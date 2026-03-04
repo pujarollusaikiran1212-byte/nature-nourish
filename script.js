@@ -1065,3 +1065,33 @@ document.addEventListener('click', function (event) {
 });
 
 console.log('🧼 All event listeners activated!');
+
+// ============================================
+// CATEGORY FILTERING
+// ============================================
+
+function filterCategory(category) {
+    const buttons = document.querySelectorAll('.category-btn');
+    buttons.forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.category === category);
+    });
+
+    const grid = document.querySelector('.products-grid');
+    const coming = document.getElementById('coming-soon');
+
+    if (category === 'Soaps') {
+        if (grid) grid.style.display = '';
+        if (coming) coming.style.display = 'none';
+    } else {
+        if (grid) grid.style.display = 'none';
+        if (coming) {
+            coming.textContent = 'Coming Soon';
+            coming.style.display = '';
+        }
+    }
+}
+
+// default load
+document.addEventListener('DOMContentLoaded', () => {
+    filterCategory('Soaps');
+});

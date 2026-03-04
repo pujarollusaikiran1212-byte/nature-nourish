@@ -154,14 +154,18 @@ const citiesByState = {
 };
 
 // ============================================
-// PRODUCT PRICE MAPPING
+// PRODUCT PRICE MAPPING (Updated with new pricing)
 // ============================================
 
 const productPrices = {
-    'Solar Calm': 100,
-    'Clearwave': 100,
-    'Milk Cloud': 100,
-    'Glow Dust': 100
+    'Solar Calm': 149,
+    'Clearwave': 149,
+    'Milk Cloud': 129,
+    'Glow Dust': 149,
+    'Lavender Bliss': 159,
+    'Rose Petal': 159,
+    'Charcoal Cleanse': 149,
+    'Aloe Vera Glow': 129
 };
 
 // Railway API Base URL

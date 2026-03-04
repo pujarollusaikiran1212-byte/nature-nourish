@@ -258,7 +258,10 @@ function updateCartDisplay() {
 
     // Display offer summary in cart summary
     let summaryHTML = '';
-    if (offer.savings > 0) {
+    // Show FREE shipping for all launch offer bundles (1-3 soaps)
+    const isLaunchOffer = totalQuantity >= 1 && totalQuantity <= 3;
+
+    if (isLaunchOffer) {
         summaryHTML = `
             <div class="offer-summary">
                 <div class="summary-row">

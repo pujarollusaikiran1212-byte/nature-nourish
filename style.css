@@ -1356,3 +1356,150 @@ p {
         margin: 5px 0;
     }
 }
+
+/* ============================================
+   LAUNCH OFFER CART STYLES
+   Dynamic Pricing Display Styles
+   ============================================ */
+
+/* Offer Banner in Cart */
+.offer-banner {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    color: white;
+    padding: 16px 24px;
+    border-radius: var(--radius-md);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.offer-icon {
+    font-size: 1.5rem;
+}
+
+.offer-text {
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+/* Offer Summary in Cart Summary */
+.offer-summary {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    padding: 24px;
+    border-radius: var(--radius-lg);
+    margin-bottom: 1.5rem;
+    border: 2px solid #28a745;
+}
+
+.offer-summary .summary-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.75rem 0;
+    color: var(--text-secondary);
+    border-bottom: 1px dashed rgba(0, 0, 0, 0.1);
+}
+
+.offer-summary .summary-row:last-child {
+    border-bottom: none;
+}
+
+.offer-summary .summary-row.offer-applied {
+    color: #28a745;
+    font-weight: 600;
+}
+
+.offer-summary .summary-row.offer-applied span:last-child {
+    color: #28a745;
+}
+
+.offer-summary .summary-row.total {
+    border-top: 2px solid #28a745;
+    margin-top: 0.5rem;
+    padding-top: 1rem;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-dark);
+}
+
+.offer-summary .summary-row.total span:last-child {
+    color: #28a745;
+    font-size: 1.5rem;
+}
+
+/* Savings Badge */
+.savings-badge {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    color: white;
+    padding: 12px 20px;
+    border-radius: var(--radius-md);
+    text-align: center;
+    font-weight: 600;
+    font-size: 1rem;
+    margin-top: 1rem;
+    box-shadow: 0 4px 10px rgba(40, 167, 69, 0.3);
+}
+
+/* Cart Item Quantity Control */
+.cart-item-quantity {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-top: 4px;
+}
+
+/* Remove Button Style */
+.remove-btn {
+    background: #dc3545;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: var(--transition-normal);
+}
+
+.remove-btn:hover {
+    background: #c82333;
+}
+
+/* Responsive Offer Styles */
+@media (max-width: 480px) {
+    .offer-banner {
+        padding: 12px 16px;
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .offer-icon {
+        font-size: 1.25rem;
+    }
+
+    .offer-text {
+        font-size: 0.9rem;
+    }
+
+    .offer-summary {
+        padding: 16px;
+    }
+
+    .savings-badge {
+        padding: 10px 16px;
+        font-size: 0.9rem;
+    }
+}

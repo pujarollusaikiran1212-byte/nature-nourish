@@ -9,6 +9,66 @@ let reviews = [];
 console.log("🧼 Premium Soap Website Loaded Successfully!");
 
 // ============================================
+// LAUNCH OFFER PRICING LOGIC
+// ============================================
+
+// Launch Offer Pricing Tiers
+const LAUNCH_OFFER = {
+    tier1: { quantity: 1, price: 149 },      // 1 Soap → ₹149
+    tier2: { quantity: 2, price: 279 },      // 2 Soaps → ₹279
+    tier3: { quantity: 3, price: 399 }        // 3+ Soaps → ₹399
+};
+
+/**
+ * Calculate launch offer price based on total soap quantity
+ * @param {number} totalQuantity - Total number of soaps in cart
+ * @returns {object} - { price, tier, savings }
+ */
+function calculateLaunchOffer(totalQuantity) {
+    if (totalQuantity >= LAUNCH_OFFER.tier3.quantity) {
+        // 3 or more soaps
+        return {
+            price: LAUNCH_OFFER.tier3.price,
+            tier: 'tier3',
+            tierName: '3+ Soaps Bundle',
+            savings: (totalQuantity * 100) - LAUNCH_OFFER.tier3.price
+        };
+    } else if (totalQuantity === LAUNCH_OFFER.tier2.quantity) {
+        // 2 soaps
+        return {
+            price: LAUNCH_OFFER.tier2.price,
+            tier: 'tier2',
+            tierName: '2 Soaps Bundle',
+            savings: (totalQuantity * 100) - LAUNCH_OFFER.tier2.price
+        };
+    } else {
+        // 1 soap
+        return {
+            price: LAUNCH_OFFER.tier1.price,
+            tier: 'tier1',
+            tierName: '1 Soap',
+            savings: 0
+        };
+    }
+}
+
+/**
+ * Get cart total soap quantity
+ * @returns {number} - Total number of soaps in cart
+ */
+function getCartTotalQuantity() {
+    return cart.reduce((total, item) => total + item.quantity, 0);
+}
+
+/**
+ * Check if offer is applicable
+ * @returns {boolean}
+ */
+function isOfferApplicable() {
+    return cart.length > 0;
+}
+
+// ============================================
 // INDIAN CITIES BY STATE
 // ============================================
 
@@ -106,19 +166,31 @@ function updateCartDisplay() {
         return;
     }
 
+    // Calculate total quantity of soaps in cart
+    const totalQuantity = getCartTotalQuantity();
+
+    // Get launch offer price based on total quantity
+    const offer = calculateLaunchOffer(totalQuantity);
+
     let cartHTML = '';
-    let total = 0;
+
+    // Add offer banner if applicable
+    if (offer.savings > 0) {
+        cartHTML += `
+            <div class="offer-banner">
+                <span class="offer-icon">🎉</span>
+                <span class="offer-text">Launch Offer Applied – You saved ₹${offer.savings} with this bundle!</span>
+            </div>
+        `;
+    }
 
     cart.forEach((item, index) => {
-        const itemTotal = item.price * item.quantity;
-        total += itemTotal;
-
         cartHTML += `
             <div class="cart-item">
                 <img src="${getProductImage(item.name)}" alt="${item.name}" class="cart-item-image" onerror="this.src='https://via.placeholder.com/100/667eea/ffffff?text=${item.name}'">
                 <div class="cart-item-details">
                     <h4>${item.name}</h4>
-                    <p class="cart-item-quantity">₹${item.price} x ${item.quantity} = ₹${itemTotal}</p>
+                    <p class="cart-item-quantity">Qty: ${item.quantity}</p>
                 </div>
                 <div class="cart-item-actions">
                     <div class="quantity-control">
@@ -126,7 +198,6 @@ function updateCartDisplay() {
                         <input type="number" value="${item.quantity}" min="1" readonly>
                         <button onclick="increaseQuantity(${index})">+</button>
                     </div>
-                    <span style="font-weight: bold; color: #667eea;">₹${itemTotal.toFixed(2)}</span>
                     <button class="remove-btn" onclick="removeFromCart(${index})">Remove</button>
                 </div>
             </div>
@@ -135,15 +206,80 @@ function updateCartDisplay() {
 
     cartContainer.innerHTML = cartHTML;
 
-    const subtotal = parseFloat(total).toFixed(2);
-    const shipping = 30;
-    const finalTotal = (parseFloat(subtotal) + shipping).toFixed(2);
+    // Display offer summary in cart summary
+    let summaryHTML = '';
+    if (offer.savings > 0) {
+        summaryHTML = `
+            <div class="offer-summary">
+                <div class="summary-row">
+                    <span>Total Soaps:</span>
+                    <span>${totalQuantity}</span>
+                </div>
+                <div class="summary-row offer-applied">
+                    <span>Applied Offer:</span>
+                    <span>${offer.tierName}</span>
+                </div>
+                <div class="summary-row">
+                    <span>Subtotal (Launch Offer):</span>
+                    <span>₹${offer.price}</span>
+                </div>
+                <div class="summary-row">
+                    <span>Shipping:</span>
+                    <span>FREE</span>
+                </div>
+                <div class="summary-row total">
+                    <span>Total:</span>
+                    <span>₹${offer.price}</span>
+                </div>
+                ${offer.savings > 0 ? `<div class="savings-badge">You save ₹${offer.savings}!</div>` : ''}
+            </div>
+        `;
+    } else {
+        // Default pricing without offer
+        let total = 0;
+        cart.forEach((item) => {
+            total += item.price * item.quantity;
+        });
+        const shipping = 30;
+        const finalTotal = total + shipping;
 
-    document.getElementById('subtotal').textContent = '₹' + subtotal;
-    document.getElementById('cart-total').textContent = '₹' + finalTotal;
+        summaryHTML = `
+            <div class="summary-box">
+                <div class="summary-row">
+                    <span>Subtotal:</span>
+                    <span>₹${total}</span>
+                </div>
+                <div class="summary-row">
+                    <span>Shipping:</span>
+                    <span>₹${shipping}</span>
+                </div>
+                <div class="summary-row total">
+                    <span>Total:</span>
+                    <span>₹${finalTotal}</span>
+                </div>
+            </div>
+        `;
+    }
+
+    // Update the cart summary div
+    const existingSummary = cartSummary.querySelector('.summary-box') || cartSummary.querySelector('.offer-summary');
+    if (existingSummary) {
+        existingSummary.remove();
+    }
+    cartSummary.innerHTML = summaryHTML;
     cartSummary.style.display = 'block';
 
-    console.log(`Cart updated: ${cart.length} items, Total: ₹${finalTotal}`);
+    // Update checkout button
+    let checkoutBtn = cartSummary.querySelector('.btn-checkout');
+    if (!checkoutBtn) {
+        checkoutBtn = document.createElement('button');
+        checkoutBtn.className = 'btn btn-checkout';
+        checkoutBtn.onclick = proceedToCheckout;
+        checkoutBtn.textContent = 'Proceed to Checkout';
+        cartSummary.appendChild(checkoutBtn);
+    }
+
+    console.log(`Cart updated: ${totalQuantity} soaps, Offer: ${offer.tierName}, Total: ₹${offer.price}`);
 }
 
 function getProductImage(productName) {

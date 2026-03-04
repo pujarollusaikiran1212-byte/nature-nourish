@@ -705,12 +705,39 @@ async function fetchReviews() {
     const reviewsGrid = document.getElementById('reviews-grid');
     if (!reviewsGrid) return;
 
+    // list of country names or other patterns we consider AI-generated
+    const bannedCountries = [
+        'USA', 'United States', 'Canada', 'Australia', 'UK', 'United Kingdom',
+        'Germany', 'France', 'Spain', 'Italy', 'Brazil', 'Japan', 'China',
+        'Mexico', 'Russia', 'South Africa', 'Argentina', 'Pakistan', 'Bangladesh'
+    ];
+
+    const containsCountry = text => {
+        if (!text) return false;
+        const lower = text.toLowerCase();
+        return bannedCountries.some(country => lower.includes(country.toLowerCase()));
+    };
+
     try {
         const response = await fetch(`${RAILWAY_API_URL}/api/reviews`);
         const data = await response.json();
 
-        if (data && data.length > 0) {
-            reviewsGrid.innerHTML = data.map(review => {
+        // filter out any reviews that seem to be AI-generated based on name or text
+        const filtered = Array.isArray(data)
+            ? data.filter(review => {
+                const name = (review.name || '').trim();
+                if (bannedCountries.includes(name)) {
+                    return false;
+                }
+                if (containsCountry(review.text)) {
+                    return false;
+                }
+                return true;
+            })
+            : [];
+
+        if (filtered && filtered.length > 0) {
+            reviewsGrid.innerHTML = filtered.map(review => {
                 const stars = '★'.repeat(review.rating) + '☆'.repeat(5 - review.rating);
                 const date = new Date(review.createdAt).toLocaleDateString();
                 return `

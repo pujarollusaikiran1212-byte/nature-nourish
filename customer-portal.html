@@ -176,12 +176,16 @@
 
             <div class="form-group">
                 <label>Product Name *</label>
-                <select id="product" required>
+                <select id="product" onchange="updatePrice()" required>
                     <option value="">-- Select Product --</option>
-                    <option value="Solar Calm">Solar Calm (₹100)</option>
-                    <option value="Clearwave">Clearwave (₹100)</option>
-                    <option value="Milk Cloud">Milk Cloud (₹100)</option>
-                    <option value="Glow Dust">Glow Dust (₹100)</option>
+                    <option value="Solar Calm">Solar Calm (₹149)</option>
+                    <option value="Clearwave">Clearwave (₹149)</option>
+                    <option value="Milk Cloud">Milk Cloud (₹129)</option>
+                    <option value="Glow Dust">Glow Dust (₹149)</option>
+                    <option value="Lavender Bliss">Lavender Bliss (₹159)</option>
+                    <option value="Rose Petal">Rose Petal (₹159)</option>
+                    <option value="Charcoal Cleanse">Charcoal Cleanse (₹149)</option>
+                    <option value="Aloe Vera Glow">Aloe Vera Glow (₹129)</option>
                 </select>
             </div>
 
@@ -298,12 +302,16 @@
                 });
             } catch (error) {
                 console.error('Error loading products:', error);
-                // Fallback to default products
+                // Fallback to default products with correct prices
                 productPrices = {
-                    'Solar Calm': 100,
-                    'Clearwave': 100,
-                    'Milk Cloud': 100,
-                    'Glow Dust': 100
+                    'Solar Calm': 149,
+                    'Clearwave': 149,
+                    'Milk Cloud': 129,
+                    'Glow Dust': 149,
+                    'Lavender Bliss': 159,
+                    'Rose Petal': 159,
+                    'Charcoal Cleanse': 149,
+                    'Aloe Vera Glow': 129
                 };
             }
         }
@@ -379,6 +387,17 @@
                 });
             } else {
                 console.log("No cities found for state:", selectedState);
+            }
+        }
+
+        // Update price when product is selected
+        function updatePrice() {
+            const productSelect = document.getElementById('product');
+            const selectedProduct = productSelect.value;
+            console.log('Selected product:', selectedProduct);
+
+            if (selectedProduct && productPrices[selectedProduct]) {
+                console.log('Product price:', productPrices[selectedProduct]);
             }
         }
 

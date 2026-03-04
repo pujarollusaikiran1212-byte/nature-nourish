@@ -133,10 +133,10 @@ const citiesByState = {
     "Haryana": ["Faridabad", "Gurgaon", "Hisar", "Ambala", "Yamunanagar"],
     "Himachal Pradesh": ["Shimla", "Solan", "Mandi", "Kangra", "Kullu"],
     "Jharkhand": ["Ranchi", "Dhanbad", "Giridih", "East Singhbhum", "Jamshedpur"],
-    "Karnataka": ["Bangalore", "Mysore", "Pune", "Belgaum", "Hubli"],
+    "Karnataka": ["Bangalore", "Mysore", "Belgaum", "Hubli", "Mangalore"],
     "Kerala": ["Kochi", "Thiruvananthapuram", "Kozhikode", "Kottayam", "Alappuzha"],
     "Madhya Pradesh": ["Bhopal", "Indore", "Jabalpur", "Ujjain", "Gwalior"],
-    "Maharashtra": ["Mumbai", "Pune", "Nagpur", "Aurangabad", "Kolhapur"],
+    "Maharashtra": ["Mumbai", "Pune", "Nagpur", "Aurangabad", "Kolhapur", "Nashik", "Solapur", "Thane"],
     "Manipur": ["Imphal", "Bishnupur", "Moirang", "Kakching"],
     "Meghalaya": ["Shillong", "Tura", "Jowai", "Nongpoh"],
     "Mizoram": ["Aizawl", "Lunglei", "Saiha"],
@@ -154,14 +154,18 @@ const citiesByState = {
 };
 
 // ============================================
-// PRODUCT PRICE MAPPING
+// PRODUCT PRICE MAPPING (Updated with new pricing)
 // ============================================
 
 const productPrices = {
-    'Solar Calm': 100,
-    'Clearwave': 100,
-    'Milk Cloud': 100,
-    'Glow Dust': 100
+    'Solar Calm': 149,
+    'Clearwave': 149,
+    'Milk Cloud': 129,
+    'Glow Dust': 149,
+    'Lavender Bliss': 159,
+    'Rose Petal': 159,
+    'Charcoal Cleanse': 149,
+    'Aloe Vera Glow': 129
 };
 
 // Railway API Base URL

@@ -12,11 +12,11 @@ console.log("🧼 Premium Soap Website Loaded Successfully!");
 // LAUNCH OFFER PRICING LOGIC
 // ============================================
 
-// Launch Offer Pricing Tiers
+// Launch Offer Pricing Tiers (with FREE Shipping included)
 const LAUNCH_OFFER = {
-    tier1: { quantity: 1, price: 149 },      // 1 Soap → ₹149
-    tier2: { quantity: 2, price: 279 },      // 2 Soaps → ₹279
-    tier3: { quantity: 3, price: 399 }        // 3+ Soaps → ₹399
+    tier1: { quantity: 1, price: 149 },      // 1 Soap → ₹149 (was ₹130 with shipping)
+    tier2: { quantity: 2, price: 249 },      // 2 Soaps → ₹249 (was ₹230 with shipping, save ₹31!)
+    tier3: { quantity: 3, price: 349 }        // 3+ Soaps → ₹349 (was ₹330 with shipping, save ₹131!)
 };
 
 /**

@@ -435,6 +435,15 @@ p {
     gap: 10px;
 }
 
+.product-actions .coming-soon {
+    background: var(--brown-luxury);
+    color: var(--bg-white);
+    padding: 14px 24px;
+    border-radius: var(--radius-sm);
+    text-align: center;
+    font-weight: 500;
+}
+
 .btn {
     padding: 14px 24px;
     border: none;

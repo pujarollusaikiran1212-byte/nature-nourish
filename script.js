@@ -20,10 +20,60 @@ const LAUNCH_OFFER = {
 };
 
 /**
- * Calculate launch offer price based on total soap quantity
- * @param {number} totalQuantity - Total number of soaps in cart
- * @returns {object} - { price, tier, savings }
+ * Add offer bundle to cart - Special Launch Offer
+ * @param {number} quantity - Number of soaps (1, 2, or 3)
  */
+function addOfferBundle(quantity) {
+    // Get the offer price based on quantity
+    const offer = calculateLaunchOffer(quantity);
+
+    // Add the bundle as a single item with the offer price
+    // We'll add multiple items to represent the bundle
+    const products = ['Solar Calm', 'Clearwave', 'Milk Cloud', 'Glow Dust', 'Lavender Bliss', 'Rose Petal', 'Charcoal Cleanse', 'Aloe Vera Glow'];
+
+    // Add each soap as a separate item in cart for display
+    for (let i = 0; i < quantity; i++) {
+        const randomProduct = products[Math.floor(Math.random() * products.length)];
+        cart.push({
+            id: Date.now() + i,
+            name: randomProduct + ' (Bundle)',
+            price: Math.floor(offer.price / quantity), // Split the price across items
+            quantity: 1,
+            isOfferBundle: true,
+            bundleTotal: offer.price
+        });
+    }
+
+    // Mark all items in this bundle
+    cart.forEach((item, index) => {
+        if (item.isOfferBundle && item.bundleTotal === offer.price) {
+            item.bundleQuantity = quantity;
+        }
+    });
+
+    updateCartCount();
+    updateCartDisplay();
+
+    // Show success message
+    const bundleNames = {
+        1: '1 Soap Bundle',
+        2: '2 Soaps Bundle',
+        3: '3 Soaps Bundle'
+    };
+
+    alert(`🎉 ${bundleNames[quantity]} added to cart!\n\nPrice: ₹${offer.price}\nYou save ₹${offer.savings} with this offer!`);
+
+    // Scroll to cart
+    document.getElementById('cart').scrollIntoView({ behavior: 'smooth' });
+
+    console.log(`Bundle added: ${quantity} soaps for ₹${offer.price}`);
+}
+
+/**
+ * Calculate launch offer price based on total soap quantity
+* @param {number} totalQuantity - Total number of soaps in cart
+* @returns {object} - { price, tier, savings }
+*/
 function calculateLaunchOffer(totalQuantity) {
     if (totalQuantity >= LAUNCH_OFFER.tier3.quantity) {
         // 3 or more soaps

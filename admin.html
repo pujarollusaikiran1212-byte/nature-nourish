@@ -567,7 +567,7 @@
             <input type="password" id="adminPassword" placeholder="Enter Admin Password">
             <button class="login-btn" onclick="login()">Login</button>
             <p style="text-align: center; margin-top: 20px; font-size: 12px; color: #888;">
-                Default password: admin123
+                Default password: puddle
             </p>
         </div>
     </div>
@@ -751,7 +751,7 @@
 
         function login() {
             const password = document.getElementById('adminPassword').value;
-            if (password === 'admin123') {
+            if (password === 'puddle') {
                 document.getElementById('loginScreen').style.display = 'none';
                 document.getElementById('adminDashboard').style.display = 'block';
                 loadOrders();

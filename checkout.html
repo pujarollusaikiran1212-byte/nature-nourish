@@ -220,7 +220,6 @@
             font-weight: 600;
             cursor: pointer;
             margin-top: 24px;
-            transition: var(--transition-normal);
         }
 
         .btn-place-order:hover {
@@ -272,7 +271,6 @@
             border-radius: var(--radius-lg);
             max-width: 500px;
             text-align: center;
-            box-shadow: var(--shadow-luxury);
         }
 
         .success-checkout-content h2 {
@@ -447,14 +445,14 @@
                     </div>
                     <script src="script.js"></script>
                     <script>
-                        const RAILWAY_API_URL = 'https://nature-nourish-production.up.railway.app';
-                        let checkoutItems = [];
+                        var RAILWAY_API_URL = 'https://nature-nourish-production.up.railway.app';
+                        var checkoutItems = [];
                         document.addEventListener('DOMContentLoaded', function () { loadCheckoutItems(); });
                         function loadCheckoutItems() {
-                            const directProductData = localStorage.getItem("directProduct");
-                            const savedCart = localStorage.getItem("cart");
-                            let directProduct = null;
-                            let cartItems = [];
+                            var directProductData = localStorage.getItem("directProduct");
+                            var savedCart = localStorage.getItem("cart");
+                            var directProduct = null;
+                            var cartItems = [];
                             if (directProductData) { try { directProduct = JSON.parse(directProductData); } catch (e) { } }
                             if (savedCart) { try { cartItems = JSON.parse(savedCart); } catch (e) { } }
                             if (cartItems.length > 0) { checkoutItems = cartItems; }
@@ -468,18 +466,18 @@
                             calculateTotals();
                         }
                         function displayOrderItems() {
-                            const container = document.getElementById('order-items');
-                            let html = '';
-                            checkoutItems.forEach(item => {
-                                const qty = item.quantity || 1;
-                                const total = item.price * qty;
+                            var container = document.getElementById('order-items');
+                            var html = '';
+                            checkoutItems.forEach(function (item) {
+                                var qty = item.quantity || 1;
+                                var total = item.price * qty;
                                 html += '<div class="order-item"><img src="' + getProductImage(item.name) + '" alt="' + item.name + '" class="order-item-image"><div class="order-item-details"><div class="order-item-name">' + item.name + '</div><div class="order-item-price">Rs.' + item.price + ' x ' + qty + '</div><div class="order-item-total">Rs.' + total + '</div>';
                             });
                             container.innerHTML = html;
                         }
                         function calculateTotals() {
-                            let subtotal = 0;
-                            checkoutItems.forEach(item => { subtotal += item.price * (item.quantity || 1); });
+                            var subtotal = 0;
+                            checkoutItems.forEach(function (item) { subtotal += item.price * (item.quantity || 1); });
                             document.getElementById("subtotal").innerText = "Rs." + subtotal;
                             document.getElementById("total").innerText = "Rs." + subtotal;
                             return subtotal;
@@ -489,7 +487,7 @@
                             return imgs[name] || 'https://via.placeholder.com/70';
                         }
                         function goBackToCart() { window.location.href = 'index.html#cart'; }
-                        document.getElementById("checkout-form").addEventListener("submit", async function (e) {
+                        document.getElementById("checkout-form").addEventListener("submit", function (e) {
                             e.preventDefault();
                             if (checkoutItems.length === 0) { alert("Your cart is empty"); return; }
                             var subtotal = calculateTotals();
@@ -499,15 +497,16 @@
                             var btn = document.getElementById('place-order-btn');
                             btn.textContent = 'Placing Order...';
                             btn.disabled = true;
-                            try {
-                                var res = await fetch(RAILWAY_API_URL + "/api/orders", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(order) });
-                                if (!res.ok) throw new Error('Failed');
-                                localStorage.removeItem('cart');
-                                localStorage.removeItem('directProduct');
-                                document.getElementById('order-success-id').textContent = 'Order ID: ' + order.orderId;
-                                document.getElementById('success-checkout-modal').style.display = 'block';
-                            } catch (err) { alert('Error: ' + err.message); }
-                            finally { btn.textContent = 'Place COD Order'; btn.disabled = false; }
+                            fetch(RAILWAY_API_URL + "/api/orders", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(order) })
+                                .then(function (res) {
+                                    if (!res.ok) throw new Error('Failed');
+                                    localStorage.removeItem('cart');
+                                    localStorage.removeItem('directProduct');
+                                    document.getElementById('order-success-id').textContent = 'Order ID: ' + order.orderId;
+                                    document.getElementById('success-checkout-modal').style.display = 'block';
+                                })
+                                .catch(function (err) { alert('Error: ' + err.message); })
+                                .finally(function () { btn.textContent = 'Place COD Order'; btn.disabled = false; });
                         });
                         function handleContinueShopping() { document.getElementById('success-checkout-modal').style.display = 'none'; window.location.href = 'index.html'; }
                     </script>

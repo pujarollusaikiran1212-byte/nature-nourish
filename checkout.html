@@ -12,7 +12,6 @@
         rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <style>
-        /* Checkout Page Specific Styles */
         .checkout-page {
             padding-top: 100px;
             min-height: 100vh;
@@ -308,456 +307,210 @@
 </head>
 
 <body>
-
-    <!-- Navigation Header -->
     <header class="navbar">
         <div class="container">
-            <div class="logo">🌿 Nature Nourish</div>
-            <button class="hamburger" onclick="toggleMobileMenu()">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
+            <div class="logo">Nature Nourish</div>
+            <button class="hamburger" onclick="toggleMobileMenu()"><span></span><span></span><span></span></button>
             <nav class="nav-links" id="navLinks">
                 <a href="index.html#home">Home</a>
                 <a href="index.html#products">Products</a>
                 <a href="index.html#about">About</a>
                 <a href="index.html#reviews">Reviews</a>
                 <a href="index.html#contact">Contact</a>
-                <a href="index.html#cart" class="cart-icon">🛒 Cart (<span id="cart-count">0</span>)</a>
+                <a href="index.html#cart" class="cart-icon">Cart (<span id="cart-count">0</span>)</a>
             </nav>
         </div>
     </header>
-
-    <!-- Checkout Page -->
     <div class="checkout-page">
         <div class="container">
             <h1 style="text-align: center; margin-bottom: 40px; color: var(--text-dark);">Checkout</h1>
-
             <div id="checkout-content" class="checkout-container">
-                <!-- Main Checkout Form -->
                 <div class="checkout-main">
-                    <!-- Order Summary Section -->
                     <div class="form-section">
                         <h2 class="section-title-checkout">Order Summary</h2>
-                        <div id="order-items">
-                            <!-- Items will be loaded from localStorage -->
+                        <div id="order-items"></div>
+                        <form id="checkout-form" class="checkout-form">
+                            <div class="form-section">
+                                <h2 class="section-title-checkout">Customer Details</h2>
+                                <div class="form-grid">
+                                    <div class="form-group-full">
+                                        <label for="full-name">Full Name *</label>
+                                        <input type="text" id="full-name" placeholder="Enter your full name" required>
+                                    </div>
+                                    <div class="form-group-full">
+                                        <label for="email">Email Address *</label>
+                                        <input type="email" id="email" placeholder="Enter your email address" required>
+                                    </div>
+                                    <div class="form-group-full">
+                                        <label for="phone">Phone Number *</label>
+                                        <input type="tel" id="phone" placeholder="Enter 10-digit mobile number"
+                                            pattern="[0-9]{10}" required>
+                                    </div>
+                                    <div class="form-group-full">
+                                        <label for="state">State *</label>
+                                        <select id="state" required>
+                                            <option value="">-- Select State --</option>
+                                            <option value="Andhra Pradesh">Andhra Pradesh</option>
+                                            <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                                            <option value="Assam">Assam</option>
+                                            <option value="Bihar">Bihar</option>
+                                            <option value="Chhattisgarh">Chhattisgarh</option>
+                                            <option value="Goa">Goa</option>
+                                            <option value="Gujarat">Gujarat</option>
+                                            <option value="Haryana">Haryana</option>
+                                            <option value="Himachal Pradesh">Himachal Pradesh</option>
+                                            <option value="Jharkhand">Jharkhand</option>
+                                            <option value="Karnataka">Karnataka</option>
+                                            <option value="Kerala">Kerala</option>
+                                            <option value="Madhya Pradesh">Madhya Pradesh</option>
+                                            <option value="Maharashtra">Maharashtra</option>
+                                            <option value="Manipur">Manipur</option>
+                                            <option value="Meghalaya">Meghalaya</option>
+                                            <option value="Mizoram">Mizoram</option>
+                                            <option value="Nagaland">Nagaland</option>
+                                            <option value="Odisha">Odisha</option>
+                                            <option value="Punjab">Punjab</option>
+                                            <option value="Rajasthan">Rajasthan</option>
+                                            <option value="Sikkim">Sikkim</option>
+                                            <option value="Tamil Nadu">Tamil Nadu</option>
+                                            <option value="Telangana">Telangana</option>
+                                            <option value="Tripura">Tripura</option>
+                                            <option value="Uttar Pradesh">Uttar Pradesh</option>
+                                            <option value="Uttarakhand">Uttarakhand</option>
+                                            <option value="West Bengal">West Bengal</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label for="city">City *</label>
+                                        <input type="text" id="city" placeholder="Enter city" required>
+                                    </div>
+                                    <div>
+                                        <label for="pincode">Pincode *</label>
+                                        <input type="text" id="pincode" placeholder="Enter 6-digit PIN code"
+                                            pattern="[0-9]{6}" required>
+                                    </div>
+                                    <div class="form-group-full">
+                                        <label for="address">Address *</label>
+                                        <textarea id="address" placeholder="Enter your complete address" rows="3"
+                                            required></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-section">
+                                    <h2 class="section-title-checkout">Payment Method</h2>
+                                    <div class="payment-method">
+                                        <label class="payment-option selected">
+                                            <input type="radio" name="payment-method" value="cod" checked>
+                                            <span class="payment-option-text">Cash on Delivery (COD)</span>
+                                        </label>
+                                    </div>
+                                    <p style="margin-top: 12px; color: var(--text-secondary); font-size: 0.9rem;">Pay
+                                        with cash when your order is delivered.</p>
+                                </div>
+                                <button type="submit" id="place-order-btn" class="btn-place-order">Place COD
+                                    Order</button>
+                        </form>
+                    </div>
+                    <div class="checkout-sidebar">
+                        <div class="price-summary">
+                            <h3 style="margin-bottom: 20px; color: var(--text-dark);">Price Details</h3>
+                            <div class="free-shipping-badge">Free Shipping</div>
+                            <div class="price-row">
+                                <span>Subtotal</span>
+                                <span id="subtotal">Rs.0</span>
+                            </div>
+                            <div class="price-row">
+                                <span>Shipping</span>
+                                <span>FREE</span>
+                            </div>
+                            <div class="price-row total">
+                                <span>Total</span>
+                                <span id="total">Rs.0</span>
+                            </div>
+                            <button onclick="goBackToCart()" class="btn"
+                                style="width: 100%; margin-top: 16px; background: var(--bg-secondary); color: var(--text-dark);">Back
+                                to Cart</button>
                         </div>
                     </div>
-
-                    <!-- Customer Details Form -->
-                    <form id="checkout-form" class="checkout-form">
-                        <div class="form-section">
-                            <h2 class="section-title-checkout">Customer Details</h2>
-                            <div class="form-grid">
-                                <div class="form-group-full">
-                                    <label for="full-name">Full Name *</label>
-                                    <input type="text" id="full-name" placeholder="Enter your full name" required>
-                                </div>
-                                <div class="form-group-full">
-                                    <label for="email">Email Address *</label>
-                                    <input type="email" id="email" placeholder="Enter your email address" required>
-                                </div>
-                                <div class="form-group-full">
-                                    <label for="phone">Phone Number *</label>
-                                    <input type="tel" id="phone" placeholder="Enter 10-digit mobile number"
-                                        pattern="[0-9]{10}" required>
-                                </div>
-                                <div class="form-group-full">
-                                    <label for="state">State *</label>
-                                    <select id="state" required>
-                                        <option value="">-- Select State --</option>
-                                        <option value="Andhra Pradesh">Andhra Pradesh</option>
-                                        <option value="Arunachal Pradesh">Arunachal Pradesh</option>
-                                        <option value="Assam">Assam</option>
-                                        <option value="Bihar">Bihar</option>
-                                        <option value="Chhattisgarh">Chhattisgarh</option>
-                                        <option value="Goa">Goa</option>
-                                        <option value="Gujarat">Gujarat</option>
-                                        <option value="Haryana">Haryana</option>
-                                        <option value="Himachal Pradesh">Himachal Pradesh</option>
-                                        <option value="Jharkhand">Jharkhand</option>
-                                        <option value="Karnataka">Karnataka</option>
-                                        <option value="Kerala">Kerala</option>
-                                        <option value="Madhya Pradesh">Madhya Pradesh</option>
-                                        <option value="Maharashtra">Maharashtra</option>
-                                        <option value="Manipur">Manipur</option>
-                                        <option value="Meghalaya">Meghalaya</option>
-                                        <option value="Mizoram">Mizoram</option>
-                                        <option value="Nagaland">Nagaland</option>
-                                        <option value="Odisha">Odisha</option>
-                                        <option value="Punjab">Punjab</option>
-                                        <option value="Rajasthan">Rajasthan</option>
-                                        <option value="Sikkim">Sikkim</option>
-                                        <option value="Tamil Nadu">Tamil Nadu</option>
-                                        <option value="Telangana">Telangana</option>
-                                        <option value="Tripura">Tripura</option>
-                                        <option value="Uttar Pradesh">Uttar Pradesh</option>
-                                        <option value="Uttarakhand">Uttarakhand</option>
-                                        <option value="West Bengal">West Bengal</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label for="city">City *</label>
-                                    <input type="text" id="city" placeholder="Enter city" required>
-                                </div>
-                                <div>
-                                    <label for="pincode">Pincode *</label>
-                                    <input type="text" id="pincode" placeholder="Enter 6-digit PIN code"
-                                        pattern="[0-9]{6}" required>
-                                </div>
-                                <div class="form-group-full">
-                                    <label for="address">Address *</label>
-                                    <textarea id="address" placeholder="Enter your complete address" rows="3"
-                                        required></textarea>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Payment Method Section -->
-                        <div class="form-section">
-                            <h2 class="section-title-checkout">Payment Method</h2>
-                            <div class="payment-method">
-                                <label class="payment-option selected">
-                                    <input type="radio" name="payment-method" value="cod" checked>
-                                    <span class="payment-option-text">Cash on Delivery (COD)</span>
-                                </label>
-                            </div>
-                            <p style="margin-top: 12px; color: var(--text-secondary); font-size: 0.9rem;">
-                                💡 Pay with cash when your order is delivered to your doorstep.
-                            </p>
-                        </div>
-
-
-                        <button type="submit" id="place-order-btn" class="btn-place-order">Place COD Order</button>
-                    </form>
-                </div>
-
-                <!-- Sidebar with Price Summary -->
-                <div class="checkout-sidebar">
-                    <div class="price-summary">
-                        <h3 style="margin-bottom: 20px; color: var(--text-dark);">Price Details</h3>
-                        <div class="free-shipping-badge">🚚 Free Shipping</div>
-                        <div class="price-row">
-                            <span>Subtotal</span>
-                            <span id="subtotal-price">₹0</span>
-                        </div>
-                        <div class="price-row">
-                            <span>Shipping</span>
-                            <span>FREE</span>
-                        </div>
-                        <div class="price-row total">
-                            <span>Total</span>
-                            <span id="total-price">₹0</span>
-                        </div>
-                        <button onclick="goBackToCart()" class="btn"
-                            style="width: 100%; margin-top: 16px; background: var(--bg-secondary); color: var(--text-dark);">
-                            ← Back to Cart
-                        </button>
+                    <div id="empty-cart" class="empty-cart-message" style="display: none;">
+                        <h2>Your cart is empty!</h2>
+                        <p>Add some products to your cart before proceeding to checkout.</p>
+                        <a href="index.html#products" class="btn-continue-shopping">Continue Shopping</a>
                     </div>
                 </div>
-            </div>
-
-            <!-- Empty Cart Message (hidden by default) -->
-            <div id="empty-cart" class="empty-cart-message" style="display: none;">
-                <h2>Your cart is empty!</h2>
-                <p>Add some products to your cart before proceeding to checkout.</p>
-                <a href="index.html#products" class="btn-continue-shopping">Continue Shopping</a>
-            </div>
-        </div>
-    </div>
-
-    <!-- Success Modal -->
-    <div id="success-checkout-modal" class="success-checkout-modal">
-        <div class="success-checkout-content">
-            <h2>✅ Order Placed Successfully!</h2>
-            <div class="order-id" id="order-success-id"></div>
-            <p style="color: var(--text-secondary); margin-bottom: 24px;">
-                Thank you for your order! Our delivery team will contact you within 24 hours to confirm delivery
-                details.
-            </p>
-            <button class="btn-continue-shopping" onclick="handleContinueShopping()">Continue Shopping</button>
-        </div>
-    </div>
-
-    <script src="script.js"></script>
-    <script>
-        // Railway API Base URL
-        const RAILWAY_API_URL = 'https://nature-nourish-production.up.railway.app';
-
-        // Load cart from localStorage on page load
-        let cart = [];
-
-        document.addEventListener('DOMContentLoaded', function () {
-            loadCheckoutCart();
-        });
-
-        function loadCheckoutCart() {
-            try {
-                // First, check for direct product purchase (from Buy Now COD)
-                const directProductData = localStorage.getItem('directProduct');
-                let directProduct = null;
-
-                if (directProductData) {
-                    try {
-                        directProduct = JSON.parse(directProductData);
-                    } catch (e) {
-                        console.log('No direct product found');
-                    }
-                }
-
-                // Use "cart" key as per requirements
-                const savedCart = localStorage.getItem('cart');
-                if (savedCart) {
-                    cart = JSON.parse(savedCart);
-                    console.log('Cart loaded:', cart);
-                }
-
-                // If cart is empty but there's a direct product, use that
-                if ((!cart || cart.length === 0) && directProduct) {
-                    cart = [directProduct];
-                    console.log('Using direct product:', cart);
-                }
-            } catch (e) {
-                console.error('Error loading cart:', e);
-                cart = [];
-            }
-
-            if (!cart || cart.length === 0) {
-                document.getElementById('checkout-content').style.display = 'none';
-                document.getElementById('empty-cart').style.display = 'block';
-                return;
-            }
-
-            displayOrderItems();
-            calculateTotals();
-        }
-
-        function displayOrderItems() {
-            const orderItemsContainer = document.getElementById('order-items');
-            let itemsHTML = '';
-
-            cart.forEach(item => {
-                const itemTotal = item.price * item.quantity;
-                itemsHTML += `
-                    <div class="order-item">
-                        <img src="${getProductImage(item.name)}" alt="${item.name}" class="order-item-image" onerror="this.src='https://via.placeholder.com/70/667eea/ffffff?text=${encodeURIComponent(item.name)}'">
-                        <div class="order-item-details">
-                            <div class="order-item-name">${item.name}</div>
-                            <div class="order-item-price">₹${item.price} × ${item.quantity}</div>
-                        </div>
-                        <div class="order-item-total">₹${itemTotal}</div>
+                <div id="success-checkout-modal" class="success-checkout-modal">
+                    <div class="success-checkout-content">
+                        <h2>Order Placed Successfully!</h2>
+                        <div class="order-id" id="order-success-id"></div>
+                        <p style="color: var(--text-secondary); margin-bottom: 24px;">Thank you for your order!</p>
+                        <button class="btn-continue-shopping" onclick="handleContinueShopping()">Continue
+                            Shopping</button>
                     </div>
-                `;
-            });
-
-            orderItemsContainer.innerHTML = itemsHTML;
-        }
-
-        function calculateTotals() {
-            // Check if this is a bundle offer order
-            const bundleItems = cart.filter(item => item.isOfferBundle);
-
-            let subtotal = 0;
-
-            if (bundleItems.length > 0) {
-                // Get the bundle total from the first bundle item
-                const bundleTotal = bundleItems[0].bundleTotal || 0;
-                subtotal = bundleTotal;
-            } else {
-                // Regular cart calculation
-                cart.forEach(item => {
-                    subtotal += item.price * item.quantity;
-                });
-            }
-
-            // Use querySelector to find elements (fallback to id if not found)
-            const subtotalElement = document.querySelector("#subtotal-price") || document.getElementById("subtotal-price");
-            const totalElement = document.querySelector("#total-price") || document.getElementById("total-price");
-
-            if (subtotalElement) {
-                subtotalElement.textContent = '₹' + subtotal;
-            }
-            if (totalElement) {
-                totalElement.textContent = '₹' + subtotal;
-            }
-
-            return subtotal;
-        }
-
-        function getProductImage(productName) {
-            const images = {
-                'Solar Calm': 'solar calm.jpeg',
-                'Clearwave': 'clear wave.jpeg',
-                'Milk Cloud': 'milk cloud.jpeg',
-                'Glow Dust': 'glow dust.jpeg'
-            };
-            return images[productName] || 'https://via.placeholder.com/70/667eea/ffffff?text=Product';
-        }
-
-        function goBackToCart() {
-            window.location.href = 'index.html#cart';
-        }
-
-        // Form submit handler - Place Order
-        document.getElementById("checkout-form").addEventListener("submit", async function (e) {
-            e.preventDefault();
-
-            // Get items from BOTH cart and directProduct
-            let cartData = localStorage.getItem("cart");
-            let directProductData = localStorage.getItem("directProduct");
-
-            let items = [];
-
-            // Try cart first
-            if (cartData) {
-                try {
-                    items = JSON.parse(cartData);
-                } catch (e) {
-                    items = [];
-                }
-            }
-
-            // If cart is empty, try directProduct
-            if ((!items || items.length === 0) && directProductData) {
-                try {
-                    items = [JSON.parse(directProductData)];
-                } catch (e) {
-                    items = [];
-                }
-            }
-
-            // Check if we have items to order
-            if (!items || items.length === 0) {
-                alert("Your cart is empty");
-                return;
-            }
-
-            // Get customer details from form
-            const name = document.getElementById('full-name').value;
-            const email = document.getElementById('email').value;
-            const phone = document.getElementById('phone').value;
-            const state = document.getElementById('state').value;
-            const address = document.getElementById('address').value;
-            const city = document.getElementById('city').value;
-            const pincode = document.getElementById('pincode').value;
-
-            // Calculate totals
-            const bundleItems = items.filter(item => item.isOfferBundle);
-            let subtotal = 0;
-            let products = [];
-
-            if (bundleItems.length > 0) {
-                // Bundle order - use the bundle total
-                subtotal = bundleItems[0].bundleTotal || 0;
-                // Get unique product names from the items
-                const uniqueProducts = [...new Set(items.map(item => item.name))];
-                uniqueProducts.forEach(productName => {
-                    const filteredItems = items.filter(item => item.name === productName);
-                    const totalQty = filteredItems.reduce((sum, item) => sum + item.quantity, 0);
-                    const price = filteredItems[0].price || Math.floor(subtotal / totalQty);
-                    products.push({
-                        name: productName.replace(' (Bundle)', ''),
-                        price: price,
-                        quantity: totalQty
-                    });
-                });
-            } else {
-                // Regular cart calculation
-                subtotal = items.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
-                products = items.map(item => ({
-                    name: item.name,
-                    price: item.price,
-                    quantity: item.quantity || 1
-                }));
-            }
-
-            const shipping = 0; // Free shipping
-            const deliveryCharge = 0;
-            const total = subtotal + shipping + deliveryCharge;
-
-            // Create order object matching backend Order model schema EXACTLY
-            const order = {
-                orderId: 'ORD-' + Date.now(),
-                products: products,
-                customer: {
-                    name: name,
-                    email: email,
-                    mobile: phone,
-                    address: address,
-                    city: city,
-                    state: state,
-                    pinCode: pincode
-                },
-                staff: {
-                    name: 'Website Customer',
-                    id: 'N/A'
-                },
-                subtotal: subtotal,
-                shipping: shipping,
-                deliveryCharge: deliveryCharge,
-                total: total,
-                paymentMethod: 'Cash on Delivery',
-                paymentStatus: 'Pending',
-                orderStatus: 'Pending',
-                deliveryStatus: 'Pending Delivery',
-                orderSource: 'Website',
-                createdAt: new Date().toISOString()
-            };
-
-            console.log('Submitting Order:', order);
-
-            // Show loading state
-            const submitBtn = document.getElementById('place-order-btn');
-            const originalText = submitBtn.textContent;
-            submitBtn.textContent = 'Placing Order...';
-            submitBtn.disabled = true;
-
-            try {
-                // Send order to backend using full Railway URL
-                const response = await fetch(RAILWAY_API_URL + "/api/orders", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(order)
-                });
-
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    console.error('Server error:', errorData);
-                    throw new Error('Failed to place order: ' + (errorData.message || response.statusText));
-                }
-
-                const data = await response.json();
-                console.log('Order placed successfully:', data);
-
-                // Clear cart and directProduct from localStorage
-                localStorage.removeItem('cart');
-                localStorage.removeItem('directProduct');
-
-                // Update cart count in header to 0
-                updateCartCount();
-
-                // Show success message
-                const successModal = document.getElementById('success-checkout-modal');
-                const orderSuccessId = document.getElementById('order-success-id');
-                orderSuccessId.textContent = 'Order ID: ' + (data.orderId || order.orderId);
-                successModal.style.display = 'block';
-
-            } catch (error) {
-                console.error('Error placing order:', error);
-                alert('Failed to place order. Please try again. Error: ' + error.message);
-            } finally {
-                // Reset button state
-                submitBtn.textContent = originalText;
-                submitBtn.disabled = false;
-            }
-        });
-
-        function handleContinueShopping() {
-            document.getElementById('success-checkout-modal').style.display = 'none';
-            window.location.href = 'index.html';
-        }
-    </script>
+                    <script src="script.js"></script>
+                    <script>
+                        const RAILWAY_API_URL = 'https://nature-nourish-production.up.railway.app';
+                        let checkoutItems = [];
+                        document.addEventListener('DOMContentLoaded', function () { loadCheckoutItems(); });
+                        function loadCheckoutItems() {
+                            const directProductData = localStorage.getItem("directProduct");
+                            const savedCart = localStorage.getItem("cart");
+                            let directProduct = null;
+                            let cartItems = [];
+                            if (directProductData) { try { directProduct = JSON.parse(directProductData); } catch (e) { } }
+                            if (savedCart) { try { cartItems = JSON.parse(savedCart); } catch (e) { } }
+                            if (cartItems.length > 0) { checkoutItems = cartItems; }
+                            else if (directProduct) { checkoutItems = [directProduct]; }
+                            if (checkoutItems.length === 0) {
+                                document.getElementById('checkout-content').style.display = 'none';
+                                document.getElementById('empty-cart').style.display = 'block';
+                                return;
+                            }
+                            displayOrderItems();
+                            calculateTotals();
+                        }
+                        function displayOrderItems() {
+                            const container = document.getElementById('order-items');
+                            let html = '';
+                            checkoutItems.forEach(item => {
+                                const qty = item.quantity || 1;
+                                const total = item.price * qty;
+                                html += '<div class="order-item"><img src="' + getProductImage(item.name) + '" alt="' + item.name + '" class="order-item-image"><div class="order-item-details"><div class="order-item-name">' + item.name + '</div><div class="order-item-price">Rs.' + item.price + ' x ' + qty + '</div><div class="order-item-total">Rs.' + total + '</div>';
+                            });
+                            container.innerHTML = html;
+                        }
+                        function calculateTotals() {
+                            let subtotal = 0;
+                            checkoutItems.forEach(item => { subtotal += item.price * (item.quantity || 1); });
+                            document.getElementById("subtotal").innerText = "Rs." + subtotal;
+                            document.getElementById("total").innerText = "Rs." + subtotal;
+                            return subtotal;
+                        }
+                        function getProductImage(name) {
+                            var imgs = { 'Solar Calm': 'solar calm.jpeg', 'Clearwave': 'clear wave.jpeg', 'Milk Cloud': 'milk cloud.jpeg', 'Glow Dust': 'glow dust.jpeg' };
+                            return imgs[name] || 'https://via.placeholder.com/70';
+                        }
+                        function goBackToCart() { window.location.href = 'index.html#cart'; }
+                        document.getElementById("checkout-form").addEventListener("submit", async function (e) {
+                            e.preventDefault();
+                            if (checkoutItems.length === 0) { alert("Your cart is empty"); return; }
+                            var subtotal = calculateTotals();
+                            var customerData = { name: document.getElementById('full-name').value, email: document.getElementById('email').value, mobile: document.getElementById('phone').value, state: document.getElementById('state').value, address: document.getElementById('address').value, city: document.getElementById('city').value, pinCode: document.getElementById('pincode').value };
+                            var products = checkoutItems.map(function (item) { return { name: item.name, price: item.price, quantity: item.quantity || 1 }; });
+                            var order = { orderId: 'ORD-' + Date.now(), products: products, customer: customerData, staff: { name: 'Website Customer', id: 'N/A' }, subtotal: subtotal, shipping: 0, deliveryCharge: 0, total: subtotal, paymentMethod: 'Cash on Delivery', paymentStatus: 'Pending', orderStatus: 'Pending', deliveryStatus: 'Pending Delivery', orderSource: 'Website', createdAt: new Date().toISOString() };
+                            var btn = document.getElementById('place-order-btn');
+                            btn.textContent = 'Placing Order...';
+                            btn.disabled = true;
+                            try {
+                                var res = await fetch(RAILWAY_API_URL + "/api/orders", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(order) });
+                                if (!res.ok) throw new Error('Failed');
+                                localStorage.removeItem('cart');
+                                localStorage.removeItem('directProduct');
+                                document.getElementById('order-success-id').textContent = 'Order ID: ' + order.orderId;
+                                document.getElementById('success-checkout-modal').style.display = 'block';
+                            } catch (err) { alert('Error: ' + err.message); }
+                            finally { btn.textContent = 'Place COD Order'; btn.disabled = false; }
+                        });
+                        function handleContinueShopping() { document.getElementById('success-checkout-modal').style.display = 'none'; window.location.href = 'index.html'; }
+                    </script>
 </body>
 
 </html>

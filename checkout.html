@@ -504,6 +504,12 @@
                                     localStorage.removeItem('directProduct');
                                     document.getElementById('order-success-id').textContent = 'Order ID: ' + order.orderId;
                                     document.getElementById('success-checkout-modal').style.display = 'block';
+
+                                    // Update cart count in navbar to 0
+                                    var cartCountEl = window.parent.document.getElementById('cart-count');
+                                    if (cartCountEl) {
+                                        cartCountEl.textContent = '0';
+                                    }
                                 })
                                 .catch(function (err) { alert('Error: ' + err.message); })
                                 .finally(function () { btn.textContent = 'Place COD Order'; btn.disabled = false; });

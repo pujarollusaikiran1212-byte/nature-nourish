@@ -657,6 +657,13 @@ function submitCODOrder(event) {
         .then(data => {
             console.log('Order saved to backend:', data);
 
+            // Clear cart after successful order
+            cart = [];
+            localStorage.removeItem('cart');
+            localStorage.removeItem('directProduct');
+            updateCartCount();
+            updateCartDisplay();
+
             const successModal = document.getElementById('success-modal');
             const successMessage = document.getElementById('success-message');
 

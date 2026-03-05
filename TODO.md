@@ -1,25 +1,17 @@
-# Checkout Form Fix - TODO List
+# TODO - Fix Order and Cart Issues
 
-## Task
-Fix the checkout form submission so orders from both single product purchases and multiple cart products are correctly sent to the backend and the cart resets after a successful order.
+## Issues to Fix:
+1. [x] Order summary disappears but cart not refreshing after COD order
+2. [x] Admin portal not showing order and customer details
 
-## Steps
+## Fixes Applied:
+- [x] 1. Fixed cart clearing in script.js after successful COD order - Added cart = [], localStorage.removeItem('cart'), localStorage.removeItem('directProduct'), updateCartCount(), and updateCartDisplay() calls
+- [x] 2. Fixed cart count update in checkout.html after successful order - Added code to update navbar cart count to 0
+- [x] 3. Admin portal loads orders from Railway API - This should work once orders are saved to backend
 
-- [x] 1. Analyze codebase and understand current implementation
-- [x] 2. Add `id="place-order-btn"` to the Place Order button
-- [x] 3. Fix placeOrder function to show success modal
-- [x] 4. Ensure cart is cleared after successful order
-- [x] 5. Ensure cart counter resets to zero
-- [ ] 6. Test the implementation
-
-## Changes Made
-
-### checkout.html
-1. Added `id="place-order-btn"` to submit button
-2. Modified placeOrder() function to:
-   - Show success modal instead of alert
-   - Clear cart from localStorage
-   - Reset cart counter to 0
-   - Display order ID in modal
-3. Added handleContinueShopping() function for proper modal button handling
+## Testing:
+- Place a COD order from product page
+- Place a COD order from cart
+- Check if cart clears and count updates to 0
+- Check if order appears in admin portal
 

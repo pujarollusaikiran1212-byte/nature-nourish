@@ -494,11 +494,29 @@
 
         function loadCheckoutCart() {
             try {
+                // First, check for direct product purchase (from Buy Now COD)
+                const directProductData = localStorage.getItem('directProduct');
+                let directProduct = null;
+
+                if (directProductData) {
+                    try {
+                        directProduct = JSON.parse(directProductData);
+                    } catch (e) {
+                        console.log('No direct product found');
+                    }
+                }
+
                 // Use "cart" key as per requirements
                 const savedCart = localStorage.getItem('cart');
                 if (savedCart) {
                     cart = JSON.parse(savedCart);
                     console.log('Cart loaded:', cart);
+                }
+
+                // If cart is empty but there's a direct product, use that
+                if ((!cart || cart.length === 0) && directProduct) {
+                    cart = [directProduct];
+                    console.log('Using direct product:', cart);
                 }
             } catch (e) {
                 console.error('Error loading cart:', e);

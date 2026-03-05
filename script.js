@@ -432,6 +432,14 @@ function proceedToCheckout() {
 // ============================================
 
 function openCODForm(productName, price) {
+    // Save direct product to localStorage for checkout page
+    const directProduct = {
+        name: productName,
+        price: price,
+        quantity: 1
+    };
+    localStorage.setItem('directProduct', JSON.stringify(directProduct));
+
     const modal = document.getElementById('cod-modal');
     document.getElementById('cod-product').value = productName;
     document.getElementById('cod-price').value = '₹' + price;

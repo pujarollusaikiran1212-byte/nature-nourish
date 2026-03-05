@@ -49,6 +49,11 @@ app.get('/customer-portal', (req, res) => {
     res.sendFile(path.join(__dirname, 'customer-portal.html'));
 });
 
+// Serve checkout.html for /checkout route
+app.get('/checkout', (req, res) => {
+    res.sendFile(path.join(__dirname, 'checkout.html'));
+});
+
 // Error handling middleware
 app.use((err, req, res, next) => {
     console.error('Error:', err.stack);

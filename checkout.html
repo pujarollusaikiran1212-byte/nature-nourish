@@ -443,8 +443,9 @@
 
     <script src="script.js"></script>
     <script>
-        // Railway API Base URL
+        // API URLs - Railway (primary) and local server (fallback)
         const RAILWAY_API_URL = 'https://nature-nourish-production.up.railway.app';
+        const LOCAL_API_URL = ''; // Uses relative URL (works with local server)
 
         // Load cart from localStorage on page load
         let cart = [];
@@ -527,7 +528,7 @@
             updateCartCount();
         }
 
-        function placeOrder(event) {
+        async function placeOrder(event) {
             event.preventDefault();
 
             if (cart.length === 0) {
@@ -586,17 +587,54 @@
 
             console.log('Submitting Checkout Order:', order);
 
-            // Send to Railway backend API
-            fetch(`${RAILWAY_API_URL}/api/orders`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(order)
-            })
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Order saved to backend:', data);
+            // Show loading state
+            const submitBtn = document.querySelector('.btn-place-order');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Placing Order...';
+            submitBtn.disabled = true;
+
+            try {
+                // Try Railway API first
+                let response = await fetch(`${RAILWAY_API_URL}/api/orders`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(order)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Railway API failed');
+                }
+
+                const data = await response.json();
+                console.log('Order saved to Railway backend:', data);
+
+                // Show success modal
+                document.getElementById('order-success-id').textContent = 'Order ID: ' + (data.orderId || order.orderId);
+                document.getElementById('success-checkout-modal').style.display = 'block';
+
+                // Clear cart after successful order
+                clearCart();
+            } catch (railwayError) {
+                console.log('Railway API failed, trying local server:', railwayError);
+
+                try {
+                    // Try local server as fallback
+                    let response = await fetch(`/api/orders`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(order)
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Local API failed');
+                    }
+
+                    const data = await response.json();
+                    console.log('Order saved to local backend:', data);
 
                     // Show success modal
                     document.getElementById('order-success-id').textContent = 'Order ID: ' + (data.orderId || order.orderId);
@@ -604,11 +642,15 @@
 
                     // Clear cart after successful order
                     clearCart();
-                })
-                .catch(error => {
-                    console.error('Error submitting order:', error);
-                    alert('Failed to place order. Please try again.');
-                });
+                } catch (localError) {
+                    console.error('Both APIs failed:', localError);
+                    alert('Failed to place order. Please try again or contact support.');
+                }
+            } finally {
+                // Reset button state
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }
         }
 
         // Close modal when clicking outside

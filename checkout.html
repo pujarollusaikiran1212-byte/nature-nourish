@@ -452,7 +452,6 @@
 
         document.addEventListener('DOMContentLoaded', function () {
             loadCheckoutCart();
-            updateCartCount();
         });
 
         function loadCheckoutCart() {
@@ -470,11 +469,13 @@
             if (cart.length === 0) {
                 document.getElementById('checkout-content').style.display = 'none';
                 document.getElementById('empty-cart').style.display = 'block';
+                updateCartCount();
                 return;
             }
 
             displayOrderItems();
             calculateTotals();
+            updateCartCount();
         }
 
         function displayOrderItems() {

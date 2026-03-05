@@ -390,7 +390,7 @@
                             </p>
                         </div>
 
-                        <button type="submit" class="btn-place-order">Confirm Order</button>
+                        <button type="submit" id="place-order-btn" class="btn-place-order">Place Order</button>
                     </form>
                 </div>
 
@@ -437,7 +437,7 @@
                 Thank you for your order! Our delivery team will contact you within 24 hours to confirm delivery
                 details.
             </p>
-            <a href="index.html" class="btn-continue-shopping" onclick="clearCart()">Continue Shopping</a>
+            <button class="btn-continue-shopping" onclick="handleContinueShopping()">Continue Shopping</button>
         </div>
     </div>
 
@@ -583,7 +583,7 @@
             console.log('Submitting Cart Order:', order);
 
             // Show loading state
-            const submitBtn = document.querySelector('.btn-place-order');
+            const submitBtn = document.getElementById('place-order-btn');
             const originalText = submitBtn.textContent;
             submitBtn.textContent = 'Placing Order...';
             submitBtn.disabled = true;
@@ -606,14 +606,13 @@
                 // Clear localStorage cart
                 localStorage.removeItem("cart");
 
-                // Reset cart count to 0
+                // Reset cart count to 0 on all pages
                 document.getElementById('cart-count').textContent = '0';
 
-                // Show success message
-                alert("Order placed successfully");
-
-                // Redirect to order success page
-                window.location.href = 'order-success.html';
+                // Show success modal with order ID
+                const orderId = data.orderId || 'ORD-' + Date.now();
+                document.getElementById('order-success-id').textContent = 'Order ID: ' + orderId;
+                document.getElementById('success-checkout-modal').style.display = 'block';
 
             } catch (error) {
                 console.error('Error placing order:', error);
@@ -623,6 +622,25 @@
                 submitBtn.textContent = originalText;
                 submitBtn.disabled = false;
             }
+        }
+
+        // Handle Continue Shopping button click from success modal
+        function handleContinueShopping() {
+            // Clear cart
+            localStorage.removeItem('cart');
+            cart = [];
+
+            // Reset cart counter to 0
+            const cartBadge = document.getElementById('cart-count');
+            if (cartBadge) {
+                cartBadge.textContent = '0';
+            }
+
+            // Hide modal
+            document.getElementById('success-checkout-modal').style.display = 'none';
+
+            // Redirect to homepage
+            window.location.href = 'index.html';
         }
 
         // Close modal when clicking outside

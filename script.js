@@ -9,6 +9,41 @@ let reviews = [];
 console.log("🧼 Premium Soap Website Loaded Successfully!");
 
 // ============================================
+// LOCALSTORAGE CART PERSISTENCE
+// ============================================
+
+// Save cart to localStorage
+function saveCart() {
+    try {
+        localStorage.setItem('natureNourishCart', JSON.stringify(cart));
+        console.log('Cart saved to localStorage:', cart.length, 'items');
+    } catch (e) {
+        console.error('Error saving cart to localStorage:', e);
+    }
+}
+
+// Load cart from localStorage
+function loadCart() {
+    try {
+        const savedCart = localStorage.getItem('natureNourishCart');
+        if (savedCart) {
+            cart = JSON.parse(savedCart);
+            console.log('Cart loaded from localStorage:', cart.length, 'items');
+            updateCartCount();
+            updateCartDisplay();
+        }
+    } catch (e) {
+        console.error('Error loading cart from localStorage:', e);
+        cart = [];
+    }
+}
+
+// Load cart when page loads
+document.addEventListener('DOMContentLoaded', function () {
+    loadCart();
+});
+
+// ============================================
 // LAUNCH OFFER PRICING LOGIC
 // ============================================
 
@@ -51,6 +86,7 @@ function addOfferBundle(quantity) {
         }
     });
 
+    saveCart();
     updateCartCount();
     updateCartDisplay();
 
@@ -179,6 +215,7 @@ function addToCart(productName, price) {
         quantity: 1
     });
 
+    saveCart();
     updateCartCount();
     updateCartDisplay();
 
@@ -347,12 +384,14 @@ function getProductImage(productName) {
 
 function increaseQuantity(index) {
     cart[index].quantity += 1;
+    saveCart();
     updateCartDisplay();
 }
 
 function decreaseQuantity(index) {
     if (cart[index].quantity > 1) {
         cart[index].quantity -= 1;
+        saveCart();
         updateCartDisplay();
     }
 }
@@ -360,6 +399,7 @@ function decreaseQuantity(index) {
 function removeFromCart(index) {
     const removedItem = cart[index].name;
     cart.splice(index, 1);
+    saveCart();
     updateCartDisplay();
     updateCartCount();
     console.log(`${removedItem} removed from cart.`);
@@ -370,8 +410,8 @@ function proceedToCheckout() {
         alert('Your cart is empty!');
         return;
     }
-    document.getElementById('cart').scrollIntoView({ behavior: 'smooth' });
-    alert('Proceed to checkout functionality. For now, use "Buy Now - COD" button on products.');
+    // Redirect to checkout page
+    window.location.href = 'checkout.html';
 }
 
 // ============================================

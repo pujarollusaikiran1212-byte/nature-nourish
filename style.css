@@ -464,6 +464,15 @@ p {
     background: var(--brown-luxury);
 }
 
+.btn-buy-now {
+    background: #28a745;
+    color: white;
+}
+
+.btn-buy-now:hover {
+    background: #218838;
+}
+
 .btn-cod {
     background: transparent;
     color: var(--text-secondary);

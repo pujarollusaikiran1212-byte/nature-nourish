@@ -533,7 +533,9 @@
         function updateCartCount() {
             const cartBadge = document.getElementById('cart-count');
             if (cartBadge) {
-                cartBadge.textContent = cart.length;
+                // Show total quantity of all items, not just unique items
+                const totalQuantity = cart.reduce((total, item) => total + item.quantity, 0);
+                cartBadge.textContent = totalQuantity;
             }
         }
 

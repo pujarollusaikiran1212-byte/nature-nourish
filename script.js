@@ -208,12 +208,21 @@ const RAILWAY_API_URL = 'https://nature-nourish-production.up.railway.app';
 // ============================================
 
 function addToCart(productName, price) {
-    cart.push({
-        id: Date.now(),
-        name: productName,
-        price: price,
-        quantity: 1
-    });
+    // Check if the product already exists in the cart
+    const existingItem = cart.find(item => item.name === productName);
+
+    if (existingItem) {
+        // If product exists, increase the quantity
+        existingItem.quantity += 1;
+    } else {
+        // If product doesn't exist, add it to the cart
+        cart.push({
+            id: Date.now(),
+            name: productName,
+            price: price,
+            quantity: 1
+        });
+    }
 
     saveCart();
     updateCartCount();
@@ -240,7 +249,11 @@ function addToCart(productName, price) {
 
 function updateCartCount() {
     const cartBadge = document.getElementById('cart-count');
-    cartBadge.textContent = cart.length;
+    if (cartBadge) {
+        // Show total quantity of all items, not just unique items
+        const totalQuantity = cart.reduce((total, item) => total + item.quantity, 0);
+        cartBadge.textContent = totalQuantity;
+    }
 }
 
 function updateCartDisplay() {

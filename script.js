@@ -15,7 +15,7 @@ console.log("🧼 Premium Soap Website Loaded Successfully!");
 // Save cart to localStorage
 function saveCart() {
     try {
-        localStorage.setItem('natureNourishCart', JSON.stringify(cart));
+        localStorage.setItem('cart', JSON.stringify(cart));
         console.log('Cart saved to localStorage:', cart.length, 'items');
     } catch (e) {
         console.error('Error saving cart to localStorage:', e);
@@ -25,7 +25,7 @@ function saveCart() {
 // Load cart from localStorage
 function loadCart() {
     try {
-        const savedCart = localStorage.getItem('natureNourishCart');
+        const savedCart = localStorage.getItem('cart');
         if (savedCart) {
             cart = JSON.parse(savedCart);
             console.log('Cart loaded from localStorage:', cart.length, 'items');

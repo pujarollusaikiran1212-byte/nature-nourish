@@ -457,7 +457,8 @@
 
         function loadCheckoutCart() {
             try {
-                const savedCart = localStorage.getItem('natureNourishCart');
+                // Use "cart" key as per requirements
+                const savedCart = localStorage.getItem('cart');
                 if (savedCart) {
                     cart = JSON.parse(savedCart);
                 }
@@ -523,69 +524,59 @@
         }
 
         function clearCart() {
-            localStorage.removeItem('natureNourishCart');
+            localStorage.removeItem('cart');
             cart = [];
             updateCartCount();
+        }
+
+        function updateCartCount() {
+            const cartBadge = document.getElementById('cart-count');
+            if (cartBadge) {
+                cartBadge.textContent = cart.length;
+            }
+        }
+
+        // Calculate cart total helper function
+        function calculateCartTotal(cartItems) {
+            return cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
         }
 
         async function placeOrder(event) {
             event.preventDefault();
 
-            if (cart.length === 0) {
-                alert('Your cart is empty!');
+            // Retrieve cart data from localStorage using the specified key
+            const cartItems = JSON.parse(localStorage.getItem("cart")) || [];
+
+            // If cartItems is empty, show alert
+            if (cartItems.length === 0) {
+                alert("Your cart is empty");
                 return;
             }
 
-            const fullName = document.getElementById('full-name').value;
+            // Get customer details from the checkout form
+            const name = document.getElementById('full-name').value;
             const phone = document.getElementById('phone').value;
             const address = document.getElementById('address').value;
             const city = document.getElementById('city').value;
             const pincode = document.getElementById('pincode').value;
-            const paymentMethod = document.querySelector('input[name="payment-method"]:checked').value;
 
-            // Calculate totals
-            let subtotal = 0;
-            const products = [];
+            // Calculate total using helper function
+            const total = calculateCartTotal(cartItems);
 
-            cart.forEach(item => {
-                subtotal += item.price * item.quantity;
-                products.push({
-                    name: item.name,
-                    price: item.price,
-                    quantity: item.quantity
-                });
-            });
-
-            // Create order object
+            // Create an order object
             const order = {
-                orderId: 'ORD-' + Date.now(),
-                products: products,
-                customer: {
-                    name: fullName,
-                    email: 'customer@website.com',
-                    mobile: phone,
-                    address: address,
-                    city: city,
-                    state: 'Not specified',
-                    pinCode: pincode
-                },
-                staff: {
-                    name: 'Website Customer',
-                    id: 'N/A'
-                },
-                subtotal: subtotal,
-                shipping: 0,
-                deliveryCharge: 0,
-                total: subtotal,
-                paymentMethod: 'Cash on Delivery',
-                paymentStatus: 'Pending',
-                orderStatus: 'Pending',
-                deliveryStatus: 'Pending Delivery',
-                orderSource: 'Website Checkout',
-                createdAt: new Date().toISOString()
+                name: name,
+                phone: phone,
+                address: address,
+                city: city,
+                pincode: pincode,
+                products: cartItems,
+                paymentMethod: "COD",
+                total: total,
+                orderDate: new Date()
             };
 
-            console.log('Submitting Checkout Order:', order);
+            console.log('Submitting Cart Order:', order);
 
             // Show loading state
             const submitBtn = document.querySelector('.btn-place-order');
@@ -610,12 +601,18 @@
                 const data = await response.json();
                 console.log('Order saved to Railway backend:', data);
 
-                // Show success modal
-                document.getElementById('order-success-id').textContent = 'Order ID: ' + (data.orderId || order.orderId);
-                document.getElementById('success-checkout-modal').style.display = 'block';
-
                 // Clear cart after successful order
-                clearCart();
+                localStorage.removeItem("cart");
+
+                // Update cart count to 0
+                document.getElementById('cart-count').textContent = '0';
+
+                // Show success alert
+                alert("Order placed successfully");
+
+                // Redirect to order-success.html
+                window.location.href = 'order-success.html';
+
             } catch (railwayError) {
                 console.log('Railway API failed, trying local server:', railwayError);
 
@@ -636,12 +633,18 @@
                     const data = await response.json();
                     console.log('Order saved to local backend:', data);
 
-                    // Show success modal
-                    document.getElementById('order-success-id').textContent = 'Order ID: ' + (data.orderId || order.orderId);
-                    document.getElementById('success-checkout-modal').style.display = 'block';
-
                     // Clear cart after successful order
-                    clearCart();
+                    localStorage.removeItem("cart");
+
+                    // Update cart count to 0
+                    document.getElementById('cart-count').textContent = '0';
+
+                    // Show success alert
+                    alert("Order placed successfully");
+
+                    // Redirect to order-success.html
+                    window.location.href = 'order-success.html';
+
                 } catch (localError) {
                     console.error('Both APIs failed:', localError);
                     alert('Failed to place order. Please try again or contact support.');

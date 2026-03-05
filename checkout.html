@@ -443,6 +443,9 @@
 
     <script src="script.js"></script>
     <script>
+        // Railway API Base URL
+        const RAILWAY_API_URL = 'https://nature-nourish-production.up.railway.app';
+
         // Load cart from localStorage on page load
         let cart = [];
 
@@ -586,8 +589,8 @@
             submitBtn.disabled = true;
 
             try {
-                // Send order to backend
-                const response = await fetch("/api/orders", {
+                // Send order to backend using full Railway URL
+                const response = await fetch(RAILWAY_API_URL + "/api/orders", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(order)

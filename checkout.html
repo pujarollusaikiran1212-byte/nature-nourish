@@ -555,26 +555,52 @@
             }
 
             // Get customer details from the checkout form
-            const name = document.getElementById('full-name').value;
+            const fullName = document.getElementById('full-name').value;
             const phone = document.getElementById('phone').value;
             const address = document.getElementById('address').value;
             const city = document.getElementById('city').value;
             const pincode = document.getElementById('pincode').value;
 
-            // Calculate total using helper function
-            const total = calculateCartTotal(cartItems);
+            // Calculate totals
+            let subtotal = 0;
+            const products = [];
 
-            // Create an order object
+            cartItems.forEach(item => {
+                subtotal += item.price * item.quantity;
+                products.push({
+                    name: item.name,
+                    price: item.price,
+                    quantity: item.quantity
+                });
+            });
+
+            // Create order object in the format the backend expects (matching Order model)
             const order = {
-                name: name,
-                phone: phone,
-                address: address,
-                city: city,
-                pincode: pincode,
-                products: cartItems,
-                paymentMethod: "COD",
-                total: total,
-                orderDate: new Date()
+                orderId: 'ORD-' + Date.now(),
+                products: products,
+                customer: {
+                    name: fullName,
+                    email: 'customer@website.com',
+                    mobile: phone,
+                    address: address,
+                    city: city,
+                    state: 'Not specified',
+                    pinCode: pincode
+                },
+                staff: {
+                    name: 'Website Customer',
+                    id: 'N/A'
+                },
+                subtotal: subtotal,
+                shipping: 0,
+                deliveryCharge: 0,
+                total: subtotal,
+                paymentMethod: 'Cash on Delivery',
+                paymentStatus: 'Pending',
+                orderStatus: 'Pending',
+                deliveryStatus: 'Pending Delivery',
+                orderSource: 'Website Checkout',
+                createdAt: new Date().toISOString()
             };
 
             console.log('Submitting Cart Order:', order);

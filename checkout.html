@@ -563,21 +563,42 @@
             const city = document.getElementById('city').value;
             const pincode = document.getElementById('pincode').value;
 
-            // Calculate total
-            const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+            // Calculate totals
+            const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+            const shipping = 0; // Free shipping
+            const total = subtotal + shipping;
 
-            // Create order object with ALL products in the cart
+            // Create order object in the format the backend expects
             const order = {
-                name: fullName,
-                phone: phone,
-                address: address,
-                city: city,
-                pincode: pincode,
-                products: cart,
-                paymentMethod: "Cash on Delivery",
+                orderId: 'ORD-' + Date.now(),
+                products: cart.map(item => ({
+                    name: item.name,
+                    price: item.price,
+                    quantity: item.quantity
+                })),
+                customer: {
+                    name: fullName,
+                    email: '', // Email not collected in checkout form
+                    mobile: phone,
+                    address: address,
+                    city: city,
+                    state: '', // State not collected in checkout form
+                    pinCode: pincode
+                },
+                staff: {
+                    name: 'Website Customer',
+                    id: 'N/A'
+                },
+                subtotal: subtotal,
+                shipping: shipping,
+                deliveryCharge: shipping,
                 total: total,
-                status: "New Order",
-                createdAt: new Date()
+                paymentMethod: 'Cash on Delivery',
+                paymentStatus: 'Pending',
+                orderStatus: 'Pending',
+                deliveryStatus: 'Pending Delivery',
+                orderSource: 'Website',
+                createdAt: new Date().toISOString()
             };
 
             console.log('Submitting Cart Order:', order);
@@ -610,7 +631,7 @@
                 document.getElementById('cart-count').textContent = '0';
 
                 // Show success modal with order ID
-                const orderId = data.orderId || 'ORD-' + Date.now();
+                const orderId = data.orderId || order.orderId;
                 document.getElementById('order-success-id').textContent = 'Order ID: ' + orderId;
                 document.getElementById('success-checkout-modal').style.display = 'block';
 

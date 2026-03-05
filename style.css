@@ -455,13 +455,15 @@ p {
     text-align: center;
 }
 
+
 .btn-add-cart {
-    background: var(--text-dark);
+    background: var(--brown-luxury);
+    color: white;
     flex: 1;
 }
 
 .btn-add-cart:hover {
-    background: var(--brown-luxury);
+    background: var(--brown-dark);
 }
 
 .btn-buy-now {

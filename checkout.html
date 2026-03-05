@@ -603,15 +603,32 @@
         document.getElementById("checkout-form").addEventListener("submit", async function (e) {
             e.preventDefault();
 
-            // Retrieve cart items from localStorage
-            const cartData = localStorage.getItem("cart");
-            if (!cartData) {
-                alert("Your cart is empty");
-                return;
+            // Get items from BOTH cart and directProduct
+            let cartData = localStorage.getItem("cart");
+            let directProductData = localStorage.getItem("directProduct");
+
+            let items = [];
+
+            // Try cart first
+            if (cartData) {
+                try {
+                    items = JSON.parse(cartData);
+                } catch (e) {
+                    items = [];
+                }
             }
 
-            const cart = JSON.parse(cartData);
-            if (!cart || cart.length === 0) {
+            // If cart is empty, try directProduct
+            if ((!items || items.length === 0) && directProductData) {
+                try {
+                    items = [JSON.parse(directProductData)];
+                } catch (e) {
+                    items = [];
+                }
+            }
+
+            // Check if we have items to order
+            if (!items || items.length === 0) {
                 alert("Your cart is empty");
                 return;
             }
@@ -626,19 +643,19 @@
             const pincode = document.getElementById('pincode').value;
 
             // Calculate totals
-            const bundleItems = cart.filter(item => item.isOfferBundle);
+            const bundleItems = items.filter(item => item.isOfferBundle);
             let subtotal = 0;
             let products = [];
 
             if (bundleItems.length > 0) {
                 // Bundle order - use the bundle total
                 subtotal = bundleItems[0].bundleTotal || 0;
-                // Get unique product names from the cart
-                const uniqueProducts = [...new Set(cart.map(item => item.name))];
+                // Get unique product names from the items
+                const uniqueProducts = [...new Set(items.map(item => item.name))];
                 uniqueProducts.forEach(productName => {
-                    const items = cart.filter(item => item.name === productName);
-                    const totalQty = items.reduce((sum, item) => sum + item.quantity, 0);
-                    const price = items[0].price || Math.floor(subtotal / totalQty);
+                    const filteredItems = items.filter(item => item.name === productName);
+                    const totalQty = filteredItems.reduce((sum, item) => sum + item.quantity, 0);
+                    const price = filteredItems[0].price || Math.floor(subtotal / totalQty);
                     products.push({
                         name: productName.replace(' (Bundle)', ''),
                         price: price,
@@ -647,11 +664,11 @@
                 });
             } else {
                 // Regular cart calculation
-                subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-                products = cart.map(item => ({
+                subtotal = items.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
+                products = items.map(item => ({
                     name: item.name,
                     price: item.price,
-                    quantity: item.quantity
+                    quantity: item.quantity || 1
                 }));
             }
 
@@ -713,8 +730,9 @@
                 const data = await response.json();
                 console.log('Order placed successfully:', data);
 
-                // Clear cart from localStorage
+                // Clear cart and directProduct from localStorage
                 localStorage.removeItem('cart');
+                localStorage.removeItem('directProduct');
 
                 // Show success message
                 const successModal = document.getElementById('success-checkout-modal');

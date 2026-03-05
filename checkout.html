@@ -443,9 +443,6 @@
 
     <script src="script.js"></script>
     <script>
-        // Railway API Base URL for production
-        const RAILWAY_API_URL = 'https://nature-nourish-production.up.railway.app';
-
         // Load cart from localStorage on page load
         let cart = [];
 
@@ -469,13 +466,11 @@
             if (!cart || cart.length === 0) {
                 document.getElementById('checkout-content').style.display = 'none';
                 document.getElementById('empty-cart').style.display = 'block';
-                updateCartCount();
                 return;
             }
 
             displayOrderItems();
             calculateTotals();
-            updateCartCount();
         }
 
         function displayOrderItems() {
@@ -516,8 +511,8 @@
                 });
             }
 
-            document.getElementById('subtotal-price').textContent = `₹${subtotal}`;
-            document.getElementById('total-price').textContent = `₹${subtotal}`;
+            document.getElementById('subtotal-price').textContent = '₹' + subtotal;
+            document.getElementById('total-price').textContent = '₹' + subtotal;
 
             return subtotal;
         }
@@ -536,30 +531,11 @@
             window.location.href = 'index.html#cart';
         }
 
-        function clearCart() {
-            localStorage.removeItem('cart');
-            cart = [];
-            updateCartCount();
-        }
+        // Form submit handler - Place Order
+        document.getElementById("checkout-form").addEventListener("submit", async function (e) {
+            e.preventDefault();
 
-        function updateCartCount() {
-            const cartBadge = document.getElementById('cart-count');
-            if (cartBadge) {
-                // Show total quantity of all items, not just unique items
-                const totalQuantity = cart.reduce((total, item) => total + item.quantity, 0);
-                cartBadge.textContent = totalQuantity;
-            }
-        }
-
-        // Calculate cart total helper function
-        function calculateCartTotal(cartItems) {
-            return cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
-        }
-
-        async function placeOrder(event) {
-            event.preventDefault();
-
-            // Retrieve cart items from localStorage fresh
+            // Retrieve cart items from localStorage
             const cartData = localStorage.getItem("cart");
             if (!cartData) {
                 alert("Your cart is empty");
@@ -572,62 +548,36 @@
                 return;
             }
 
-            // Get checkout form data
-            const fullName = document.getElementById('full-name').value;
+            // Get customer details from form
+            const name = document.getElementById('full-name').value;
             const phone = document.getElementById('phone').value;
             const address = document.getElementById('address').value;
             const city = document.getElementById('city').value;
             const pincode = document.getElementById('pincode').value;
 
-            // Calculate totals - handle bundle offers properly
+            // Calculate total amount
             const bundleItems = cart.filter(item => item.isOfferBundle);
-            let subtotal = 0;
+            let totalAmount = 0;
 
             if (bundleItems.length > 0) {
-                // This is a bundle order - use the bundle total
-                subtotal = bundleItems[0].bundleTotal || 0;
+                totalAmount = bundleItems[0].bundleTotal || 0;
             } else {
-                // Regular order
-                subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+                totalAmount = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
             }
 
-            const shipping = 0; // Free shipping
-            const total = subtotal + shipping;
-
-            // Create order object in the format the backend expects
+            // Create order object as per requirements
             const order = {
-                orderId: 'ORD-' + Date.now(),
-                products: cart.map(item => ({
-                    name: item.name,
-                    price: item.price,
-                    quantity: item.quantity
-                })),
-                customer: {
-                    name: fullName,
-                    email: '', // Email not collected in checkout form
-                    mobile: phone,
-                    address: address,
-                    city: city,
-                    state: '', // State not collected in checkout form
-                    pinCode: pincode
-                },
-                staff: {
-                    name: 'Website Customer',
-                    id: 'N/A'
-                },
-                subtotal: subtotal,
-                shipping: shipping,
-                deliveryCharge: shipping,
-                total: total,
-                paymentMethod: 'Cash on Delivery',
-                paymentStatus: 'Pending',
-                orderStatus: 'Pending',
-                deliveryStatus: 'Pending Delivery',
-                orderSource: 'Website',
-                createdAt: new Date().toISOString()
+                name: name,
+                phone: phone,
+                address: address,
+                city: city,
+                pincode: pincode,
+                items: cart,
+                paymentMethod: "COD",
+                totalAmount: totalAmount
             };
 
-            console.log('Submitting Cart Order:', order);
+            console.log('Submitting Order:', order);
 
             // Show loading state
             const submitBtn = document.getElementById('place-order-btn');
@@ -636,8 +586,8 @@
             submitBtn.disabled = true;
 
             try {
-                // Send order to Railway backend API
-                const response = await fetch(`${RAILWAY_API_URL}/api/orders`, {
+                // Send order to backend
+                const response = await fetch("/api/orders", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(order)
@@ -650,19 +600,14 @@
                 const data = await response.json();
                 console.log('Order placed successfully:', data);
 
-                // Clear localStorage cart
-                localStorage.removeItem("cart");
+                // Clear cart from localStorage
+                localStorage.removeItem('cart');
 
-                // Reset cart count to 0 on all pages
-                const cartBadge = document.getElementById('cart-count');
-                if (cartBadge) {
-                    cartBadge.textContent = '0';
-                }
+                // Show success message
+                alert("Order placed successfully");
 
-                // Show success modal with order ID
-                const orderId = data.orderId || order.orderId;
-                document.getElementById('order-success-id').textContent = 'Order ID: ' + orderId;
-                document.getElementById('success-checkout-modal').style.display = 'block';
+                // Redirect to homepage
+                window.location.href = 'index.html';
 
             } catch (error) {
                 console.error('Error placing order:', error);
@@ -672,34 +617,7 @@
                 submitBtn.textContent = originalText;
                 submitBtn.disabled = false;
             }
-        }
-
-        // Handle Continue Shopping button click from success modal
-        function handleContinueShopping() {
-            // Clear cart
-            localStorage.removeItem('cart');
-            cart = [];
-
-            // Reset cart counter to 0
-            const cartBadge = document.getElementById('cart-count');
-            if (cartBadge) {
-                cartBadge.textContent = '0';
-            }
-
-            // Hide modal
-            document.getElementById('success-checkout-modal').style.display = 'none';
-
-            // Redirect to homepage
-            window.location.href = 'index.html';
-        }
-
-        // Close modal when clicking outside
-        window.onclick = function (event) {
-            const modal = document.getElementById('success-checkout-modal');
-            if (event.target === modal) {
-                // Don't close on outside click - let user click the button
-            }
-        }
+        });
     </script>
 </body>
 

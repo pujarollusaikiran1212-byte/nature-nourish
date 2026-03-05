@@ -734,6 +734,9 @@
                 localStorage.removeItem('cart');
                 localStorage.removeItem('directProduct');
 
+                // Update cart count in header to 0
+                updateCartCount();
+
                 // Show success message
                 const successModal = document.getElementById('success-checkout-modal');
                 const orderSuccessId = document.getElementById('order-success-id');

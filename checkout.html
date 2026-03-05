@@ -443,9 +443,8 @@
 
     <script src="script.js"></script>
     <script>
-        // API URLs - Railway (primary) and local server (fallback)
+        // Railway API Base URL for production
         const RAILWAY_API_URL = 'https://nature-nourish-production.up.railway.app';
-        const LOCAL_API_URL = ''; // Uses relative URL (works with local server)
 
         // Load cart from localStorage on page load
         let cart = [];
@@ -460,13 +459,14 @@
                 const savedCart = localStorage.getItem('cart');
                 if (savedCart) {
                     cart = JSON.parse(savedCart);
+                    console.log('Cart loaded:', cart);
                 }
             } catch (e) {
                 console.error('Error loading cart:', e);
                 cart = [];
             }
 
-            if (cart.length === 0) {
+            if (!cart || cart.length === 0) {
                 document.getElementById('checkout-content').style.display = 'none';
                 document.getElementById('empty-cart').style.display = 'block';
                 updateCartCount();
@@ -500,14 +500,26 @@
         }
 
         function calculateTotals() {
+            // Check if this is a bundle offer order
+            const bundleItems = cart.filter(item => item.isOfferBundle);
+
             let subtotal = 0;
 
-            cart.forEach(item => {
-                subtotal += item.price * item.quantity;
-            });
+            if (bundleItems.length > 0) {
+                // Get the bundle total from the first bundle item
+                const bundleTotal = bundleItems[0].bundleTotal || 0;
+                subtotal = bundleTotal;
+            } else {
+                // Regular cart calculation
+                cart.forEach(item => {
+                    subtotal += item.price * item.quantity;
+                });
+            }
 
             document.getElementById('subtotal-price').textContent = `₹${subtotal}`;
             document.getElementById('total-price').textContent = `₹${subtotal}`;
+
+            return subtotal;
         }
 
         function getProductImage(productName) {
@@ -547,11 +559,15 @@
         async function placeOrder(event) {
             event.preventDefault();
 
-            // Retrieve cart items from localStorage
-            const cart = JSON.parse(localStorage.getItem("cart")) || [];
+            // Retrieve cart items from localStorage fresh
+            const cartData = localStorage.getItem("cart");
+            if (!cartData) {
+                alert("Your cart is empty");
+                return;
+            }
 
-            // If cart is empty, show alert
-            if (cart.length === 0) {
+            const cart = JSON.parse(cartData);
+            if (!cart || cart.length === 0) {
                 alert("Your cart is empty");
                 return;
             }
@@ -563,8 +579,18 @@
             const city = document.getElementById('city').value;
             const pincode = document.getElementById('pincode').value;
 
-            // Calculate totals
-            const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+            // Calculate totals - handle bundle offers properly
+            const bundleItems = cart.filter(item => item.isOfferBundle);
+            let subtotal = 0;
+
+            if (bundleItems.length > 0) {
+                // This is a bundle order - use the bundle total
+                subtotal = bundleItems[0].bundleTotal || 0;
+            } else {
+                // Regular order
+                subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+            }
+
             const shipping = 0; // Free shipping
             const total = subtotal + shipping;
 
@@ -610,8 +636,8 @@
             submitBtn.disabled = true;
 
             try {
-                // Send order to backend using the same API endpoint as Confirm Order
-                const response = await fetch("/api/orders", {
+                // Send order to Railway backend API
+                const response = await fetch(`${RAILWAY_API_URL}/api/orders`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(order)
@@ -628,7 +654,10 @@
                 localStorage.removeItem("cart");
 
                 // Reset cart count to 0 on all pages
-                document.getElementById('cart-count').textContent = '0';
+                const cartBadge = document.getElementById('cart-count');
+                if (cartBadge) {
+                    cartBadge.textContent = '0';
+                }
 
                 // Show success modal with order ID
                 const orderId = data.orderId || order.orderId;

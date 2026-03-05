@@ -373,6 +373,7 @@
                         <span id="cart-total">₹0</span>
                     </div>
                     <button class="btn btn-checkout" onclick="proceedToCheckout()">Proceed to Checkout</button>
+                    <button class="btn btn-buy-cod-cart" onclick="openCartCODForm()">Buy All with COD</button>
                 </div>
             </div>
         </div>
@@ -506,6 +507,11 @@
                 <div class="form-group">
                     <label>Price:</label>
                     <input type="text" id="cod-price" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Quantity:</label>
+                    <input type="number" id="cod-quantity" value="1" min="1" max="10" onchange="updateCODTotal()"
+                        oninput="updateCODTotal()">
                 </div>
                 <div class="form-group">
                     <label>Full Name:</label>

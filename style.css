@@ -457,7 +457,7 @@ p {
 
 .btn-add-cart {
     background: var(--text-dark);
-    color: var(--bg-white);
+    flex: 1;
 }
 
 .btn-add-cart:hover {
@@ -467,9 +467,34 @@ p {
 .btn-buy-now {
     background: #28a745;
     color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 14px;
+    flex: 1;
+    transition: all 0.3s ease;
 }
 
 .btn-buy-now:hover {
+    background: #218838;
+}
+
+.btn-buy-cod-cart {
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 14px 24px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 14px;
+    margin-top: 10px;
+    width: 100%;
+}
+
+.btn-buy-cod-cart:hover {
     background: #218838;
 }
 

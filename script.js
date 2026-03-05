@@ -436,32 +436,102 @@ function openCODForm(productName, price) {
     document.getElementById('cod-product').value = productName;
     document.getElementById('cod-price').value = '₹' + price;
 
+    // Reset quantity to 1 when opening the modal
+    const quantityInput = document.getElementById('cod-quantity');
+    if (quantityInput) {
+        quantityInput.value = 1;
+    }
+
     const deliveryOption = document.querySelector('input[name="delivery-option"]:checked');
     const deliveryCharge = deliveryOption ? parseInt(deliveryOption.value) : 0;
     document.getElementById('cod-delivery-charge').value = '₹' + deliveryCharge;
 
     const productPrice = parseInt(price);
-    const totalAmount = productPrice + deliveryCharge;
+    const quantity = 1;
+    const totalAmount = (productPrice * quantity) + deliveryCharge;
     document.getElementById('cod-total-amount').value = '₹' + totalAmount;
 
     modal.style.display = 'block';
+}
+
+// Update COD total based on quantity and delivery charge
+function updateCODTotal() {
+    const priceText = document.getElementById('cod-price').value;
+    const productPrice = parseInt(priceText.replace('₹', '')) || 0;
+
+    const quantityInput = document.getElementById('cod-quantity');
+    let quantity = parseInt(quantityInput.value) || 1;
+    // Ensure quantity is at least 1
+    if (quantity < 1) {
+        quantity = 1;
+        quantityInput.value = 1;
+    }
+
+    const deliveryOption = document.querySelector('input[name="delivery-option"]:checked');
+    const deliveryCharge = deliveryOption ? parseInt(deliveryOption.value) : 0;
+
+    document.getElementById('cod-delivery-charge').value = '₹' + deliveryCharge;
+
+    const totalAmount = (productPrice * quantity) + deliveryCharge;
+    document.getElementById('cod-total-amount').value = '₹' + totalAmount;
 }
 
 function updateDeliveryCharge() {
     const priceText = document.getElementById('cod-price').value;
     const productPrice = parseInt(priceText.replace('₹', '')) || 0;
 
+    const quantityInput = document.getElementById('cod-quantity');
+    let quantity = parseInt(quantityInput ? quantityInput.value : 1) || 1;
+    if (quantity < 1) quantity = 1;
+
     const deliveryOption = document.querySelector('input[name="delivery-option"]:checked');
     const deliveryCharge = deliveryOption ? parseInt(deliveryOption.value) : 0;
 
     document.getElementById('cod-delivery-charge').value = '₹' + deliveryCharge;
 
-    const totalAmount = productPrice + deliveryCharge;
+    const totalAmount = (productPrice * quantity) + deliveryCharge;
     document.getElementById('cod-total-amount').value = '₹' + totalAmount;
 }
 
 function closeCODForm() {
     document.getElementById('cod-modal').style.display = 'none';
+}
+
+// Open COD form for all cart items at once
+function openCartCODForm() {
+    if (cart.length === 0) {
+        alert('Your cart is empty! Add some products first.');
+        return;
+    }
+
+    const modal = document.getElementById('cod-modal');
+
+    // Build cart summary text
+    let cartSummary = '';
+    let totalAmount = 0;
+    cart.forEach(item => {
+        const itemTotal = item.price * item.quantity;
+        totalAmount += itemTotal;
+        cartSummary += `${item.name} x ${item.quantity} = ₹${itemTotal}\n`;
+    });
+
+    document.getElementById('cod-product').value = 'Multiple Items (See Below)';
+    document.getElementById('cod-price').value = '₹' + totalAmount;
+    document.getElementById('cod-quantity').value = cart.length;
+    document.getElementById('cod-quantity').style.display = 'none';
+    document.getElementById('cod-quantity').previousElementSibling.style.display = 'none';
+
+    // Show cart items in a hidden field or alert
+    document.getElementById('cod-product').title = cartSummary;
+
+    const deliveryOption = document.querySelector('input[name="delivery-option"]:checked');
+    const deliveryCharge = deliveryOption ? parseInt(deliveryOption.value) : 0;
+    document.getElementById('cod-delivery-charge').value = '₹' + deliveryCharge;
+
+    const totalWithDelivery = totalAmount + deliveryCharge;
+    document.getElementById('cod-total-amount').value = '₹' + totalWithDelivery;
+
+    modal.style.display = 'block';
 }
 
 function updateCities() {
@@ -516,9 +586,10 @@ function submitCODOrder(event) {
     const pin = document.getElementById('cod-pin').value;
     const productName = document.getElementById('cod-product').value;
     const priceText = document.getElementById('cod-price').value;
+    const quantityInput = document.getElementById('cod-quantity');
+    const quantity = parseInt(quantityInput ? quantityInput.value : 1) || 1;
 
     const unitPrice = parseInt(priceText.replace('₹', '')) || 100;
-    const quantity = 1;
     const totalAmount = unitPrice * quantity;
 
     if (!name || !email || !mobile || !state || !city || !address || !pin) {
@@ -547,10 +618,10 @@ function submitCODOrder(event) {
             name: 'Website Customer',
             id: 'N/A'
         },
-        subtotal: unitPrice,
+        subtotal: totalAmount,
         shipping: 30,
         deliveryCharge: parseInt(document.getElementById('cod-delivery-charge').value.replace('₹', '')) || 0,
-        total: unitPrice + (parseInt(document.getElementById('cod-delivery-charge').value.replace('₹', '')) || 0),
+        total: totalAmount + (parseInt(document.getElementById('cod-delivery-charge').value.replace('₹', '')) || 0),
         paymentMethod: 'Cash on Delivery',
         paymentStatus: 'Pending',
         orderStatus: 'Pending',

@@ -766,7 +766,7 @@ function submitCustomerOrder(event) {
         subtotal: totalAmount,
         shipping: 30,
         total: totalAmount + 30,
-        paymentMethod: 'COD',
+        paymentMethod: 'Cash on Delivery',
         paymentStatus: 'Pending',
         orderStatus: 'Pending',
         deliveryStatus: deliveryStatus,

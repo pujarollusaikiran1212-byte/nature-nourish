@@ -633,7 +633,7 @@
             const deliveryCharge = 0;
             const total = subtotal + shipping + deliveryCharge;
 
-            // Create order object matching backend Order model schema
+            // Create order object matching backend Order model schema EXACTLY
             const order = {
                 orderId: 'ORD-' + Date.now(),
                 products: products,
@@ -679,7 +679,9 @@
                 });
 
                 if (!response.ok) {
-                    throw new Error('Failed to place order');
+                    const errorData = await response.json();
+                    console.error('Server error:', errorData);
+                    throw new Error('Failed to place order: ' + (errorData.message || response.statusText));
                 }
 
                 const data = await response.json();
@@ -696,7 +698,7 @@
 
             } catch (error) {
                 console.error('Error placing order:', error);
-                alert('Failed to place order. Please try again.');
+                alert('Failed to place order. Please try again. Error: ' + error.message);
             } finally {
                 // Reset button state
                 submitBtn.textContent = originalText;

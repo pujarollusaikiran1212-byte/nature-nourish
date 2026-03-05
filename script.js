@@ -622,7 +622,7 @@ function submitCODOrder(event) {
         shipping: 30,
         deliveryCharge: parseInt(document.getElementById('cod-delivery-charge').value.replace('₹', '')) || 0,
         total: totalAmount + (parseInt(document.getElementById('cod-delivery-charge').value.replace('₹', '')) || 0),
-        paymentMethod: 'COD',
+        paymentMethod: 'Cash on Delivery',
         paymentStatus: 'Pending',
         orderStatus: 'Pending',
         deliveryStatus: 'Pending Delivery',

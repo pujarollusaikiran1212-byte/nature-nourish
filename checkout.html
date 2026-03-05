@@ -571,8 +571,16 @@
                 });
             }
 
-            document.getElementById('subtotal-price').textContent = '₹' + subtotal;
-            document.getElementById('total-price').textContent = '₹' + subtotal;
+            // Use querySelector to find elements (fallback to id if not found)
+            const subtotalElement = document.querySelector("#subtotal-price") || document.getElementById("subtotal-price");
+            const totalElement = document.querySelector("#total-price") || document.getElementById("total-price");
+
+            if (subtotalElement) {
+                subtotalElement.textContent = '₹' + subtotal;
+            }
+            if (totalElement) {
+                totalElement.textContent = '₹' + subtotal;
+            }
 
             return subtotal;
         }

@@ -640,7 +640,12 @@ function submitCODOrder(event) {
         },
         body: JSON.stringify(order)
     })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Server error: ' + response.status);
+            }
+            return response.json();
+        })
         .then(data => {
             console.log('Order saved to backend:', data);
 
@@ -671,7 +676,7 @@ function submitCODOrder(event) {
         })
         .catch(error => {
             console.error('Error submitting order:', error);
-            alert('Failed to submit order. Please try again.');
+            alert('Failed to submit order. Please try again. Error: ' + error.message);
         });
 }
 

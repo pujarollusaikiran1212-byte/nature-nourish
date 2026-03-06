@@ -450,8 +450,8 @@
 
     <script src="script.js"></script>
     <script>
-        // Use local server API instead of Railway
-        var API_URL = ''; // Empty means relative to current domain (local server)
+        // Use Railway API for orders since local MongoDB may not be connected
+        var API_URL = 'https://nature-nourish-production.up.railway.app';
         var checkoutItems = [];
         document.addEventListener('DOMContentLoaded', function () { loadCheckoutItems(); });
 

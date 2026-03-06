@@ -537,21 +537,35 @@
 
                         function calculateTotals() {
                             var subtotal = 0;
+                            var totalQuantity = 0;
+
+                            // Calculate total quantity and subtotal
                             checkoutItems.forEach(function (item) {
                                 var price = parseFloat(item.price) || 0;
                                 var qty = parseInt(item.quantity) || 1;
                                 subtotal += price * qty;
+                                totalQuantity += qty;
                             });
 
-                            console.log("Calculated subtotal:", subtotal);
+                            // Check if this is a launch offer bundle (1-3 items at launch offer prices)
+                            // The cart stores the actual individual prices, so we need to get the offer price
+                            var offerPrice = subtotal;
+                            if (totalQuantity >= 1 && totalQuantity <= 3) {
+                                // Apply launch offer pricing
+                                if (totalQuantity === 1) offerPrice = 149;
+                                else if (totalQuantity === 2) offerPrice = 249;
+                                else if (totalQuantity === 3) offerPrice = 349;
+                            }
+
+                            console.log("Calculated subtotal:", subtotal, "Total quantity:", totalQuantity, "Offer price:", offerPrice);
 
                             var subtotalEl = document.getElementById("subtotal");
                             var totalEl = document.getElementById("total");
 
-                            if (subtotalEl) subtotalEl.innerText = "₹" + subtotal;
-                            if (totalEl) totalEl.innerText = "₹" + subtotal;
+                            if (subtotalEl) subtotalEl.innerText = "₹" + offerPrice;
+                            if (totalEl) totalEl.innerText = "₹" + offerPrice;
 
-                            return subtotal;
+                            return offerPrice;
                         }
 
                         function getProductImage(name) {
@@ -582,14 +596,17 @@
                                 return;
                             }
 
-                            // Validate items have proper price - recalculate from current checkoutItems
+                            // Calculate total quantity and apply launch offer pricing
                             var subtotal = 0;
+                            var totalQuantity = 0;
                             var validItems = [];
 
                             checkoutItems.forEach(function (item) {
                                 var price = parseFloat(item.price) || 0;
                                 var qty = parseInt(item.quantity) || 1;
-                                if (price > 0 && qty > 0) {
+                                totalQuantity += qty;
+                                // Accept items with any valid price (including 0 for split bundle prices)
+                                if (item.name && qty > 0) {
                                     validItems.push({
                                         name: item.name,
                                         price: price,
@@ -599,16 +616,25 @@
                                 }
                             });
 
-                            console.log("Valid items:", validItems);
-                            console.log("Calculated subtotal:", subtotal);
+                            // Apply launch offer pricing if applicable
+                            var finalTotal = subtotal;
+                            if (totalQuantity >= 1 && totalQuantity <= 3) {
+                                if (totalQuantity === 1) finalTotal = 149;
+                                else if (totalQuantity === 2) finalTotal = 249;
+                                else if (totalQuantity === 3) finalTotal = 349;
+                            }
 
-                            if (validItems.length === 0 || subtotal <= 0) {
-                                alert("Invalid cart items. Please add products to your cart with valid prices.");
+                            console.log("Valid items:", validItems);
+                            console.log("Calculated subtotal:", subtotal, "Total quantity:", totalQuantity, "Final total:", finalTotal);
+
+                            // Allow order if there are valid items and total is correct
+                            if (validItems.length === 0 || finalTotal <= 0) {
+                                alert("Invalid cart items. Please add products to your cart.");
                                 return;
                             }
 
                             console.log("Submitting order with items:", validItems);
-                            console.log("Subtotal:", subtotal);
+                            console.log("Final total:", finalTotal);
 
                             var customerData = {
                                 name: document.getElementById('full-name').value,
@@ -633,10 +659,10 @@
                                 products: validItems,
                                 customer: customerData,
                                 staff: { name: 'Website Customer', id: 'N/A' },
-                                subtotal: subtotal,
+                                subtotal: finalTotal,
                                 shipping: 0,
                                 deliveryCharge: 0,
-                                total: subtotal,
+                                total: finalTotal,
                                 paymentMethod: 'Cash on Delivery',
                                 paymentStatus: 'Pending',
                                 orderStatus: 'Pending',

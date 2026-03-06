@@ -1,47 +1,23 @@
-# Checkout Order Submission - FIX COMPLETED ✅
+# TODO - Fix Cart Price Sum and Admin Order Display
 
-## Summary of Changes Made:
+## Issues Identified:
+1. **Cart prices not summing up**: The checkout page calculates totals from individual item prices, but the launch offer bundle prices are split across items which can cause rounding issues
+2. **Order details not displaying in admin portal**: Need to verify order data is properly sent and stored
 
-### 1. checkout.html - Fixed embedded JavaScript:
-- **loadCheckoutItems()**: Now properly parses cart items and directProduct from localStorage with correct numeric conversion for prices and quantities
-- **displayOrderItems()**: Added null checks and proper HTML structure
-- **calculateTotals()**: Fixed to properly calculate subtotal from items with correct price parsing
-- **getProductImage()**: Added more product mappings including Lavender Bliss, Rose Petal, Charcoal Cleanse, Aloe Vera Glow
-- **Order submission**: Added better validation, reloads cart before submission, improved error handling, proper cart clearing after successful order
+## Fix Plan:
 
-### 2. script.js - Fixed openCODForm():
-- Changed from opening a modal to redirecting to checkout.html
-- Now properly saves product to localStorage as 'directProduct' before redirecting
-- This ensures "Buy Now COD" button goes through checkout page
+### Fix 1: Update checkout.html to properly calculate totals with launch offer logic
+- [ ] 1. Add launch offer pricing logic to checkout.html to match script.js
+- [ ] 2. Fix the calculateTotals function to apply launch offer discounts properly
 
-## How the Fixed Flows Work:
+### Fix 2: Ensure order data is properly sent to backend
+- [ ] 3. Verify order submission sends complete product details
+- [ ] 4. Add console logging for debugging order submission
 
-### Flow 1: Add to Cart → Cart → Checkout → Place COD Order
-1. User clicks "Add to Cart" on product
-2. Product added to cart (stored in localStorage as 'cart')
-3. User clicks "Proceed to Checkout" in cart
-4. Redirects to checkout.html
-5. checkout.html loads cart from localStorage
-6. User fills customer details and clicks "Place COD Order"
-7. Order sent to Railway backend API
-8. Success modal shows with Order ID
-9. Cart cleared from localStorage
+### Fix 3: Test the fixes
+- [ ] 5. Verify cart total calculation
+- [ ] 6. Verify orders appear in admin portal
 
-### Flow 2: Buy Now COD → Checkout → Place COD Order
-1. User clicks "Buy Now COD" on product
-2. Product saved to localStorage as 'directProduct'
-3. Redirects to checkout.html
-4. checkout.html loads directProduct from localStorage
-5. User fills customer details and clicks "Place COD Order"
-6. Order sent to Railway backend API
-7. Success modal shows with Order ID
-8. localStorage cleared
-
-## Key Technical Fixes:
-- Proper parsing of prices as numbers (parseFloat)
-- Proper parsing of quantities as integers (parseInt)
-- Validation before order submission to prevent ₹0 orders
-- Better error handling with user-friendly messages
-- Cart clearing after successful order
-- Support for both cart-based and direct product checkout flows
+## Files to Edit:
+- checkout.html - Fix cart price calculation and order submission
 

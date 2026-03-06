@@ -460,33 +460,37 @@
             var savedCart = localStorage.getItem("cart");
             var directProductData = localStorage.getItem("directProduct");
 
-            console.log("CheckoutCart from localStorage:", checkoutCartData);
-            console.log("Cart from localStorage:", savedCart);
-            console.log("Direct product from localStorage:", directProductData);
+            console.log("=== CHECKOUT LOAD DEBUG ===");
+            console.log("checkoutCart:", checkoutCartData);
+            console.log("cart:", savedCart);
+            console.log("directProduct:", directProductData);
 
             var cartItems = [];
             var directProduct = null;
 
-            // Try checkoutCart first (priority), then fall back to cart
-            if (checkoutCartData) {
+            // Try checkoutCart first (priority - from proceed to checkout)
+            if (checkoutCartData && checkoutCartData !== '[]' && checkoutCartData !== 'null') {
                 try {
                     cartItems = JSON.parse(checkoutCartData);
-                    console.log("Using checkoutCart:", cartItems);
+                    console.log("Using checkoutCart, items:", cartItems);
                 } catch (e) {
                     console.error("Error parsing checkoutCart:", e);
                     cartItems = [];
                 }
-            } else if (savedCart) {
+            }
+            // Fall back to cart (if opened directly without proceed to checkout)
+            else if (savedCart && savedCart !== '[]' && savedCart !== 'null') {
                 try {
                     cartItems = JSON.parse(savedCart);
-                    console.log("Using cart (fallback):", cartItems);
+                    console.log("Using savedCart, items:", cartItems);
                 } catch (e) {
                     console.error("Error parsing cart:", e);
                     cartItems = [];
                 }
             }
 
-            if (directProductData) {
+            // Check for direct product
+            if (directProductData && directProductData !== 'null') {
                 try {
                     directProduct = JSON.parse(directProductData);
                     console.log("Parsed direct product:", directProduct);
@@ -499,19 +503,16 @@
             // Use cart items if available, otherwise use direct product
             if (cartItems && cartItems.length > 0) {
                 checkoutItems = cartItems;
-                console.log("Using cart items:", checkoutItems);
-            }
-            else if (directProduct && directProduct.name) {
+            } else if (directProduct && directProduct.name) {
                 checkoutItems = [directProduct];
-                console.log("Using direct product:", checkoutItems);
             }
 
-            // Debug: Check if we have items
             console.log("Final checkoutItems:", checkoutItems);
 
-            if (checkoutItems.length === 0) {
+            if (!checkoutItems || checkoutItems.length === 0) {
                 document.getElementById('checkout-content').style.display = 'none';
                 document.getElementById('empty-cart').style.display = 'block';
+                console.log("Cart is empty!");
                 return;
             }
 

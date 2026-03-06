@@ -716,6 +716,23 @@
             document.getElementById('success-checkout-modal').style.display = 'none';
             window.location.href = 'index.html';
         }
+
+        // Test API connectivity
+        async function testAPI() {
+            console.log("Testing API connectivity...");
+            try {
+                const response = await fetch(RAILWAY_API_URL + "/api/health");
+                const data = await response.json();
+                console.log("API Health:", data);
+                alert("API is connected! Status: " + data.status);
+            } catch (error) {
+                console.error("API Error:", error);
+                alert("API is NOT accessible: " + error.message);
+            }
+        }
+
+        // Uncomment to test API on page load
+        // testAPI();
     </script>
 </body>
 

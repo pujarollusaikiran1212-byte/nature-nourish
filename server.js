@@ -65,12 +65,18 @@ app.use((req, res) => {
     res.status(404).json({ message: 'Route not found' });
 });
 
-const PORT = process.env.PORT || 5000;
+const PORT = parseInt(process.env.PORT, 10) || 5500;
 
 connectDB();
 
-// Function to start the server
+// Function to start the server with port validation
 function startServer(port) {
+    // Validate port is within acceptable range
+    if (port < 0 || port > 65535 || isNaN(port)) {
+        console.error('Invalid port number. Using default port 5500.');
+        port = 5500;
+    }
+
     const server = app.listen(port, '0.0.0.0', () => {
         console.log(`Server running on port ${port}`);
     });
@@ -78,8 +84,12 @@ function startServer(port) {
     // Handle port conflicts gracefully
     server.on('error', (err) => {
         if (err.code === 'EADDRINUSE') {
-            console.log(`Port ${port} is already in use. Trying port ${port + 1}...`);
-            startServer(port + 1);
+            if (port < 65535) {
+                console.log(`Port ${port} is already in use. Trying port ${port + 1}...`);
+                startServer(port + 1);
+            } else {
+                console.error('No available ports found!');
+            }
         } else {
             console.error('Server error:', err);
         }

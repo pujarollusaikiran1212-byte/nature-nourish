@@ -450,7 +450,8 @@
 
     <script src="script.js"></script>
     <script>
-        var RAILWAY_API_URL = 'https://nature-nourish-production.up.railway.app';
+        // Use local server API instead of Railway
+        var API_URL = ''; // Empty means relative to current domain (local server)
         var checkoutItems = [];
         document.addEventListener('DOMContentLoaded', function () { loadCheckoutItems(); });
 
@@ -662,7 +663,7 @@
                 btn.disabled = true;
             }
 
-            fetch(RAILWAY_API_URL + "/api/orders", {
+            fetch(API_URL + "/api/orders", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -721,7 +722,7 @@
         async function testAPI() {
             console.log("Testing API connectivity...");
             try {
-                const response = await fetch(RAILWAY_API_URL + "/api/health");
+                const response = await fetch(API_URL + "/api/health");
                 const data = await response.json();
                 console.log("API Health:", data);
                 alert("API is connected! Status: " + data.status);

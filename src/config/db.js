@@ -14,8 +14,10 @@ const connectDB = async () => {
 
     try {
         const mongoose = require('mongoose');
-        await mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://asus:01lWUs7yjxFnX126@cluster1.mpartvh.mongodb.net/?appName=Cluster1', {
-            serverSelectionTimeoutMS: 5000,
+        // Use the correct MongoDB Atlas connection string with database name
+        const mongoURI = process.env.MONGODB_URI || 'mongodb+srv://asus:01lWUs7yjxFnX126@cluster1.mpartvh.mongodb.net/storeDB?retryWrites=true&w=majority';
+        await mongoose.connect(mongoURI, {
+            serverSelectionTimeoutMS: 10000,
             socketTimeoutMS: 45000,
         });
         isConnected = true;

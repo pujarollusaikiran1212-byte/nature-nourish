@@ -69,6 +69,22 @@ const PORT = process.env.PORT || 5000;
 
 connectDB();
 
-app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Server running on port ${PORT}`);
-});
+// Function to start the server
+function startServer(port) {
+    const server = app.listen(port, '0.0.0.0', () => {
+        console.log(`Server running on port ${port}`);
+    });
+
+    // Handle port conflicts gracefully
+    server.on('error', (err) => {
+        if (err.code === 'EADDRINUSE') {
+            console.log(`Port ${port} is already in use. Trying port ${port + 1}...`);
+            startServer(port + 1);
+        } else {
+            console.error('Server error:', err);
+        }
+    });
+}
+
+// Start server with error handling
+startServer(PORT);

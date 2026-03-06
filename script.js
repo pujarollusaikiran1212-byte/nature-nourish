@@ -440,26 +440,10 @@ function openCODForm(productName, price) {
     };
     localStorage.setItem('directProduct', JSON.stringify(directProduct));
 
-    const modal = document.getElementById('cod-modal');
-    document.getElementById('cod-product').value = productName;
-    document.getElementById('cod-price').value = '₹' + price;
+    console.log('Direct product saved:', directProduct);
 
-    // Reset quantity to 1 when opening the modal
-    const quantityInput = document.getElementById('cod-quantity');
-    if (quantityInput) {
-        quantityInput.value = 1;
-    }
-
-    const deliveryOption = document.querySelector('input[name="delivery-option"]:checked');
-    const deliveryCharge = deliveryOption ? parseInt(deliveryOption.value) : 0;
-    document.getElementById('cod-delivery-charge').value = '₹' + deliveryCharge;
-
-    const productPrice = parseInt(price);
-    const quantity = 1;
-    const totalAmount = (productPrice * quantity) + deliveryCharge;
-    document.getElementById('cod-total-amount').value = '₹' + totalAmount;
-
-    modal.style.display = 'block';
+    // Redirect to checkout page instead of opening modal
+    window.location.href = 'checkout.html';
 }
 
 // Update COD total based on quantity and delivery charge

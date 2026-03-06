@@ -448,6 +448,7 @@
                         var RAILWAY_API_URL = 'https://nature-nourish-production.up.railway.app';
                         var checkoutItems = [];
                         document.addEventListener('DOMContentLoaded', function () { loadCheckoutItems(); });
+
                         function loadCheckoutItems() {
                             // First try to get from cart, then from directProduct
                             var savedCart = localStorage.getItem("cart");
@@ -462,6 +463,14 @@
                             if (savedCart) {
                                 try {
                                     cartItems = JSON.parse(savedCart);
+                                    // Ensure all items have proper numeric prices and quantity
+                                    cartItems = cartItems.map(function (item) {
+                                        return {
+                                            name: item.name,
+                                            price: parseFloat(item.price) || 0,
+                                            quantity: parseInt(item.quantity) || 1
+                                        };
+                                    });
                                     console.log("Parsed cart items:", cartItems);
                                 } catch (e) {
                                     console.error("Error parsing cart:", e);
@@ -472,6 +481,12 @@
                             if (directProductData) {
                                 try {
                                     directProduct = JSON.parse(directProductData);
+                                    // Ensure proper numeric values
+                                    directProduct = {
+                                        name: directProduct.name,
+                                        price: parseFloat(directProduct.price) || 0,
+                                        quantity: parseInt(directProduct.quantity) || 1
+                                    };
                                     console.log("Parsed direct product:", directProduct);
                                 } catch (e) {
                                     console.error("Error parsing directProduct:", e);
@@ -484,50 +499,43 @@
                                 checkoutItems = cartItems;
                                 console.log("Using cart items:", checkoutItems);
                             }
-                            else if (directProduct) {
+                            else if (directProduct && directProduct.name) {
                                 checkoutItems = [directProduct];
                                 console.log("Using direct product:", checkoutItems);
                             }
+
+                            // Debug: Check if we have items
+                            console.log("Final checkoutItems:", checkoutItems);
 
                             if (checkoutItems.length === 0) {
                                 document.getElementById('checkout-content').style.display = 'none';
                                 document.getElementById('empty-cart').style.display = 'block';
                                 return;
                             }
+
+                            // Show checkout content and hide empty cart message
+                            document.getElementById('checkout-content').style.display = 'grid';
+                            document.getElementById('empty-cart').style.display = 'none';
+
                             displayOrderItems();
                             calculateTotals();
                         }
+
                         function displayOrderItems() {
                             var container = document.getElementById('order-items');
+                            if (!container) return;
+
                             var html = '';
                             checkoutItems.forEach(function (item) {
-                                var qty = item.quantity || 1;
-                                var total = item.price * qty;
-                                html += '<div class="order-item"><img src="' + getProductImage(item.name) + '" alt="' + item.name + '" class="order-item-image"><div class="order-item-details"><div class="order-item-name">' + item.name + '</div><div class="order-item-price">Rs.' + item.price + ' x ' + qty + '</div><div class="order-item-total">Rs.' + total + '</div>';
+                                var qty = parseInt(item.quantity) || 1;
+                                var price = parseFloat(item.price) || 0;
+                                var total = price * qty;
+                                html += '<div class="order-item"><img src="' + getProductImage(item.name) + '" alt="' + item.name + '" class="order-item-image"><div class="order-item-details"><div class="order-item-name">' + item.name + '</div><div class="order-item-price">₹' + price + ' x ' + qty + '</div><div class="order-item-total">₹' + total + '</div></div></div>';
                             });
                             container.innerHTML = html;
                         }
+
                         function calculateTotals() {
-                            var subtotal = 0;
-                            checkoutItems.forEach(function (item) { subtotal += item.price * (item.quantity || 1); });
-                            document.getElementById("subtotal").innerText = "Rs." + subtotal;
-                            document.getElementById("total").innerText = "Rs." + subtotal;
-                            return subtotal;
-                        }
-                        function getProductImage(name) {
-                            var imgs = { 'Solar Calm': 'solar calm.jpeg', 'Clearwave': 'clear wave.jpeg', 'Milk Cloud': 'milk cloud.jpeg', 'Glow Dust': 'glow dust.jpeg' };
-                            return imgs[name] || 'https://via.placeholder.com/70';
-                        }
-                        function goBackToCart() { window.location.href = 'index.html#cart'; }
-                        document.getElementById("checkout-form").addEventListener("submit", function (e) {
-                            e.preventDefault();
-
-                            if (checkoutItems.length === 0) {
-                                alert("Your cart is empty");
-                                return;
-                            }
-
-                            // Validate items have proper price
                             var subtotal = 0;
                             checkoutItems.forEach(function (item) {
                                 var price = parseFloat(item.price) || 0;
@@ -535,12 +543,71 @@
                                 subtotal += price * qty;
                             });
 
-                            if (subtotal <= 0) {
-                                alert("Invalid cart items. Please try again.");
+                            console.log("Calculated subtotal:", subtotal);
+
+                            var subtotalEl = document.getElementById("subtotal");
+                            var totalEl = document.getElementById("total");
+
+                            if (subtotalEl) subtotalEl.innerText = "₹" + subtotal;
+                            if (totalEl) totalEl.innerText = "₹" + subtotal;
+
+                            return subtotal;
+                        }
+
+                        function getProductImage(name) {
+                            if (!name) return 'https://via.placeholder.com/70';
+                            var imgs = {
+                                'Solar Calm': 'solar calm.jpeg',
+                                'Clearwave': 'clear wave.jpeg',
+                                'Milk Cloud': 'milk cloud.jpeg',
+                                'Glow Dust': 'glow dust.jpeg',
+                                'Lavender Bliss': 'lavender bliss.jpeg',
+                                'Rose Petal': 'rose petal.jpeg',
+                                'Charcoal Cleanse': 'charcoal.jpeg',
+                                'Aloe Vera Glow': 'aloe vera.jpeg'
+                            };
+                            return imgs[name] || 'https://via.placeholder.com/70';
+                        }
+
+                        function goBackToCart() { window.location.href = 'index.html#cart'; }
+
+                        document.getElementById("checkout-form").addEventListener("submit", function (e) {
+                            e.preventDefault();
+
+                            // Reload items to ensure we have the latest data
+                            loadCheckoutItems();
+
+                            if (checkoutItems.length === 0) {
+                                alert("Your cart is empty. Please add products to your cart first.");
                                 return;
                             }
 
-                            console.log("Submitting order with items:", checkoutItems);
+                            // Validate items have proper price - recalculate from current checkoutItems
+                            var subtotal = 0;
+                            var validItems = [];
+
+                            checkoutItems.forEach(function (item) {
+                                var price = parseFloat(item.price) || 0;
+                                var qty = parseInt(item.quantity) || 1;
+                                if (price > 0 && qty > 0) {
+                                    validItems.push({
+                                        name: item.name,
+                                        price: price,
+                                        quantity: qty
+                                    });
+                                    subtotal += price * qty;
+                                }
+                            });
+
+                            console.log("Valid items:", validItems);
+                            console.log("Calculated subtotal:", subtotal);
+
+                            if (validItems.length === 0 || subtotal <= 0) {
+                                alert("Invalid cart items. Please add products to your cart with valid prices.");
+                                return;
+                            }
+
+                            console.log("Submitting order with items:", validItems);
                             console.log("Subtotal:", subtotal);
 
                             var customerData = {
@@ -553,18 +620,17 @@
                                 pinCode: document.getElementById('pincode').value
                             };
 
-                            var products = checkoutItems.map(function (item) {
-                                return {
-                                    name: item.name,
-                                    price: parseFloat(item.price) || 0,
-                                    quantity: parseInt(item.quantity) || 1
-                                };
-                            });
+                            // Validate customer data
+                            if (!customerData.name || !customerData.email || !customerData.mobile ||
+                                !customerData.state || !customerData.address || !customerData.city || !customerData.pinCode) {
+                                alert("Please fill in all customer details.");
+                                return;
+                            }
 
                             var orderId = 'ORD-' + Date.now();
                             var order = {
                                 orderId: orderId,
-                                products: products,
+                                products: validItems,
                                 customer: customerData,
                                 staff: { name: 'Website Customer', id: 'N/A' },
                                 subtotal: subtotal,
@@ -579,11 +645,13 @@
                                 createdAt: new Date().toISOString()
                             };
 
-                            console.log("Sending order to API:", order);
+                            console.log("Sending order to API:", JSON.stringify(order));
 
                             var btn = document.getElementById('place-order-btn');
-                            btn.textContent = 'Placing Order...';
-                            btn.disabled = true;
+                            if (btn) {
+                                btn.textContent = 'Placing Order...';
+                                btn.disabled = true;
+                            }
 
                             fetch(RAILWAY_API_URL + "/api/orders", {
                                 method: "POST",
@@ -603,21 +671,41 @@
                                 })
                                 .then(function (data) {
                                     console.log("Order saved successfully:", data);
+
+                                    // Clear localStorage cart and directProduct
                                     localStorage.removeItem('cart');
                                     localStorage.removeItem('directProduct');
-                                    document.getElementById('order-success-id').textContent = 'Order ID: ' + orderId;
-                                    document.getElementById('success-checkout-modal').style.display = 'block';
+
+                                    // Update checkoutItems to empty
+                                    checkoutItems = [];
+
+                                    // Show success modal
+                                    var orderSuccessId = document.getElementById('order-success-id');
+                                    var successModal = document.getElementById('success-checkout-modal');
+
+                                    if (orderSuccessId) {
+                                        orderSuccessId.textContent = 'Order ID: ' + (data.orderId || orderId);
+                                    }
+                                    if (successModal) {
+                                        successModal.style.display = 'block';
+                                    }
                                 })
                                 .catch(function (err) {
                                     console.error("Error placing order:", err);
-                                    alert('Error placing order: ' + err.message);
+                                    alert('Error placing order: ' + err.message + '\n\nPlease try again or contact support.');
                                 })
                                 .finally(function () {
-                                    btn.textContent = 'Place COD Order';
-                                    btn.disabled = false;
+                                    if (btn) {
+                                        btn.textContent = 'Place COD Order';
+                                        btn.disabled = false;
+                                    }
                                 });
                         });
-                        function handleContinueShopping() { document.getElementById('success-checkout-modal').style.display = 'none'; window.location.href = 'index.html'; }
+
+                        function handleContinueShopping() {
+                            document.getElementById('success-checkout-modal').style.display = 'none';
+                            window.location.href = 'index.html';
+                        }
                     </script>
 </body>
 

@@ -455,28 +455,31 @@
         document.addEventListener('DOMContentLoaded', function () { loadCheckoutItems(); });
 
         function loadCheckoutItems() {
-            // First try to get from cart, then from directProduct
+            // First try to get from checkoutCart (set by proceedToCheckout), then from cart
+            var checkoutCartData = localStorage.getItem("checkoutCart");
             var savedCart = localStorage.getItem("cart");
             var directProductData = localStorage.getItem("directProduct");
 
+            console.log("CheckoutCart from localStorage:", checkoutCartData);
             console.log("Cart from localStorage:", savedCart);
             console.log("Direct product from localStorage:", directProductData);
 
             var cartItems = [];
             var directProduct = null;
 
-            if (savedCart) {
+            // Try checkoutCart first (priority), then fall back to cart
+            if (checkoutCartData) {
+                try {
+                    cartItems = JSON.parse(checkoutCartData);
+                    console.log("Using checkoutCart:", cartItems);
+                } catch (e) {
+                    console.error("Error parsing checkoutCart:", e);
+                    cartItems = [];
+                }
+            } else if (savedCart) {
                 try {
                     cartItems = JSON.parse(savedCart);
-                    // Ensure all items have proper numeric prices and quantity
-                    cartItems = cartItems.map(function (item) {
-                        return {
-                            name: item.name,
-                            price: parseFloat(item.price) || 0,
-                            quantity: parseInt(item.quantity) || 1
-                        };
-                    });
-                    console.log("Parsed cart items:", cartItems);
+                    console.log("Using cart (fallback):", cartItems);
                 } catch (e) {
                     console.error("Error parsing cart:", e);
                     cartItems = [];
@@ -486,12 +489,6 @@
             if (directProductData) {
                 try {
                     directProduct = JSON.parse(directProductData);
-                    // Ensure proper numeric values
-                    directProduct = {
-                        name: directProduct.name,
-                        price: parseFloat(directProduct.price) || 0,
-                        quantity: parseInt(directProduct.quantity) || 1
-                    };
                     console.log("Parsed direct product:", directProduct);
                 } catch (e) {
                     console.error("Error parsing directProduct:", e);
@@ -683,8 +680,9 @@
                 .then(function (data) {
                     console.log("Order saved successfully:", data);
 
-                    // Clear localStorage cart and directProduct
+                    // Clear localStorage cart, checkoutCart, and directProduct
                     localStorage.removeItem('cart');
+                    localStorage.removeItem('checkoutCart');
                     localStorage.removeItem('directProduct');
 
                     // Update checkoutItems to empty

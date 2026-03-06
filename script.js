@@ -423,6 +423,10 @@ function proceedToCheckout() {
         alert('Your cart is empty!');
         return;
     }
+    // Save cart to checkoutCart for checkout page
+    localStorage.setItem('checkoutCart', JSON.stringify(cart));
+    // Also keep cart in localStorage for persistence
+    localStorage.setItem('cart', JSON.stringify(cart));
     // Redirect to checkout page
     window.location.href = 'checkout.html';
 }

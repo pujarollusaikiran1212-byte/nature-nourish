@@ -376,10 +376,14 @@ function updateCartDisplay() {
 }
 function getProductImage(productName) {
     const images = {
-        'Solar Calm': 'solar-calm.jpg',
-        'Clearwave': 'clearwave.jpg',
-        'Milk Cloud': 'milk-cloud.jpg',
-        'Glow Dust': 'glow-dust.jpg'
+        'Solar Calm': 'solar calm.jpeg',
+        'Clearwave': 'clear wave.jpeg',
+        'Milk Cloud': 'milk cloud.jpeg',
+        'Glow Dust': 'glow dust.jpeg',
+        'Lavender Bliss': 'lavender bliss.jpeg',
+        'Rose Petal': 'rose petal.jpeg',
+        'Charcoal Cleanse': 'charcoal.jpeg',
+        'Aloe Vera Glow': 'aloe vera.jpeg'
     };
     return images[productName] || 'placeholder.jpg';
 }

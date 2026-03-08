@@ -85,799 +85,1027 @@
         </div>
     </section>
 
-    <!-- Products Section -->
+    <!-- Products Section with Categories -->
     <section id="products" class="products-section">
         <div class="container">
-            <h2 class="section-title">Our Premium Soap Collection</h2>
+            <h2 class="section-title">Our Premium Collection</h2>
             <p class="section-subtitle">Carefully crafted for your skin's health and wellness</p>
 
-            <div class="products-grid">
+            <!-- Category 1: Soaps -->
+            <div class="category-section">
+                <div class="category-header">
+                    <h3 class="category-title">🧼 soaps</h3>
+                    <p class="category-subtitle">Handmade natural soap bars</p>
+                </div>
+                <div class="products-grid">
 
-                <!-- Product 1: Solar Calm -->
-                <div class="product-card">
-                    <div class="product-image-container">
-                        <img src="solar calm.jpeg" alt="Solar Calm" class="product-image">
-                        <div class="image-overlay">
-                            <span class="new-badge">Popular</span>
-                            <span class="discount-badge">₹20 OFF</span>
+                    <!-- Product 1: Solar Calm -->
+                    <div class="product-card">
+                        <div class="product-image-container">
+                            <img src="solar calm.jpeg" alt="Solar Calm" class="product-image">
+                            <div class="image-overlay">
+                                <span class="new-badge">Popular</span>
+                                <span class="discount-badge">₹20 OFF</span>
+                            </div>
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-name">Solar Calm</h3>
+                            <p class="product-subtitle">Tan Correcting Body Soap</p>
+                            <p class="product-description">Specially formulated to reduce tan and brighten your skin.
+                            </p>
+                            <div class="product-rating">
+                                <span class="stars">★★★★★</span>
+                                <span class="rating-count">(245 reviews)</span>
+                            </div>
+                            <div class="price-section">
+                                <span class="mrp-price">MRP ₹169</span>
+                                <span class="price">₹149</span>
+                                <span class="discount-badge">₹20 OFF</span>
+                            </div>
+                        </div>
+                        <div class="product-actions">
+                            <button class="btn btn-add-cart" onclick="addToCart('Solar Calm', 149)">Add to Cart</button>
+                            <button class="btn btn-cod" onclick="openCODForm('Solar Calm', 149)">Buy Now - COD</button>
                         </div>
                     </div>
-                    <div class="product-info">
-                        <h3 class="product-name">Solar Calm</h3>
-                        <p class="product-subtitle">Tan Correcting Body Soap</p>
-                        <p class="product-description">Specially formulated to reduce tan and brighten your skin.</p>
-                        <div class="product-rating">
-                            <span class="stars">★★★★★</span>
-                            <span class="rating-count">(245 reviews)</span>
+
+                    <!-- Product 2: Clearwave -->
+                    <div class="product-card">
+                        <div class="product-image-container">
+                            <img src="clear wave.jpeg" alt="Clearwave" class="product-image">
+                            <div class="image-overlay">
+                                <span class="new-badge">Best Seller</span>
+                                <span class="discount-badge">₹20 OFF</span>
+                            </div>
                         </div>
-                        <div class="price-section">
-                            <span class="mrp-price">MRP ₹169</span>
-                            <span class="price">₹149</span>
+                        <div class="product-info">
+                            <h3 class="product-name">Clearwave</h3>
+                            <p class="product-subtitle">Body Acne Control Soap</p>
+                            <p class="product-description">Formulated to treat and prevent body acne effectively.</p>
+                            <div class="product-rating">
+                                <span class="stars">★★★★★</span>
+                                <span class="rating-count">(398 reviews)</span>
+                            </div>
+                            <div class="price-section">
+                                <span class="mrp-price">MRP ₹169</span>
+                                <span class="price">₹149</span>
+                                <span class="discount-badge">₹20 OFF</span>
+                            </div>
+                        </div>
+                        <div class="product-actions">
+                            <button class="btn btn-add-cart" onclick="addToCart('Clearwave', 149)">Add to Cart</button>
+                            <button class="btn btn-cod" onclick="openCODForm('Clearwave', 149)">Buy Now - COD</button>
                         </div>
                     </div>
-                    <div class="product-actions">
-                        <button class="btn btn-add-cart" onclick="addToCart('Solar Calm', 149)">Add to Cart</button>
-                        <button class="btn btn-cod" onclick="openCODForm('Solar Calm', 149)">Buy Now - COD</button>
+
+                    <!-- Product 3: Milk Cloud -->
+                    <div class="product-card">
+                        <div class="product-image-container">
+                            <img src="milk cloud.jpeg" alt="Milk Cloud" class="product-image">
+                            <div class="image-overlay">
+                                <span class="new-badge">New</span>
+                            </div>
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-name">Milk Cloud</h3>
+                            <p class="product-subtitle">Gentle Daily Body Soap</p>
+                            <p class="product-description">Ultra-gentle formula perfect for daily use and sensitive
+                                skin.
+                            </p>
+                            <div class="product-rating">
+                                <span class="stars">★★★★☆</span>
+                                <span class="rating-count">(156 reviews)</span>
+                            </div>
+                            <div class="price-section">
+                                <span class="mrp-price">MRP ₹149</span>
+                                <span class="price">₹129</span>
+                                <span class="discount-badge">₹20 OFF</span>
+                            </div>
+                        </div>
+                        <div class="product-actions">
+                            <button class="btn btn-add-cart" onclick="addToCart('Milk Cloud', 129)">Add to Cart</button>
+                            <button class="btn btn-cod" onclick="openCODForm('Milk Cloud', 129)">Buy Now - COD</button>
+                        </div>
                     </div>
+
+                    <!-- Product 4: Glow Dust -->
+                    <div class="product-card">
+                        <div class="product-image-container">
+                            <img src="glow dust.jpeg" alt="Glow Dust" class="product-image">
+                            <div class="image-overlay">
+                                <span class="new-badge">Premium</span>
+                            </div>
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-name">Glow Dust</h3>
+                            <p class="product-subtitle">Exfoliating Body Soap</p>
+                            <p class="product-description">Premium exfoliating soap with natural scrub particles.</p>
+                            <div class="product-rating">
+                                <span class="stars">★★★★★</span>
+                                <span class="rating-count">(312 reviews)</span>
+                            </div>
+                            <div class="price-section">
+                                <span class="mrp-price">MRP ₹169</span>
+                                <span class="price">₹149</span>
+                                <span class="discount-badge">₹20 OFF</span>
+                            </div>
+                        </div>
+                        <div class="product-actions">
+                            <button class="btn btn-add-cart" onclick="addToCart('Glow Dust', 149)">Add to Cart</button>
+                            <button class="btn btn-cod" onclick="openCODForm('Glow Dust', 149)">Buy Now - COD</button>
+                        </div>
+                    </div>
+
+                    <!-- Product 5: Lavender Bliss -->
+                    <div class="product-card">
+                        <div class="product-image-container">
+                            <img src="lavender bliss.jpeg" alt="Lavender Bliss" class="product-image">
+                            <div class="image-overlay">
+                                <span class="new-badge">Calming</span>
+                            </div>
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-name">Lavender Bliss</h3>
+                            <p class="product-subtitle">Relaxing Aromatherapy Soap</p>
+                            <p class="product-description">Infused with lavender essential oil for ultimate relaxation.
+                            </p>
+                            <div class="product-rating">
+                                <span class="stars">★★★★★</span>
+                                <span class="rating-count">(189 reviews)</span>
+                            </div>
+                            <div class="price-section">
+                                <span class="mrp-price">MRP ₹179</span>
+                                <span class="price">₹159</span>
+                                <span class="discount-badge">₹20 OFF</span>
+                            </div>
+                        </div>
+                        <div class="product-actions">
+                            <button class="btn btn-add-cart" onclick="addToCart('Lavender Bliss', 159)">Add to
+                                Cart</button>
+                            <button class="btn btn-cod" onclick="openCODForm('Lavender Bliss', 159)">Buy Now -
+                                COD</button>
+                        </div>
+                    </div>
+
+                    <!-- Product 6: Rose Petal -->
+                    <div class="product-card">
+                        <div class="product-image-container">
+                            <img src="rose petal.jpeg" alt="Rose Petal" class="product-image">
+                            <div class="image-overlay">
+                                <span class="new-badge">Luxury</span>
+                            </div>
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-name">Rose Petal</h3>
+                            <p class="product-subtitle">Hydrating Rose Soap</p>
+                            <p class="product-description">Enriched with real rose extract for soft, moisturized skin.
+                            </p>
+                            <div class="product-rating">
+                                <span class="stars">★★★★★</span>
+                                <span class="rating-count">(267 reviews)</span>
+                            </div>
+                            <div class="price-section">
+                                <span class="mrp-price">MRP ₹179</span>
+                                <span class="price">₹159</span>
+                                <span class="discount-badge">₹20 OFF</span>
+                            </div>
+                        </div>
+                        <div class="product-actions">
+                            <button class="btn btn-add-cart" onclick="addToCart('Rose Petal', 159)">Add to Cart</button>
+                            <button class="btn btn-cod" onclick="openCODForm('Rose Petal', 159)">Buy Now - COD</button>
+                        </div>
+                    </div>
+
+                    <!-- Product 7: Charcoal Cleanse -->
+                    <div class="product-card">
+                        <div class="product-image-container">
+                            <img src="charcoal.jpeg" alt="Charcoal Cleanse" class="product-image">
+                            <div class="image-overlay">
+                                <span class="new-badge">Detox</span>
+                            </div>
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-name">Charcoal Cleanse</h3>
+                            <p class="product-subtitle">Deep Cleansing Soap</p>
+                            <p class="product-description">Activated charcoal draws out impurities for deep cleansing.
+                            </p>
+                            <div class="product-rating">
+                                <span class="stars">★★★★☆</span>
+                                <span class="rating-count">(198 reviews)</span>
+                            </div>
+                            <div class="price-section">
+                                <span class="mrp-price">MRP ₹169</span>
+                                <span class="price">₹149</span>
+                                <span class="discount-badge">₹20 OFF</span>
+                            </div>
+                        </div>
+                        <div class="product-actions">
+                            <button class="btn btn-add-cart" onclick="addToCart('Charcoal Cleanse', 149)">Add to
+                                Cart</button>
+                            <button class="btn btn-cod" onclick="openCODForm('Charcoal Cleanse', 149)">Buy Now -
+                                COD</button>
+                        </div>
+                    </div>
+
+                    <!-- Product 8: Aloe Vera Glow -->
+                    <div class="product-card">
+                        <div class="product-image-container">
+                            <img src="aloe vera.jpeg" alt="Aloe Vera Glow" class="product-image">
+                            <div class="image-overlay">
+                                <span class="new-badge">Healing</span>
+                            </div>
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-name">Aloe Vera Glow</h3>
+                            <p class="product-subtitle">Soothing Aloe Soap</p>
+                            <p class="product-description">Pure aloe vera soothes and heals irritated skin.</p>
+                            <div class="product-rating">
+                                <span class="stars">★★★★★</span>
+                                <span class="rating-count">(234 reviews)</span>
+                            </div>
+                            <div class="price-section">
+                                <span class="mrp-price">MRP ₹149</span>
+                                <span class="price">₹129</span>
+                                <span class="discount-badge">₹20 OFF</span>
+                            </div>
+                        </div>
+                        <div class="product-actions">
+                            <button class="btn btn-add-cart" onclick="addToCart('Aloe Vera Glow', 129)">Add to
+                                Cart</button>
+                            <button class="btn btn-cod" onclick="openCODForm('Aloe Vera Glow', 129)">Buy Now -
+                                COD</button>
+                        </div>
+                    </div>
+
                 </div>
 
-                <!-- Product 2: Clearwave -->
-                <div class="product-card">
-                    <div class="product-image-container">
-                        <img src="clear wave.jpeg" alt="Clearwave" class="product-image">
-                        <div class="image-overlay">
-                            <span class="new-badge">Best Seller</span>
-                            <span class="discount-badge">₹20 OFF</span>
+                <!-- Category 2: Body Oils -->
+                <div class="category-section">
+                    <div class="category-header">
+                        <h3 class="category-title">💧 Body Oils</h3>
+                        <p class="category-subtitle">Nourishing body oils for soft, glowing skin</p>
+                    </div>
+                    <div class="category-products">
+                        <div class="coming-soon-card">
+                            <span class="coming-soon-icon">🌿</span>
+                            <h4 class="coming-soon-title">Coming Soon 🌿</h4>
+                            <p class="coming-soon-description">Nature Nourish is carefully crafting new natural products
+                                for you. Our Body Oils, Scrubs, Whipped Soaps, Travel Soaps, and Shampoo Bars will be
+                                available soon. Stay tuned for pure, skin-loving goodness!</p>
                         </div>
-                    </div>
-                    <div class="product-info">
-                        <h3 class="product-name">Clearwave</h3>
-                        <p class="product-subtitle">Body Acne Control Soap</p>
-                        <p class="product-description">Formulated to treat and prevent body acne effectively.</p>
-                        <div class="product-rating">
-                            <span class="stars">★★★★★</span>
-                            <span class="rating-count">(398 reviews)</span>
-                        </div>
-                        <div class="price-section">
-                            <span class="mrp-price">MRP ₹169</span>
-                            <span class="price">₹149</span>
-                        </div>
-                    </div>
-                    <div class="product-actions">
-                        <button class="btn btn-add-cart" onclick="addToCart('Clearwave', 149)">Add to Cart</button>
-                        <button class="btn btn-cod" onclick="openCODForm('Clearwave', 149)">Buy Now - COD</button>
-                    </div>
-                </div>
-
-                <!-- Product 3: Milk Cloud -->
-                <div class="product-card">
-                    <div class="product-image-container">
-                        <img src="milk cloud.jpeg" alt="Milk Cloud" class="product-image">
-                        <div class="image-overlay">
-                            <span class="new-badge">New</span>
-                            <span class="discount-badge">₹20 OFF</span>
-                        </div>
-                    </div>
-                    <div class="product-info">
-                        <h3 class="product-name">Milk Cloud</h3>
-                        <p class="product-subtitle">Gentle Daily Body Soap</p>
-                        <p class="product-description">Ultra-gentle formula perfect for daily use and sensitive skin.
-                        </p>
-                        <div class="product-rating">
-                            <span class="stars">★★★★☆</span>
-                            <span class="rating-count">(156 reviews)</span>
-                        </div>
-                        <div class="price-section">
-                            <span class="mrp-price">MRP ₹149</span>
-                            <span class="price">₹129</span>
-                        </div>
-                    </div>
-                    <div class="product-actions">
-                        <button class="btn btn-add-cart" onclick="addToCart('Milk Cloud', 129)">Add to Cart</button>
-                        <button class="btn btn-cod" onclick="openCODForm('Milk Cloud', 129)">Buy Now - COD</button>
-                    </div>
-                </div>
-
-                <!-- Product 4: Glow Dust -->
-                <div class="product-card">
-                    <div class="product-image-container">
-                        <img src="glow dust.jpeg" alt="Glow Dust" class="product-image">
-                        <div class="image-overlay">
-                            <span class="new-badge">Premium</span>
-                            <span class="discount-badge">₹20 OFF</span>
-                        </div>
-                    </div>
-                    <div class="product-info">
-                        <h3 class="product-name">Glow Dust</h3>
-                        <p class="product-subtitle">Exfoliating Body Soap</p>
-                        <p class="product-description">Premium exfoliating soap with natural scrub particles.</p>
-                        <div class="product-rating">
-                            <span class="stars">★★★★★</span>
-                            <span class="rating-count">(312 reviews)</span>
-                        </div>
-                        <div class="price-section">
-                            <span class="mrp-price">MRP ₹169</span>
-                            <span class="price">₹149</span>
-                        </div>
-                    </div>
-                    <div class="product-actions">
-                        <button class="btn btn-add-cart" onclick="addToCart('Glow Dust', 149)">Add to Cart</button>
-                        <button class="btn btn-cod" onclick="openCODForm('Glow Dust', 149)">Buy Now - COD</button>
-                    </div>
-                </div>
-
-                <!-- Product 5: Lavender Bliss -->
-                <div class="product-card">
-                    <div class="product-image-container">
-                        <img src="lavender bliss.jpeg" alt="Lavender Bliss" class="product-image">
-                        <div class="image-overlay">
-                            <span class="new-badge">Calming</span>
-                            <span class="discount-badge">₹20 OFF</span>
-                        </div>
-                    </div>
-                    <div class="product-info">
-                        <h3 class="product-name">Lavender Bliss</h3>
-                        <p class="product-subtitle">Relaxing Aromatherapy Soap</p>
-                        <p class="product-description">Infused with lavender essential oil for ultimate relaxation.</p>
-                        <div class="product-rating">
-                            <span class="stars">★★★★★</span>
-                            <span class="rating-count">(189 reviews)</span>
-                        </div>
-                        <div class="price-section">
-                            <span class="mrp-price">MRP ₹179</span>
-                            <span class="price">₹159</span>
-                        </div>
-                    </div>
-                    <div class="product-actions">
-                        <button class="btn btn-add-cart" onclick="addToCart('Lavender Bliss', 159)">Add to Cart</button>
-                        <button class="btn btn-cod" onclick="openCODForm('Lavender Bliss', 159)">Buy Now - COD</button>
-                    </div>
-                </div>
-
-                <!-- Product 6: Rose Petal -->
-                <div class="product-card">
-                    <div class="product-image-container">
-                        <img src="rose petal.jpeg" alt="Rose Petal" class="product-image">
-                        <div class="image-overlay">
-                            <span class="new-badge">Luxury</span>
-                            <span class="discount-badge">₹20 OFF</span>
-                        </div>
-                    </div>
-                    <div class="product-info">
-                        <h3 class="product-name">Rose Petal</h3>
-                        <p class="product-subtitle">Hydrating Rose Soap</p>
-                        <p class="product-description">Enriched with real rose extract for soft, moisturized skin.</p>
-                        <div class="product-rating">
-                            <span class="stars">★★★★★</span>
-                            <span class="rating-count">(267 reviews)</span>
-                        </div>
-                        <div class="price-section">
-                            <span class="mrp-price">MRP ₹179</span>
-                            <span class="price">₹159</span>
-                        </div>
-                    </div>
-                    <div class="product-actions">
-                        <button class="btn btn-add-cart" onclick="addToCart('Rose Petal', 159)">Add to Cart</button>
-                        <button class="btn btn-cod" onclick="openCODForm('Rose Petal', 159)">Buy Now - COD</button>
-                    </div>
-                </div>
-
-                <!-- Product 7: Charcoal Cleanse -->
-                <div class="product-card">
-                    <div class="product-image-container">
-                        <img src="charcoal.jpeg" alt="Charcoal Cleanse" class="product-image">
-                        <div class="image-overlay">
-                            <span class="new-badge">Detox</span>
-                            <span class="discount-badge">₹20 OFF</span>
-                        </div>
-                    </div>
-                    <div class="product-info">
-                        <h3 class="product-name">Charcoal Cleanse</h3>
-                        <p class="product-subtitle">Deep Cleansing Soap</p>
-                        <p class="product-description">Activated charcoal draws out impurities for deep cleansing.</p>
-                        <div class="product-rating">
-                            <span class="stars">★★★★☆</span>
-                            <span class="rating-count">(198 reviews)</span>
-                        </div>
-                        <div class="price-section">
-                            <span class="mrp-price">MRP ₹169</span>
-                            <span class="price">₹149</span>
-                        </div>
-                    </div>
-                    <div class="product-actions">
-                        <button class="btn btn-add-cart" onclick="addToCart('Charcoal Cleanse', 149)">Add to
-                            Cart</button>
-                        <button class="btn btn-cod" onclick="openCODForm('Charcoal Cleanse', 149)">Buy Now -
-                            COD</button>
-                    </div>
-                </div>
-
-                <!-- Product 8: Aloe Vera Glow -->
-                <div class="product-card">
-                    <div class="product-image-container">
-                        <img src="aloe vera.jpeg" alt="Aloe Vera Glow" class="product-image">
-                        <div class="image-overlay">
-                            <span class="new-badge">Healing</span>
-                            <span class="discount-badge">₹20 OFF</span>
-                        </div>
-                    </div>
-                    <div class="product-info">
-                        <h3 class="product-name">Aloe Vera Glow</h3>
-                        <p class="product-subtitle">Soothing Aloe Soap</p>
-                        <p class="product-description">Pure aloe vera soothes and heals irritated skin.</p>
-                        <div class="product-rating">
-                            <span class="stars">★★★★★</span>
-                            <span class="rating-count">(234 reviews)</span>
-                        </div>
-                        <div class="price-section">
-                            <span class="mrp-price">MRP ₹149</span>
-                            <span class="price">₹129</span>
-                        </div>
-                    </div>
-                    <div class="product-actions">
-                        <button class="btn btn-add-cart" onclick="addToCart('Aloe Vera Glow', 129)">Add to Cart</button>
-                        <button class="btn btn-cod" onclick="openCODForm('Aloe Vera Glow', 129)">Buy Now - COD</button>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- Shopping Cart Section -->
-    <section id="cart" class="cart-section">
-        <div class="container">
-            <h2 class="section-title">Your Shopping Cart</h2>
-            <div id="cart-items-container" class="cart-items-container">
-                <p class="empty-message">Your cart is empty. Start shopping!</p>
-            </div>
-            <div id="cart-summary" class="cart-summary" style="display: none;">
-                <div class="summary-box">
-                    <div class="summary-row">
-                        <span>Subtotal:</span>
-                        <span id="subtotal">₹0</span>
-                    </div>
-                    <div class="summary-row">
-                        <span>Shipping:</span>
-                        <span>FREE</span>
-                    </div>
-                    <div class="summary-row total">
-                        <span>Total:</span>
-                        <span id="cart-total">₹0</span>
-                    </div>
-                    <button class="btn btn-checkout" onclick="proceedToCheckout()">Proceed to Checkout</button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Checkout Section -->
-    <section id="checkout" class="checkout-section" style="display:none;">
-        <div class="container">
-            <h2>Checkout</h2>
-            <div class="checkout-container">
-                <div class="order-review">
-                    <h3>Order Summary</h3>
-                    <div id="checkout-items"></div>
-                    <div class="checkout-total">
-                        <h4>Total: $<span id="checkout-total">0.00</span></h4>
-                    </div>
-                </div>
-                <form class="checkout-form" id="checkout-form">
-                    <h3>Delivery Information</h3>
-                    <input type="text" placeholder="Full Name" required>
-                    <input type="email" placeholder="Email Address" required>
-                    <input type="tel" placeholder="Mobile Number (10 digits)" pattern="[0-9]{10}" required>
-                    <textarea placeholder="Complete Address" rows="4" required></textarea>
-                    <input type="text" placeholder="City" required>
-                    <input type="text" placeholder="Postal Code" required>
-
-                    <h3 style="margin-top: 2rem;">Payment Method</h3>
-                    <div class="payment-options">
-                        <label>
-                            <input type="radio" name="payment" value="cod" checked> Cash on Delivery
-                        </label>
-                        <label>
-                            <input type="radio" name="payment" value="online"> Online Payment
-                        </label>
                     </div>
 
-                    <button type="submit" class="place-order-btn">Place Order</button>
-                    <button type="button" class="back-btn"
-                        onclick="document.getElementById('checkout').style.display='none'; document.getElementById('cart').style.display='block';">Back
-                        to Cart</button>
-                </form>
-            </div>
-        </div>
-    </section>
+                    <!-- Category 3: Body Scrubs -->
+                    <div class="category-section">
+                        <div class="category-header">
+                            <h3 class="category-title">✨ Body Scrubs</h3>
+                            <p class="category-subtitle">Exfoliate and rejuvenate your skin</p>
+                        </div>
+                        <div class="category-products">
+                            <div class="coming-soon-card">
+                                <span class="coming-soon-icon">🌿</span>
+                                <h4 class="coming-soon-title">Coming Soon 🌿</h4>
+                                <p class="coming-soon-description">Nature Nourish is carefully crafting new natural
+                                    products for you. Our Body Oils, Scrubs, Whipped Soaps, Travel Soaps, and Shampoo
+                                    Bars will be available soon. Stay tuned for pure, skin-loving goodness!</p>
+                            </div>
+                        </div>
 
-    <!-- About Section -->
-    <section id="about" class="about">
-        <div class="container">
-            <h2>About Us</h2>
-            <p>We create premium natural and herbal soaps using only organic ingredients. Each bar is handcrafted to
-                provide the best care for your skin, free from harsh chemicals and artificial additives.</p>
-            <div class="features">
-                <div class="feature">
-                    <span>🌍</span>
-                    <h3>100% Natural</h3>
-                </div>
-                <div class="feature">
-                    <span>♻️</span>
-                    <h3>Eco-Friendly</h3>
-                </div>
-                <div class="feature">
-                    <span>✨</span>
-                    <h3>Premium Quality</h3>
-                </div>
-            </div>
-        </div>
-    </section>
+                        <!-- Category 4: Whipped Soap -->
+                        <div class="category-section">
+                            <div class="category-header">
+                                <h3 class="category-title">🧁 Whipped Soap</h3>
+                                <p class="category-subtitle">Light, fluffy soaps for a luxurious wash</p>
+                            </div>
+                            <div class="category-products">
+                                <div class="coming-soon-card">
+                                    <span class="coming-soon-icon">🌿</span>
+                                    <h4 class="coming-soon-title">Coming Soon 🌿</h4>
+                                    <p class="coming-soon-description">Nature Nourish is carefully crafting new natural
+                                        products for you. Our Body Oils, Scrubs, Whipped Soaps, Travel Soaps, and
+                                        Shampoo Bars will be available soon. Stay tuned for pure, skin-loving goodness!
+                                    </p>
+                                </div>
+                            </div>
 
-    <!-- Reviews Section -->
-    <section id="reviews" class="reviews">
-        <div class="container">
-            <h2>Customer Reviews</h2>
-            <div id="reviews-grid" class="reviews-grid">
-                <p class="loading-message">Loading reviews...</p>
-            </div>
-            <div class="review-card">
-                <div class="stars">⭐⭐⭐⭐⭐</div>
-                <p class="review-text">"Amazing quality soaps! My skin has never felt better. Highly recommend!"</p>
-                <div class="review-card">
-                    <div class="stars">⭐⭐⭐⭐⭐</div>
-                    <p class="review-text">"Love the natural ingredients. No harsh chemicals, just pure goodness!"</p>
-                    <p class="reviewer-name">- Michael Chen</p>
-                </div>
-                <div class="review-card">
-                    <div class="stars">⭐⭐⭐⭐⭐</div>
-                    <p class="review-text">"Best soaps I've ever used. Fast delivery and excellent customer service!"
-                    </p>
-                    <p class="reviewer-name">- Emma Williams</p>
-                </div>
-                <div class="review-card">
-                    <div class="stars">⭐⭐⭐⭐⭐</div>
-                    <p class="review-text">"Perfect gift for my family. Everyone loves them!"</p>
-                    <p class="reviewer-name">- David Kumar</p>
-                </div>
-            </div>
-            <div class="reviews-form">
-                <h3>Share Your Review</h3>
-                <form id="review-form">
-                    <input type="text" placeholder="Your Name" required>
-                    <select id="rating" required>
-                        <option value="">Select Rating</option>
-                        <option value="5">⭐⭐⭐⭐⭐ 5 Stars</option>
-                        <option value="4">⭐⭐⭐⭐ 4 Stars</option>
-                        <option value="3">⭐⭐⭐ 3 Stars</option>
-                        <option value="2">⭐⭐ 2 Stars</option>
-                        <option value="1">⭐ 1 Star</option>
-                    </select>
-                    <textarea placeholder="Write your review" rows="4" required></textarea>
-                    <button type="submit" class="submit-review-btn">Submit Review</button>
-                </form>
-            </div>
-        </div>
-    </section>
+                            <!-- Category 5: Travel Soaps -->
+                            <div class="category-section">
+                                <div class="category-header">
+                                    <h3 class="category-title">✈️ Travel Soaps</h3>
+                                    <p class="category-subtitle">Compact soaps perfect for on-the-go</p>
+                                </div>
+                                <div class="category-products">
+                                    <div class="coming-soon-card">
+                                        <span class="coming-soon-icon">🌿</span>
+                                        <h4 class="coming-soon-title">Coming Soon 🌿</h4>
+                                        <p class="coming-soon-description">Nature Nourish is carefully crafting new
+                                            natural products for you. Our Body Oils, Scrubs, Whipped Soaps, Travel
+                                            Soaps, and Shampoo Bars will be available soon. Stay tuned for pure,
+                                            skin-loving goodness!</p>
+                                    </div>
+                                </div>
 
-    <!-- Contact Section -->
-    <section id="contact" class="contact">
-        <div class="container">
-            <h2>Get In Touch</h2>
-            <form class="contact-form">
-                <input type="text" placeholder="Your Name" required>
-                <input type="email" placeholder="Your Email" required>
-                <textarea placeholder="Your Message" rows="5" required></textarea>
-                <button type="submit" class="submit-btn">Send Message</button>
-            </form>
-        </div>
-    </section>
+                                <!-- Category 6: Shampoo Bars -->
+                                <div class="category-section">
+                                    <div class="category-header">
+                                        <h3 class="category-title">🧴 Shampoo Bars</h3>
+                                        <p class="category-subtitle">Eco-friendly solid shampoo alternatives</p>
+                                    </div>
+                                    <div class="category-products">
+                                        <div class="coming-soon-card">
+                                            <span class="coming-soon-icon">🌿</span>
+                                            <h4 class="coming-soon-title">Coming Soon 🌿</h4>
+                                            <p class="coming-soon-description">Nature Nourish is carefully crafting new
+                                                natural products for you. Our Body Oils, Scrubs, Whipped Soaps, Travel
+                                                Soaps, and Shampoo Bars will be available soon. Stay tuned for pure,
+                                                skin-loving goodness!</p>
+                                        </div>
+                                    </div>
+                                </div>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <p>&copy; 2026 Nature Nourish. All rights reserved.</p>
-            <p>Made with 🌿 for your wellness</p>
-        </div>
-    </footer>
+                                <!-- Shopping Cart Section -->
+                                <section id="cart" class="cart-section">
+                                    <div class="container">
+                                        <h2 class="section-title">Your Shopping Cart</h2>
+                                        <div id="cart-items-container" class="cart-items-container">
+                                            <p class="empty-message">Your cart is empty. Start shopping!</p>
+                                        </div>
+                                        <div id="cart-summary" class="cart-summary" style="display: none;">
+                                            <div class="summary-box">
+                                                <div class="summary-row">
+                                                    <span>Subtotal:</span>
+                                                    <span id="subtotal">₹0</span>
+                                                </div>
+                                                <div class="summary-row">
+                                                    <span>Shipping:</span>
+                                                    <span>FREE</span>
+                                                </div>
+                                                <div class="summary-row total">
+                                                    <span>Total:</span>
+                                                    <span id="cart-total">₹0</span>
+                                                </div>
+                                                <button class="btn btn-checkout" onclick="proceedToCheckout()">Proceed
+                                                    to Checkout</button>
+                                            </div>
+                                        </div>
 
-    <!-- ============================================
+                                        <!-- Category 2: Body Oils -->
+                                        <div class="category-section">
+                                            <div class="category-header">
+                                                <h3 class="category-title">💧 Body Oils</h3>
+                                                <p class="category-subtitle">Nourishing body oils for soft, glowing skin
+                                                </p>
+                                            </div>
+                                            <div class="category-products">
+                                                <div class="coming-soon-card">
+                                                    <span class="coming-soon-icon">🌿</span>
+                                                    <h4 class="coming-soon-title">Coming Soon 🌿</h4>
+                                                    <p class="coming-soon-description">Nature Nourish is carefully
+                                                        crafting new natural products for you. Our Body Oils, Scrubs,
+                                                        Whipped Soaps, Travel Soaps, and Shampoo Bars will be available
+                                                        soon. Stay tuned for pure, skin loving goodness!</p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Category 3: Body Scrubs -->
+                                        <div class="category-section">
+                                            <div class="category-header">
+                                                <h3 class="category-title">✨ Body Scrubs</h3>
+                                                <p class="category-subtitle">Exfoliate and rejuvenate your skin</p>
+                                            </div>
+                                            <div class="category-products">
+                                                <div class="coming-soon-card">
+                                                    <span class="coming-soon-icon">🌿</span>
+                                                    <h4 class="coming-soon-title">Coming Soon 🌿</h4>
+                                                    <p class="coming-soon-description">Nature Nourish is carefully
+                                                        crafting new natural products for you. Our Body Oils, Scrubs,
+                                                        Whipped Soaps, Travel Soaps, and Shampoo Bars will be available
+                                                        soon. Stay tuned for pure, skin loving goodness!</p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Category 4: Whipped Soap -->
+                                        <div class="category-section">
+                                            <div class="category-header">
+                                                <h3 class="category-title">🧁 Whipped Soap</h3>
+                                                <p class="category-subtitle">Light, fluffy soaps for a luxurious wash
+                                                </p>
+                                            </div>
+                                            <div class="category-products">
+                                                <div class="coming-soon-card">
+                                                    <span class="coming-soon-icon">🌿</span>
+                                                    <h4 class="coming-soon-title">Coming Soon 🌿</h4>
+                                                    <p class="coming-soon-description">Nature Nourish is carefully
+                                                        crafting new natural products for you. Our Body Oils, Scrubs,
+                                                        Whipped Soaps, Travel Soaps, and Shampoo Bars will be available
+                                                        soon. Stay tuned for pure, skin loving goodness!</p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Category 5: Travel Soaps -->
+                                        <div class="category-section">
+                                            <div class="category-header">
+                                                <h3 class="category-title">✈️ Travel Soaps</h3>
+                                                <p class="category-subtitle">Compact soaps perfect for on-the-go</p>
+                                            </div>
+                                            <div class="category-products">
+                                                <div class="coming-soon-card">
+                                                    <span class="coming-soon-icon">🌿</span>
+                                                    <h4 class="coming-soon-title">Coming Soon 🌿</h4>
+                                                    <p class="coming-soon-description">Nature Nourish is carefully
+                                                        crafting new natural products for you. Our Body Oils, Scrubs,
+                                                        Whipped Soaps, Travel Soaps, and Shampoo Bars will be available
+                                                        soon. Stay tuned for pure, skin loving goodness!</p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Category 6: Shampoo Bars -->
+                                        <div class="category-section">
+                                            <div class="category-header">
+                                                <h3 class="category-title">🧴 Shampoo Bars</h3>
+                                                <p class="category-subtitle">Eco-friendly solid shampoo alternatives</p>
+                                            </div>
+                                            <div class="category-products">
+                                                <div class="coming-soon-card">
+                                                    <span class="coming-soon-icon">🌿</span>
+                                                    <h4 class="coming-soon-title">Coming Soon 🌿</h4>
+                                                    <p class="coming-soon-description">Nature Nourish is carefully
+                                                        crafting new natural products for you. Our Body Oils, Scrubs,
+                                                        Whipped Soaps, Travel Soaps, and Shampoo Bars will be available
+                                                        soon. Stay tuned for pure, skin loving goodness!</p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </section>
+
+                                <!-- Checkout Section -->
+                                <section id="checkout" class="checkout-section" style="display:none;">
+                                    <div class="container">
+                                        <h2>Checkout</h2>
+                                        <div class="checkout-container">
+                                            <div class="order-review">
+                                                <h3>Order Summary</h3>
+                                                <div id="checkout-items"></div>
+                                                <div class="checkout-total">
+                                                    <h4>Total: $<span id="checkout-total">0.00</span></h4>
+                                                </div>
+                                            </div>
+                                            <form class="checkout-form" id="checkout-form">
+                                                <h3>Delivery Information</h3>
+                                                <input type="text" placeholder="Full Name" required>
+                                                <input type="email" placeholder="Email Address" required>
+                                                <input type="tel" placeholder="Mobile Number (10 digits)"
+                                                    pattern="[0-9]{10}" required>
+                                                <textarea placeholder="Complete Address" rows="4" required></textarea>
+                                                <input type="text" placeholder="City" required>
+                                                <input type="text" placeholder="Postal Code" required>
+
+                                                <h3 style="margin-top: 2rem;">Payment Method</h3>
+                                                <div class="payment-options">
+                                                    <label>
+                                                        <input type="radio" name="payment" value="cod" checked> Cash on
+                                                        Delivery
+                                                    </label>
+                                                    <label>
+                                                        <input type="radio" name="payment" value="online"> Online
+                                                        Payment
+                                                    </label>
+                                                </div>
+
+                                                <button type="submit" class="place-order-btn">Place Order</button>
+                                                <button type="button" class="back-btn"
+                                                    onclick="document.getElementById('checkout').style.display='none'; document.getElementById('cart').style.display='block';">Back
+                                                    to Cart</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </section>
+
+                                <!-- About Section -->
+                                <section id="about" class="about">
+                                    <div class="container">
+                                        <h2>About Us</h2>
+                                        <p>We create premium natural and herbal soaps using only organic ingredients.
+                                            Each bar is handcrafted to
+                                            provide the best care for your skin, free from harsh chemicals and
+                                            artificial additives.</p>
+                                        <div class="features">
+                                            <div class="feature">
+                                                <span>🌍</span>
+                                                <h3>100% Natural</h3>
+                                            </div>
+                                            <div class="feature">
+                                                <span>♻️</span>
+                                                <h3>Eco-Friendly</h3>
+                                            </div>
+                                            <div class="feature">
+                                                <span>✨</span>
+                                                <h3>Premium Quality</h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+
+                                <!-- Reviews Section -->
+                                <section id="reviews" class="reviews">
+                                    <div class="container">
+                                        <h2>Customer Reviews</h2>
+                                        <div id="reviews-grid" class="reviews-grid">
+                                            <p class="loading-message">Loading reviews...</p>
+                                        </div>
+                                        <div class="review-card">
+                                            <div class="stars">⭐⭐⭐⭐⭐</div>
+                                            <p class="review-text">"Amazing quality soaps! My skin has never felt
+                                                better. Highly recommend!"</p>
+                                            <div class="review-card">
+                                                <div class="stars">⭐⭐⭐⭐⭐</div>
+                                                <p class="review-text">"Love the natural ingredients. No harsh
+                                                    chemicals, just pure goodness!"</p>
+                                                <p class="reviewer-name">- Michael Chen</p>
+                                            </div>
+                                            <div class="review-card">
+                                                <div class="stars">⭐⭐⭐⭐⭐</div>
+                                                <p class="review-text">"Best soaps I've ever used. Fast delivery and
+                                                    excellent customer service!"
+                                                </p>
+                                                <p class="reviewer-name">- Emma Williams</p>
+                                            </div>
+                                            <div class="review-card">
+                                                <div class="stars">⭐⭐⭐⭐⭐</div>
+                                                <p class="review-text">"Perfect gift for my family. Everyone loves
+                                                    them!"</p>
+                                                <p class="reviewer-name">- David Kumar</p>
+                                            </div>
+                                        </div>
+                                        <div class="reviews-form">
+                                            <h3>Share Your Review</h3>
+                                            <form id="review-form">
+                                                <input type="text" placeholder="Your Name" required>
+                                                <select id="rating" required>
+                                                    <option value="">Select Rating</option>
+                                                    <option value="5">⭐⭐⭐⭐⭐ 5 Stars</option>
+                                                    <option value="4">⭐⭐⭐⭐ 4 Stars</option>
+                                                    <option value="3">⭐⭐⭐ 3 Stars</option>
+                                                    <option value="2">⭐⭐ 2 Stars</option>
+                                                    <option value="1">⭐ 1 Star</option>
+                                                </select>
+                                                <textarea placeholder="Write your review" rows="4" required></textarea>
+                                                <button type="submit" class="submit-review-btn">Submit Review</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </section>
+
+                                <!-- Contact Section -->
+                                <section id="contact" class="contact">
+                                    <div class="container">
+                                        <h2>Get In Touch</h2>
+                                        <form class="contact-form">
+                                            <input type="text" placeholder="Your Name" required>
+                                            <input type="email" placeholder="Your Email" required>
+                                            <textarea placeholder="Your Message" rows="5" required></textarea>
+                                            <button type="submit" class="submit-btn">Send Message</button>
+                                        </form>
+                                    </div>
+                                </section>
+
+                                <!-- Footer -->
+                                <footer class="footer">
+                                    <div class="container">
+                                        <p>&copy; 2026 Nature Nourish. All rights reserved.</p>
+                                        <p>Made with 🌿 for your wellness</p>
+                                    </div>
+                                </footer>
+
+                                <!-- ============================================
          MODALS
          ============================================ -->
 
-    <!-- COD Order Form Modal -->
-    <div id="cod-modal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeCODForm()">&times;</span>
-            <h2>Order with Cash on Delivery</h2>
-            <form id="cod-form" onsubmit="submitCODOrder(event)">
-                <div class="form-group">
-                    <label>Product:</label>
-                    <input type="text" id="cod-product" readonly>
-                </div>
-                <div class="form-group">
-                    <label>Price:</label>
-                    <input type="text" id="cod-price" readonly>
-                </div>
-                <div class="form-group">
-                    <label>Full Name:</label>
-                    <input type="text" id="cod-name" placeholder="Enter your full name" required>
-                </div>
-                <div class="form-group">
-                    <label>Email Address:</label>
-                    <input type="email" id="cod-email" placeholder="Enter your email address" required>
-                </div>
-                <div class="form-group">
-                    <label>Mobile Number:</label>
-                    <input type="tel" id="cod-mobile" placeholder="Enter 10-digit mobile number" pattern="[0-9]{10}"
-                        required>
-                </div>
-                <div class="form-group">
-                    <label>Select State:</label>
-                    <select id="cod-state" onchange="updateCities()" required>
-                        <option value="">-- Select State --</option>
-                        <option value="Andhra Pradesh">Andhra Pradesh</option>
-                        <option value="Arunachal Pradesh">Arunachal Pradesh</option>
-                        <option value="Assam">Assam</option>
-                        <option value="Bihar">Bihar</option>
-                        <option value="Chhattisgarh">Chhattisgarh</option>
-                        <option value="Goa">Goa</option>
-                        <option value="Gujarat">Gujarat</option>
-                        <option value="Haryana">Haryana</option>
-                        <option value="Himachal Pradesh">Himachal Pradesh</option>
-                        <option value="Jharkhand">Jharkhand</option>
-                        <option value="Karnataka">Karnataka</option>
-                        <option value="Kerala">Kerala</option>
-                        <option value="Madhya Pradesh">Madhya Pradesh</option>
-                        <option value="Maharashtra">Maharashtra</option>
-                        <option value="Manipur">Manipur</option>
-                        <option value="Meghalaya">Meghalaya</option>
-                        <option value="Mizoram">Mizoram</option>
-                        <option value="Nagaland">Nagaland</option>
-                        <option value="Odisha">Odisha</option>
-                        <option value="Punjab">Punjab</option>
-                        <option value="Rajasthan">Rajasthan</option>
-                        <option value="Sikkim">Sikkim</option>
-                        <option value="Tamil Nadu">Tamil Nadu</option>
-                        <option value="Telangana">Telangana</option>
-                        <option value="Tripura">Tripura</option>
-                        <option value="Uttar Pradesh">Uttar Pradesh</option>
-                        <option value="Uttarakhand">Uttarakhand</option>
-                        <option value="West Bengal">West Bengal</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Select City:</label>
-                    <select id="cod-city" required>
-                        <option value="">-- Select State First --</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Complete Address:</label>
-                    <textarea id="cod-address" placeholder="Enter your street address and locality" rows="3"
-                        required></textarea>
-                </div>
-                <div class="form-group">
-                    <label>PIN Code:</label>
-                    <input type="text" id="cod-pin" placeholder="Enter PIN code (6 digits)" pattern="[0-9]{6}" required>
-                </div>
+                                <!-- COD Order Form Modal -->
+                                <div id="cod-modal" class="modal">
+                                    <div class="modal-content">
+                                        <span class="close" onclick="closeCODForm()">&times;</span>
+                                        <h2>Order with Cash on Delivery</h2>
+                                        <form id="cod-form" onsubmit="submitCODOrder(event)">
+                                            <div class="form-group">
+                                                <label>Product:</label>
+                                                <input type="text" id="cod-product" readonly>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Price:</label>
+                                                <input type="text" id="cod-price" readonly>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Full Name:</label>
+                                                <input type="text" id="cod-name" placeholder="Enter your full name"
+                                                    required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Email Address:</label>
+                                                <input type="email" id="cod-email"
+                                                    placeholder="Enter your email address" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Mobile Number:</label>
+                                                <input type="tel" id="cod-mobile"
+                                                    placeholder="Enter 10-digit mobile number" pattern="[0-9]{10}"
+                                                    required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Select State:</label>
+                                                <select id="cod-state" onchange="updateCities()" required>
+                                                    <option value="">-- Select State --</option>
+                                                    <option value="Andhra Pradesh">Andhra Pradesh</option>
+                                                    <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                                                    <option value="Assam">Assam</option>
+                                                    <option value="Bihar">Bihar</option>
+                                                    <option value="Chhattisgarh">Chhattisgarh</option>
+                                                    <option value="Goa">Goa</option>
+                                                    <option value="Gujarat">Gujarat</option>
+                                                    <option value="Haryana">Haryana</option>
+                                                    <option value="Himachal Pradesh">Himachal Pradesh</option>
+                                                    <option value="Jharkhand">Jharkhand</option>
+                                                    <option value="Karnataka">Karnataka</option>
+                                                    <option value="Kerala">Kerala</option>
+                                                    <option value="Madhya Pradesh">Madhya Pradesh</option>
+                                                    <option value="Maharashtra">Maharashtra</option>
+                                                    <option value="Manipur">Manipur</option>
+                                                    <option value="Meghalaya">Meghalaya</option>
+                                                    <option value="Mizoram">Mizoram</option>
+                                                    <option value="Nagaland">Nagaland</option>
+                                                    <option value="Odisha">Odisha</option>
+                                                    <option value="Punjab">Punjab</option>
+                                                    <option value="Rajasthan">Rajasthan</option>
+                                                    <option value="Sikkim">Sikkim</option>
+                                                    <option value="Tamil Nadu">Tamil Nadu</option>
+                                                    <option value="Telangana">Telangana</option>
+                                                    <option value="Tripura">Tripura</option>
+                                                    <option value="Uttar Pradesh">Uttar Pradesh</option>
+                                                    <option value="Uttarakhand">Uttarakhand</option>
+                                                    <option value="West Bengal">West Bengal</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Select City:</label>
+                                                <select id="cod-city" required>
+                                                    <option value="">-- Select State First --</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Complete Address:</label>
+                                                <textarea id="cod-address"
+                                                    placeholder="Enter your street address and locality" rows="3"
+                                                    required></textarea>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>PIN Code:</label>
+                                                <input type="text" id="cod-pin" placeholder="Enter PIN code (6 digits)"
+                                                    pattern="[0-9]{6}" required>
+                                            </div>
 
-                <div class="form-group">
-                    <label>Delivery Option:</label>
-                    <div class="delivery-options">
-                        <label class="delivery-option">
-                            <input type="radio" name="delivery-option" value="0" checked
-                                onchange="updateDeliveryCharge()">
-                            <span class="delivery-text">
-                                <strong>Free Delivery</strong>
-                                <span class="delivery-time">5 Business Working Days</span>
-                            </span>
-                            <span class="delivery-charge">₹0</span>
-                        </label>
-                        <label class="delivery-option">
-                            <input type="radio" name="delivery-option" value="30" onchange="updateDeliveryCharge()">
-                            <span class="delivery-text">
-                                <strong>Express Delivery</strong>
-                                <span class="delivery-time">2 Business Days</span>
-                            </span>
-                            <span class="delivery-charge">₹30</span>
-                        </label>
-                        <label class="delivery-option">
-                            <input type="radio" name="delivery-option" value="50" onchange="updateDeliveryCharge()">
-                            <span class="delivery-text">
-                                <strong>Same Day Delivery</strong>
-                                <span class="delivery-time">1 Business Day</span>
-                            </span>
-                            <span class="delivery-charge">₹50</span>
-                        </label>
-                    </div>
-                </div>
+                                            <div class="form-group">
+                                                <label>Delivery Option:</label>
+                                                <div class="delivery-options">
+                                                    <label class="delivery-option">
+                                                        <input type="radio" name="delivery-option" value="0" checked
+                                                            onchange="updateDeliveryCharge()">
+                                                        <span class="delivery-text">
+                                                            <strong>Free Delivery</strong>
+                                                            <span class="delivery-time">5 Business Working Days</span>
+                                                        </span>
+                                                        <span class="delivery-charge">₹0</span>
+                                                    </label>
+                                                    <label class="delivery-option">
+                                                        <input type="radio" name="delivery-option" value="30"
+                                                            onchange="updateDeliveryCharge()">
+                                                        <span class="delivery-text">
+                                                            <strong>Express Delivery</strong>
+                                                            <span class="delivery-time">2 Business Days</span>
+                                                        </span>
+                                                        <span class="delivery-charge">₹30</span>
+                                                    </label>
+                                                    <label class="delivery-option">
+                                                        <input type="radio" name="delivery-option" value="50"
+                                                            onchange="updateDeliveryCharge()">
+                                                        <span class="delivery-text">
+                                                            <strong>Same Day Delivery</strong>
+                                                            <span class="delivery-time">1 Business Day</span>
+                                                        </span>
+                                                        <span class="delivery-charge">₹50</span>
+                                                    </label>
+                                                </div>
+                                            </div>
 
-                <div class="form-group">
-                    <label>Delivery Charge:</label>
-                    <input type="text" id="cod-delivery-charge" value="₹0" readonly
-                        style="font-weight: bold; color: #667eea;">
-                </div>
+                                            <div class="form-group">
+                                                <label>Delivery Charge:</label>
+                                                <input type="text" id="cod-delivery-charge" value="₹0" readonly
+                                                    style="font-weight: bold; color: #667eea;">
+                                            </div>
 
-                <div class="form-group">
-                    <label>Total Amount:</label>
-                    <input type="text" id="cod-total-amount" readonly style="font-weight: bold; color: #28a745;">
-                </div>
+                                            <div class="form-group">
+                                                <label>Total Amount:</label>
+                                                <input type="text" id="cod-total-amount" readonly
+                                                    style="font-weight: bold; color: #28a745;">
+                                            </div>
 
-                <button type="submit" class="btn btn-confirm-order">Confirm Order</button>
-            </form>
-        </div>
-    </div>
+                                            <button type="submit" class="btn btn-confirm-order">Confirm Order</button>
+                                        </form>
+                                    </div>
+                                </div>
 
-    <!-- Success Message Modal -->
-    <div id="success-modal" class="modal">
-        <div class="modal-content success-content">
-            <h2>✅ Order Placed Successfully!</h2>
-            <p id="success-message"></p>
-            <button class="btn btn-close-modal" onclick="closeSuccessModal()">Continue Shopping</button>
-        </div>
-    </div>
+                                <!-- Success Message Modal -->
+                                <div id="success-modal" class="modal">
+                                    <div class="modal-content success-content">
+                                        <h2>✅ Order Placed Successfully!</h2>
+                                        <p id="success-message"></p>
+                                        <button class="btn btn-close-modal" onclick="closeSuccessModal()">Continue
+                                            Shopping</button>
+                                    </div>
+                                </div>
 
-    <!-- Customer Portal Modal -->
-    <div id="customer-portal-modal" class="modal">
-        <div class="modal-content customer-content">
-            <span class="close" onclick="closeCustomerPortal()">&times;</span>
-            <h2>📋 Customer Portal - Order Entry</h2>
-            <p style="color: #666; margin-bottom: 1.5rem;">Enter customer details for Cash on Delivery order</p>
+                                <!-- Customer Portal Modal -->
+                                <div id="customer-portal-modal" class="modal">
+                                    <div class="modal-content customer-content">
+                                        <span class="close" onclick="closeCustomerPortal()">&times;</span>
+                                        <h2>📋 Customer Portal - Order Entry</h2>
+                                        <p style="color: #666; margin-bottom: 1.5rem;">Enter customer details for Cash
+                                            on Delivery order</p>
 
-            <form id="customer-form" onsubmit="submitCustomerOrder(event)">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Staff Name:</label>
-                        <input type="text" id="customer-staff-name" placeholder="Your name" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Staff ID:</label>
-                        <input type="text" id="customer-staff-id" placeholder="Your staff ID" required>
-                    </div>
-                </div>
+                                        <form id="customer-form" onsubmit="submitCustomerOrder(event)">
+                                            <div class="form-row">
+                                                <div class="form-group">
+                                                    <label>Staff Name:</label>
+                                                    <input type="text" id="customer-staff-name" placeholder="Your name"
+                                                        required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Staff ID:</label>
+                                                    <input type="text" id="customer-staff-id"
+                                                        placeholder="Your staff ID" required>
+                                                </div>
+                                            </div>
 
-                <hr style="margin: 1.5rem 0; border: none; border-top: 1px solid #ddd;">
+                                            <hr style="margin: 1.5rem 0; border: none; border-top: 1px solid #ddd;">
 
-                <h3 style="color: #667eea; margin-bottom: 1rem;">Customer Details</h3>
+                                            <h3 style="color: #667eea; margin-bottom: 1rem;">Customer Details</h3>
 
-                <div class="form-group">
-                    <label>Product Name:</label>
-                    <select id="customer-product" required>
-                        <option value="">-- Select Product --</option>
-                        <option value="Solar Calm">Solar Calm (₹100)</option>
-                        <option value="Clearwave">Clearwave (₹100)</option>
-                        <option value="Milk Cloud">Milk Cloud (₹100)</option>
-                        <option value="Glow Dust">Glow Dust (₹100)</option>
-                    </select>
-                </div>
+                                            <div class="form-group">
+                                                <label>Product Name:</label>
+                                                <select id="customer-product" required>
+                                                    <option value="">-- Select Product --</option>
+                                                    <option value="Solar Calm">Solar Calm (₹100)</option>
+                                                    <option value="Clearwave">Clearwave (₹100)</option>
+                                                    <option value="Milk Cloud">Milk Cloud (₹100)</option>
+                                                    <option value="Glow Dust">Glow Dust (₹100)</option>
+                                                </select>
+                                            </div>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Customer Name:</label>
-                        <input type="text" id="customer-customer-name" placeholder="Full name" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Email Address:</label>
-                        <input type="email" id="customer-customer-email" placeholder="Email address" required>
-                    </div>
-                </div>
+                                            <div class="form-row">
+                                                <div class="form-group">
+                                                    <label>Customer Name:</label>
+                                                    <input type="text" id="customer-customer-name"
+                                                        placeholder="Full name" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Email Address:</label>
+                                                    <input type="email" id="customer-customer-email"
+                                                        placeholder="Email address" required>
+                                                </div>
+                                            </div>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Mobile Number:</label>
-                        <input type="tel" id="customer-customer-mobile" placeholder="10-digit mobile"
-                            pattern="[0-9]{10}" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Product Quantity:</label>
-                        <input type="number" id="customer-quantity" value="1" min="1" required>
-                    </div>
-                </div>
+                                            <div class="form-row">
+                                                <div class="form-group">
+                                                    <label>Mobile Number:</label>
+                                                    <input type="tel" id="customer-customer-mobile"
+                                                        placeholder="10-digit mobile" pattern="[0-9]{10}" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Product Quantity:</label>
+                                                    <input type="number" id="customer-quantity" value="1" min="1"
+                                                        required>
+                                                </div>
+                                            </div>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Select State:</label>
-                        <select id="customer-state" onchange="updateCustomerCities()" required>
-                            <option value="">-- Select State --</option>
-                            <option value="Andhra Pradesh">Andhra Pradesh</option>
-                            <option value="Arunachal Pradesh">Arunachal Pradesh</option>
-                            <option value="Assam">Assam</option>
-                            <option value="Bihar">Bihar</option>
-                            <option value="Chhattisgarh">Chhattisgarh</option>
-                            <option value="Goa">Goa</option>
-                            <option value="Gujarat">Gujarat</option>
-                            <option value="Haryana">Haryana</option>
-                            <option value="Himachal Pradesh">Himachal Pradesh</option>
-                            <option value="Jharkhand">Jharkhand</option>
-                            <option value="Karnataka">Karnataka</option>
-                            <option value="Kerala">Kerala</option>
-                            <option value="Madhya Pradesh">Madhya Pradesh</option>
-                            <option value="Maharashtra">Maharashtra</option>
-                            <option value="Manipur">Manipur</option>
-                            <option value="Meghalaya">Meghalaya</option>
-                            <option value="Mizoram">Mizoram</option>
-                            <option value="Nagaland">Nagaland</option>
-                            <option value="Odisha">Odisha</option>
-                            <option value="Punjab">Punjab</option>
-                            <option value="Rajasthan">Rajasthan</option>
-                            <option value="Sikkim">Sikkim</option>
-                            <option value="Tamil Nadu">Tamil Nadu</option>
-                            <option value="Telangana">Telangana</option>
-                            <option value="Tripura">Tripura</option>
-                            <option value="Uttar Pradesh">Uttar Pradesh</option>
-                            <option value="Uttarakhand">Uttarakhand</option>
-                            <option value="West Bengal">West Bengal</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Select City:</label>
-                        <select id="customer-city" required>
-                            <option value="">-- Select State First --</option>
-                        </select>
-                    </div>
-                </div>
+                                            <div class="form-row">
+                                                <div class="form-group">
+                                                    <label>Select State:</label>
+                                                    <select id="customer-state" onchange="updateCustomerCities()"
+                                                        required>
+                                                        <option value="">-- Select State --</option>
+                                                        <option value="Andhra Pradesh">Andhra Pradesh</option>
+                                                        <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                                                        <option value="Assam">Assam</option>
+                                                        <option value="Bihar">Bihar</option>
+                                                        <option value="Chhattisgarh">Chhattisgarh</option>
+                                                        <option value="Goa">Goa</option>
+                                                        <option value="Gujarat">Gujarat</option>
+                                                        <option value="Haryana">Haryana</option>
+                                                        <option value="Himachal Pradesh">Himachal Pradesh</option>
+                                                        <option value="Jharkhand">Jharkhand</option>
+                                                        <option value="Karnataka">Karnataka</option>
+                                                        <option value="Kerala">Kerala</option>
+                                                        <option value="Madhya Pradesh">Madhya Pradesh</option>
+                                                        <option value="Maharashtra">Maharashtra</option>
+                                                        <option value="Manipur">Manipur</option>
+                                                        <option value="Meghalaya">Meghalaya</option>
+                                                        <option value="Mizoram">Mizoram</option>
+                                                        <option value="Nagaland">Nagaland</option>
+                                                        <option value="Odisha">Odisha</option>
+                                                        <option value="Punjab">Punjab</option>
+                                                        <option value="Rajasthan">Rajasthan</option>
+                                                        <option value="Sikkim">Sikkim</option>
+                                                        <option value="Tamil Nadu">Tamil Nadu</option>
+                                                        <option value="Telangana">Telangana</option>
+                                                        <option value="Tripura">Tripura</option>
+                                                        <option value="Uttar Pradesh">Uttar Pradesh</option>
+                                                        <option value="Uttarakhand">Uttarakhand</option>
+                                                        <option value="West Bengal">West Bengal</option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Select City:</label>
+                                                    <select id="customer-city" required>
+                                                        <option value="">-- Select State First --</option>
+                                                    </select>
+                                                </div>
+                                            </div>
 
-                <div class="form-group">
-                    <label>Complete Address:</label>
-                    <textarea id="customer-address" placeholder="Street address, house number, locality" rows="3"
-                        required></textarea>
-                </div>
+                                            <div class="form-group">
+                                                <label>Complete Address:</label>
+                                                <textarea id="customer-address"
+                                                    placeholder="Street address, house number, locality" rows="3"
+                                                    required></textarea>
+                                            </div>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>PIN Code:</label>
-                        <input type="text" id="customer-pin" placeholder="6-digit PIN code" pattern="[0-9]{6}" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Delivery Status:</label>
-                        <select id="customer-status" required>
-                            <option value="Pending">Pending Delivery</option>
-                            <option value="In Transit">In Transit</option>
-                            <option value="Delivered">Delivered</option>
-                        </select>
-                    </div>
-                </div>
+                                            <div class="form-row">
+                                                <div class="form-group">
+                                                    <label>PIN Code:</label>
+                                                    <input type="text" id="customer-pin" placeholder="6-digit PIN code"
+                                                        pattern="[0-9]{6}" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Delivery Status:</label>
+                                                    <select id="customer-status" required>
+                                                        <option value="Pending">Pending Delivery</option>
+                                                        <option value="In Transit">In Transit</option>
+                                                        <option value="Delivered">Delivered</option>
+                                                    </select>
+                                                </div>
+                                            </div>
 
-                <button type="submit" class="btn btn-confirm-order" style="width: 100%; margin-top: 1.5rem;">Register
-                    COD Delivery</button>
-            </form>
-        </div>
-    </div>
+                                            <button type="submit" class="btn btn-confirm-order"
+                                                style="width: 100%; margin-top: 1.5rem;">Register
+                                                COD Delivery</button>
+                                        </form>
+                                    </div>
+                                </div>
 
-    <!-- Agent Portal Modal -->
-    <div id="agent-portal-modal" class="modal">
-        <div class="modal-content customer-content">
-            <span class="close" onclick="closeAgentPortal()">&times;</span>
-            <h2>🚚 Agent Portal - Delivery Order Entry</h2>
-            <p style="color: #666; margin-bottom: 1.5rem;">Register delivery orders as an agent</p>
+                                <!-- Agent Portal Modal -->
+                                <div id="agent-portal-modal" class="modal">
+                                    <div class="modal-content customer-content">
+                                        <span class="close" onclick="closeAgentPortal()">&times;</span>
+                                        <h2>🚚 Agent Portal - Delivery Order Entry</h2>
+                                        <p style="color: #666; margin-bottom: 1.5rem;">Register delivery orders as an
+                                            agent</p>
 
-            <form id="agent-form" onsubmit="submitAgentOrder(event)">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Agent Name:</label>
-                        <input type="text" id="agent-name" placeholder="Your name" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Agent ID:</label>
-                        <input type="text" id="agent-id" placeholder="Your agent ID" required>
-                    </div>
-                </div>
+                                        <form id="agent-form" onsubmit="submitAgentOrder(event)">
+                                            <div class="form-row">
+                                                <div class="form-group">
+                                                    <label>Agent Name:</label>
+                                                    <input type="text" id="agent-name" placeholder="Your name" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Agent ID:</label>
+                                                    <input type="text" id="agent-id" placeholder="Your agent ID"
+                                                        required>
+                                                </div>
+                                            </div>
 
-                <hr style="margin: 1.5rem 0; border: none; border-top: 1px solid #ddd;">
+                                            <hr style="margin: 1.5rem 0; border: none; border-top: 1px solid #ddd;">
 
-                <h3 style="color: #667eea; margin-bottom: 1rem;">Order Details</h3>
+                                            <h3 style="color: #667eea; margin-bottom: 1rem;">Order Details</h3>
 
-                <div class="form-group">
-                    <label>Product Name:</label>
-                    <select id="agent-product" required>
-                        <option value="">-- Select Product --</option>
-                        <option value="Solar Calm">Solar Calm (₹100)</option>
-                        <option value="Clearwave">Clearwave (₹100)</option>
-                        <option value="Milk Cloud">Milk Cloud (₹100)</option>
-                        <option value="Glow Dust">Glow Dust (₹100)</option>
-                    </select>
-                </div>
+                                            <div class="form-group">
+                                                <label>Product Name:</label>
+                                                <select id="agent-product" required>
+                                                    <option value="">-- Select Product --</option>
+                                                    <option value="Solar Calm">Solar Calm (₹100)</option>
+                                                    <option value="Clearwave">Clearwave (₹100)</option>
+                                                    <option value="Milk Cloud">Milk Cloud (₹100)</option>
+                                                    <option value="Glow Dust">Glow Dust (₹100)</option>
+                                                </select>
+                                            </div>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Quantity:</label>
-                        <input type="number" id="agent-quantity" value="1" min="1" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Delivery Status:</label>
-                        <select id="agent-status" required>
-                            <option value="Pending">Pending Delivery</option>
-                            <option value="In Transit">In Transit</option>
-                            <option value="Delivered">Delivered</option>
-                        </select>
-                    </div>
-                </div>
+                                            <div class="form-row">
+                                                <div class="form-group">
+                                                    <label>Quantity:</label>
+                                                    <input type="number" id="agent-quantity" value="1" min="1" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Delivery Status:</label>
+                                                    <select id="agent-status" required>
+                                                        <option value="Pending">Pending Delivery</option>
+                                                        <option value="In Transit">In Transit</option>
+                                                        <option value="Delivered">Delivered</option>
+                                                    </select>
+                                                </div>
+                                            </div>
 
-                <hr style="margin: 1.5rem 0; border: none; border-top: 1px solid #ddd;">
+                                            <hr style="margin: 1.5rem 0; border: none; border-top: 1px solid #ddd;">
 
-                <h3 style="color: #667eea; margin-bottom: 1rem;">Customer Details</h3>
+                                            <h3 style="color: #667eea; margin-bottom: 1rem;">Customer Details</h3>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Customer Name:</label>
-                        <input type="text" id="agent-customer-name" placeholder="Full name" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Email Address:</label>
-                        <input type="email" id="agent-customer-email" placeholder="Email address" required>
-                    </div>
-                </div>
+                                            <div class="form-row">
+                                                <div class="form-group">
+                                                    <label>Customer Name:</label>
+                                                    <input type="text" id="agent-customer-name" placeholder="Full name"
+                                                        required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Email Address:</label>
+                                                    <input type="email" id="agent-customer-email"
+                                                        placeholder="Email address" required>
+                                                </div>
+                                            </div>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Mobile Number:</label>
-                        <input type="tel" id="agent-customer-mobile" placeholder="10-digit mobile" pattern="[0-9]{10}"
-                            required>
-                    </div>
-                </div>
+                                            <div class="form-row">
+                                                <div class="form-group">
+                                                    <label>Mobile Number:</label>
+                                                    <input type="tel" id="agent-customer-mobile"
+                                                        placeholder="10-digit mobile" pattern="[0-9]{10}" required>
+                                                </div>
+                                            </div>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Select State:</label>
-                        <select id="agent-state" onchange="updateAgentCities()" required>
-                            <option value="">-- Select State --</option>
-                            <option value="Andhra Pradesh">Andhra Pradesh</option>
-                            <option value="Arunachal Pradesh">Arunachal Pradesh</option>
-                            <option value="Assam">Assam</option>
-                            <option value="Bihar">Bihar</option>
-                            <option value="Chhattisgarh">Chhattisgarh</option>
-                            <option value="Goa">Goa</option>
-                            <option value="Gujarat">Gujarat</option>
-                            <option value="Haryana">Haryana</option>
-                            <option value="Himachal Pradesh">Himachal Pradesh</option>
-                            <option value="Jharkhand">Jharkhand</option>
-                            <option value="Karnataka">Karnataka</option>
-                            <option value="Kerala">Kerala</option>
-                            <option value="Madhya Pradesh">Madhya Pradesh</option>
-                            <option value="Maharashtra">Maharashtra</option>
-                            <option value="Manipur">Manipur</option>
-                            <option value="Meghalaya">Meghalaya</option>
-                            <option value="Mizoram">Mizoram</option>
-                            <option value="Nagaland">Nagaland</option>
-                            <option value="Odisha">Odisha</option>
-                            <option value="Punjab">Punjab</option>
-                            <option value="Rajasthan">Rajasthan</option>
-                            <option value="Sikkim">Sikkim</option>
-                            <option value="Tamil Nadu">Tamil Nadu</option>
-                            <option value="Telangana">Telangana</option>
-                            <option value="Tripura">Tripura</option>
-                            <option value="Uttar Pradesh">Uttar Pradesh</option>
-                            <option value="Uttarakhand">Uttarakhand</option>
-                            <option value="West Bengal">West Bengal</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Select City:</label>
-                        <select id="agent-city" required>
-                            <option value="">-- Select State First --</option>
-                        </select>
-                    </div>
-                </div>
+                                            <div class="form-row">
+                                                <div class="form-group">
+                                                    <label>Select State:</label>
+                                                    <select id="agent-state" onchange="updateAgentCities()" required>
+                                                        <option value="">-- Select State --</option>
+                                                        <option value="Andhra Pradesh">Andhra Pradesh</option>
+                                                        <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                                                        <option value="Assam">Assam</option>
+                                                        <option value="Bihar">Bihar</option>
+                                                        <option value="Chhattisgarh">Chhattisgarh</option>
+                                                        <option value="Goa">Goa</option>
+                                                        <option value="Gujarat">Gujarat</option>
+                                                        <option value="Haryana">Haryana</option>
+                                                        <option value="Himachal Pradesh">Himachal Pradesh</option>
+                                                        <option value="Jharkhand">Jharkhand</option>
+                                                        <option value="Karnataka">Karnataka</option>
+                                                        <option value="Kerala">Kerala</option>
+                                                        <option value="Madhya Pradesh">Madhya Pradesh</option>
+                                                        <option value="Maharashtra">Maharashtra</option>
+                                                        <option value="Manipur">Manipur</option>
+                                                        <option value="Meghalaya">Meghalaya</option>
+                                                        <option value="Mizoram">Mizoram</option>
+                                                        <option value="Nagaland">Nagaland</option>
+                                                        <option value="Odisha">Odisha</option>
+                                                        <option value="Punjab">Punjab</option>
+                                                        <option value="Rajasthan">Rajasthan</option>
+                                                        <option value="Sikkim">Sikkim</option>
+                                                        <option value="Tamil Nadu">Tamil Nadu</option>
+                                                        <option value="Telangana">Telangana</option>
+                                                        <option value="Tripura">Tripura</option>
+                                                        <option value="Uttar Pradesh">Uttar Pradesh</option>
+                                                        <option value="Uttarakhand">Uttarakhand</option>
+                                                        <option value="West Bengal">West Bengal</option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Select City:</label>
+                                                    <select id="agent-city" required>
+                                                        <option value="">-- Select State First --</option>
+                                                    </select>
+                                                </div>
+                                            </div>
 
-                <div class="form-group">
-                    <label>Complete Address:</label>
-                    <textarea id="agent-address" placeholder="Street address, house number, locality" rows="3"
-                        required></textarea>
-                </div>
+                                            <div class="form-group">
+                                                <label>Complete Address:</label>
+                                                <textarea id="agent-address"
+                                                    placeholder="Street address, house number, locality" rows="3"
+                                                    required></textarea>
+                                            </div>
 
-                <div class="form-group">
-                    <label>PIN Code:</label>
-                    <input type="text" id="agent-pin" placeholder="6-digit PIN code" pattern="[0-9]{6}" required>
-                </div>
+                                            <div class="form-group">
+                                                <label>PIN Code:</label>
+                                                <input type="text" id="agent-pin" placeholder="6-digit PIN code"
+                                                    pattern="[0-9]{6}" required>
+                                            </div>
 
-                <button type="submit" class="btn btn-confirm-order" style="width: 100%; margin-top: 1.5rem;">Register
-                    Delivery Order</button>
-            </form>
-        </div>
-    </div>
+                                            <button type="submit" class="btn btn-confirm-order"
+                                                style="width: 100%; margin-top: 1.5rem;">Register
+                                                Delivery Order</button>
+                                        </form>
+                                    </div>
+                                </div>
 
-    <script src="script.js"></script>
+                                <script src="script.js"></script>
 </body>
 
 </html>

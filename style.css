@@ -249,27 +249,34 @@ p {
 .category-filters {
     text-align: center;
     margin-bottom: 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
 }
 
 .category-btn {
-    background: var(--brown-luxury);
-    color: var(--bg-white);
-    border: none;
-    padding: 10px 18px;
-    margin: 0 6px 6px;
+    background: transparent;
+    color: var(--text-dark);
+    border: 1px solid var(--beige-soft);
+    padding: 12px 20px;
     border-radius: var(--radius-sm);
     cursor: pointer;
     transition: var(--transition-normal);
     font-weight: 500;
     font-size: 0.9rem;
+    font-family: 'Inter', sans-serif;
+}
+
+.category-btn:hover {
+    border-color: var(--brown-luxury);
+    background: rgba(181, 144, 114, 0.1);
 }
 
 .category-btn.active {
     background: var(--brown-dark);
-}
-
-.category-btn:hover {
-    opacity: 0.9;
+    color: var(--bg-white);
+    border-color: var(--brown-dark);
 }
 
 .coming-soon {
@@ -277,6 +284,114 @@ p {
     color: var(--text-secondary);
     margin: 2rem 0;
     text-align: center;
+}
+
+/* Coming Soon Section - Premium Card Design */
+.coming-soon-section {
+    display: none;
+    padding: 40px 20px;
+}
+
+.coming-soon-section.active {
+    display: block;
+}
+
+.coming-soon-card {
+    background: linear-gradient(135deg, #f5efe6 0%, #e8e0d5 100%);
+    border-radius: 20px;
+    padding: 60px 40px;
+    text-align: center;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(181, 144, 114, 0.2);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.coming-soon-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+    border-color: rgba(181, 144, 114, 0.4);
+}
+
+.coming-soon-emoji {
+    font-size: 4rem;
+    display: block;
+    margin-bottom: 1.5rem;
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.coming-soon-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 2rem;
+    color: var(--text-dark);
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+}
+
+.coming-soon-text {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    line-height: 1.8;
+    margin-bottom: 1rem;
+}
+
+.coming-soon-launch {
+    display: inline-block;
+    margin-top: 1.5rem;
+    font-size: 1.1rem;
+    color: var(--brown-luxury);
+    font-weight: 500;
+}
+
+/* Hide the old minimal coming soon */
+.coming-soon-minimal {
+    display: none;
+}
+
+/* Mobile Responsive for Coming Soon Card */
+@media (max-width: 768px) {
+    .coming-soon-card {
+        padding: 40px 24px;
+    }
+
+    .coming-soon-emoji {
+        font-size: 3rem;
+    }
+
+    .coming-soon-title {
+        font-size: 1.5rem;
+    }
+
+    .coming-soon-text {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .coming-soon-card {
+        padding: 30px 20px;
+    }
+
+    .coming-soon-emoji {
+        font-size: 2.5rem;
+    }
+
+    .coming-soon-title {
+        font-size: 1.35rem;
+    }
 }
 
 /* Products Grid - Horizontal Scrollable Layout */

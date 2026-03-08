@@ -1,23 +1,31 @@
-# TODO - Fix Cart Price Sum and Admin Order Display
+# TODO - Product Categories Update
 
-## Issues Identified:
-1. **Cart prices not summing up**: The checkout page calculates totals from individual item prices, but the launch offer bundle prices are split across items which can cause rounding issues
-2. **Order details not displaying in admin portal**: Need to verify order data is properly sent and stored
+## Status: ✅ Completed
 
-## Fix Plan:
+### Tasks:
+- [x] 1. Analyze existing code
+- [x] 2. Update CSS - Category button styling (inactive: light border, active: dark brown)
+- [x] 3. Update HTML - Improve Coming Soon card design
+- [x] 4. Update JavaScript - Fix filterCategory function (already working in inline script)
+- [x] 5. Add mobile responsive styles for Coming Soon card
 
-### Fix 1: Update checkout.html to properly calculate totals with launch offer logic
-- [ ] 1. Add launch offer pricing logic to checkout.html to match script.js
-- [ ] 2. Fix the calculateTotals function to apply launch offer discounts properly
+### Summary of Changes:
+1. **CSS (style.css):**
+   - Updated category buttons: inactive = transparent with light beige border, active = dark brown background
+   - Added hover effects with subtle background highlight
+   - Created beautiful Coming Soon card design with:
+     - Gradient background
+     - Floating emoji animation
+     - Premium typography
+     - Hover effects
+   - Added mobile responsive styles for the Coming Soon card
 
-### Fix 2: Ensure order data is properly sent to backend
-- [ ] 3. Verify order submission sends complete product details
-- [ ] 4. Add console logging for debugging order submission
+2. **HTML (index.html):**
+   - Updated Coming Soon section with new card structure
+   - Added proper classes for styling
 
-### Fix 3: Test the fixes
-- [ ] 5. Verify cart total calculation
-- [ ] 6. Verify orders appear in admin portal
-
-## Files to Edit:
-- checkout.html - Fix cart price calculation and order submission
+3. **Functionality:**
+   - Soaps button (default active) shows all 8 soap products
+   - Other category buttons (Body Oils, Body Scrubs, Whipped Soap, Travel Soaps, Shampoo Bars) show beautiful Coming Soon card
+   - Category buttons are properly styled with active/inactive states
 

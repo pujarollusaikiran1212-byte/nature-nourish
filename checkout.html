@@ -288,17 +288,173 @@
             border-radius: var(--radius-md);
         }
 
-        @media (max-width: 900px) {
+        @media (max-width: 768px) {
+            .checkout-page {
+                padding-top: 80px;
+            }
+
             .checkout-container {
                 grid-template-columns: 1fr;
+                gap: 24px;
+                padding: 16px;
+                width: 100%;
+            }
+
+            .checkout-main {
+                padding: 20px;
+                order: 1;
             }
 
             .checkout-sidebar {
                 position: static;
+                order: 2;
+            }
+
+            .price-summary {
+                padding: 20px;
+            }
+
+            .section-title-checkout {
+                font-size: 1.25rem;
+                margin-bottom: 16px;
+                padding-bottom: 10px;
             }
 
             .form-grid {
                 grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .form-section {
+                margin-bottom: 24px;
+            }
+
+            .checkout-form input,
+            .checkout-form select,
+            .checkout-form textarea {
+                padding: 14px 16px;
+                font-size: 1rem;
+                width: 100%;
+            }
+
+            .checkout-form label {
+                font-size: 0.95rem;
+                margin-bottom: 8px;
+            }
+
+            .order-item {
+                padding: 12px 0;
+                flex-wrap: wrap;
+            }
+
+            .order-item-image {
+                width: 60px;
+                height: 60px;
+            }
+
+            .order-item-details {
+                flex: 1;
+                margin-left: 12px;
+                min-width: 0;
+            }
+
+            .order-item-name {
+                font-size: 0.95rem;
+            }
+
+            .order-item-price {
+                font-size: 0.85rem;
+            }
+
+            .order-item-total {
+                font-size: 1rem;
+                margin-top: 4px;
+            }
+
+            .payment-method {
+                padding: 16px;
+            }
+
+            .payment-option {
+                padding: 12px 14px;
+            }
+
+            .payment-option input {
+                width: 20px;
+                height: 20px;
+            }
+
+            .payment-option-text {
+                font-size: 0.95rem;
+            }
+
+            .btn-place-order {
+                padding: 16px;
+                font-size: 1rem;
+                margin-top: 20px;
+            }
+
+            .price-row {
+                padding: 8px 0;
+                font-size: 0.9rem;
+            }
+
+            .price-row.total {
+                font-size: 1.1rem;
+            }
+
+            .price-row.total span:last-child {
+                font-size: 1.25rem;
+            }
+
+            .free-shipping-badge {
+                padding: 6px 10px;
+                font-size: 0.8rem;
+            }
+
+            .price-summary h3 {
+                font-size: 1.1rem;
+                margin-bottom: 16px;
+            }
+
+            .checkout-sidebar .btn {
+                padding: 14px;
+                font-size: 0.95rem;
+            }
+        }
+
+        /* Extra small devices */
+        @media (max-width: 480px) {
+            .checkout-container {
+                padding: 12px;
+            }
+
+            .checkout-main {
+                padding: 16px;
+            }
+
+            .checkout-form input,
+            .checkout-form select,
+            .checkout-form textarea {
+                padding: 12px 14px;
+                font-size: 1rem;
+            }
+
+            .order-item-image {
+                width: 50px;
+                height: 50px;
+            }
+
+            .price-summary {
+                padding: 16px;
+            }
+        }
+
+        /* Ensure proper stacking on mobile */
+        @media (max-width: 768px) {
+            #checkout-content.checkout-container {
+                display: flex;
+                flex-direction: column;
             }
         }
     </style>

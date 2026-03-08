@@ -190,15 +190,50 @@ const citiesByState = {
 };
 
 // ============================================
-// PRODUCT PRICE MAPPING
+// PRODUCT PRICE MAPPING (MRP - Discounted Prices)
 // ============================================
 
 const productPrices = {
-    'Solar Calm': 100,
-    'Clearwave': 100,
-    'Milk Cloud': 100,
-    'Glow Dust': 100
+    'Solar Calm': { mrp: 169, price: 149 },
+    'Clearwave': { mrp: 169, price: 149 },
+    'Milk Cloud': { mrp: 149, price: 129 },
+    'Glow Dust': { mrp: 169, price: 149 },
+    'Lavender Bliss': { mrp: 179, price: 159 },
+    'Rose Petal': { mrp: 179, price: 159 },
+    'Charcoal Cleanse': { mrp: 169, price: 149 },
+    'Aloe Vera Glow': { mrp: 149, price: 129 }
 };
+
+// Discount amount
+const DISCOUNT_AMOUNT = 20;
+
+/**
+ * Get the exact discounted price for a product
+ * Uses productPrices object to ensure exact calculation
+ * @param {string} productName - Name of the product
+ * @returns {number} - Discounted price (MRP - 20)
+ */
+function getDiscountedPrice(productName) {
+    const product = productPrices[productName];
+    if (product) {
+        return product.price; // Already calculated as mrp - 20
+    }
+    // Fallback: return MRP - 20 if product not found
+    return 0;
+}
+
+/**
+ * Get the MRP for a product
+ * @param {string} productName - Name of the product
+ * @returns {number} - MRP of the product
+ */
+function getMRP(productName) {
+    const product = productPrices[productName];
+    if (product) {
+        return product.mrp;
+    }
+    return 0;
+}
 
 // Railway API Base URL
 const RAILWAY_API_URL = 'https://nature-nourish-production.up.railway.app';
@@ -266,31 +301,17 @@ function updateCartDisplay() {
         return;
     }
 
-    // Calculate total quantity of soaps in cart
-    const totalQuantity = getCartTotalQuantity();
-
-    // Get launch offer price based on total quantity
-    const offer = calculateLaunchOffer(totalQuantity);
-
     let cartHTML = '';
 
-    // Add offer banner if applicable
-    if (offer.savings > 0) {
-        cartHTML += `
-            <div class="offer-banner">
-                <span class="offer-icon">🎉</span>
-                <span class="offer-text">Launch Offer Applied – You saved ₹${offer.savings} with this bundle!</span>
-            </div>
-        `;
-    }
-
     cart.forEach((item, index) => {
+        const itemTotal = (item.price || 0) * (item.quantity || 1);
         cartHTML += `
             <div class="cart-item">
                 <img src="${getProductImage(item.name)}" alt="${item.name}" class="cart-item-image" onerror="this.src='https://via.placeholder.com/100/667eea/ffffff?text=${item.name}'">
                 <div class="cart-item-details">
                     <h4>${item.name}</h4>
-                    <p class="cart-item-quantity">Qty: ${item.quantity}</p>
+                    <p class="cart-item-price">₹${item.price} x ${item.quantity}</p>
+                    <p class="cart-item-total">Total: ₹${itemTotal}</p>
                 </div>
                 <div class="cart-item-actions">
                     <div class="quantity-control">
@@ -306,63 +327,32 @@ function updateCartDisplay() {
 
     cartContainer.innerHTML = cartHTML;
 
-    // Display offer summary in cart summary
-    let summaryHTML = '';
-    // Show FREE shipping for all launch offer bundles (1-3 soaps)
-    const isLaunchOffer = totalQuantity >= 1 && totalQuantity <= 3;
+    // Calculate totals based on actual product prices
+    let subtotal = 0;
+    cart.forEach((item) => {
+        subtotal += (item.price || 0) * (item.quantity || 1);
+    });
 
-    if (isLaunchOffer) {
-        summaryHTML = `
-            <div class="offer-summary">
-                <div class="summary-row">
-                    <span>Total Soaps:</span>
-                    <span>${totalQuantity}</span>
-                </div>
-                <div class="summary-row offer-applied">
-                    <span>Applied Offer:</span>
-                    <span>${offer.tierName}</span>
-                </div>
-                <div class="summary-row">
-                    <span>Subtotal (Launch Offer):</span>
-                    <span>₹${offer.price}</span>
-                </div>
-                <div class="summary-row">
-                    <span>Shipping:</span>
-                    <span>FREE</span>
-                </div>
-                <div class="summary-row total">
-                    <span>Total:</span>
-                    <span>₹${offer.price}</span>
-                </div>
-                ${offer.savings > 0 ? `<div class="savings-badge">You save ₹${offer.savings}!</div>` : ''}
-            </div>
-        `;
-    } else {
-        // Default pricing without offer
-        let total = 0;
-        cart.forEach((item) => {
-            total += item.price * item.quantity;
-        });
-        const shipping = 30;
-        const finalTotal = total + shipping;
+    // Free shipping for all orders
+    const shipping = 0;
+    const total = subtotal + shipping;
 
-        summaryHTML = `
-            <div class="summary-box">
-                <div class="summary-row">
-                    <span>Subtotal:</span>
-                    <span>₹${total}</span>
-                </div>
-                <div class="summary-row">
-                    <span>Shipping:</span>
-                    <span>₹${shipping}</span>
-                </div>
-                <div class="summary-row total">
-                    <span>Total:</span>
-                    <span>₹${finalTotal}</span>
-                </div>
+    let summaryHTML = `
+        <div class="summary-box">
+            <div class="summary-row">
+                <span>Subtotal:</span>
+                <span>₹${subtotal}</span>
             </div>
-        `;
-    }
+            <div class="summary-row">
+                <span>Shipping:</span>
+                <span>${shipping === 0 ? 'FREE' : '₹' + shipping}</span>
+            </div>
+            <div class="summary-row total">
+                <span>Total:</span>
+                <span>₹${total}</span>
+            </div>
+        </div>
+    `;
 
     // Update the cart summary div
     const existingSummary = cartSummary.querySelector('.summary-box') || cartSummary.querySelector('.offer-summary');
@@ -382,9 +372,8 @@ function updateCartDisplay() {
         cartSummary.appendChild(checkoutBtn);
     }
 
-    console.log(`Cart updated: ${totalQuantity} soaps, Offer: ${offer.tierName}, Total: ₹${offer.price}`);
+    console.log(`Cart updated: ${cart.length} items, Subtotal: ₹${subtotal}, Total: ₹${total}`);
 }
-
 function getProductImage(productName) {
     const images = {
         'Solar Calm': 'solar-calm.jpg',

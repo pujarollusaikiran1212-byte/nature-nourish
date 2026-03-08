@@ -543,6 +543,32 @@ p {
     margin-left: 8px;
 }
 
+/* Coming Soon Badge */
+.coming-soon-badge {
+    background: var(--brown-luxury);
+    color: white;
+    padding: 6px 12px;
+    border-radius: var(--radius-sm);
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Coming Soon Button State */
+.btn-coming-soon {
+    background: #999 !important;
+    color: #fff !important;
+    cursor: not-allowed !important;
+    opacity: 0.7;
+    border: none !important;
+}
+
+.btn-coming-soon:hover {
+    background: #888 !important;
+    transform: none !important;
+}
+
 .product-actions {
     padding: 0 28px 28px;
     display: flex;

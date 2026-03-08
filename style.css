@@ -642,14 +642,15 @@ p {
 }
 
 .btn-cod {
-    background: transparent;
-    color: var(--text-secondary);
-    border: 1px solid var(--beige-soft);
+    background: #28a745;
+    color: white;
+    border: 1px solid #28a745;
 }
 
 .btn-cod:hover {
-    border-color: var(--brown-luxury);
-    color: var(--text-dark);
+    background: #218838;
+    border-color: #218838;
+    color: white;
 }
 
 .btn-customer-portal {

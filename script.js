@@ -63,12 +63,12 @@ function addOfferBundle(quantity) {
     const offer = calculateLaunchOffer(quantity);
 
     // Add the bundle as a single item with the offer price
-    // We'll add multiple items to represent the bundle
-    const products = ['Solar Calm', 'Clearwave', 'Milk Cloud', 'Glow Dust', 'Lavender Bliss', 'Rose Petal', 'Charcoal Cleanse', 'Aloe Vera Glow'];
+    // Only include AVAILABLE products - exclude "Coming Soon" products
+    const availableProducts = ['Solar Calm', 'Clearwave', 'Milk Cloud', 'Glow Dust'];
 
     // Add each soap as a separate item in cart for display
     for (let i = 0; i < quantity; i++) {
-        const randomProduct = products[Math.floor(Math.random() * products.length)];
+        const randomProduct = availableProducts[Math.floor(Math.random() * availableProducts.length)];
         cart.push({
             id: Date.now() + i,
             name: randomProduct + ' (Bundle)',

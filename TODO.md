@@ -1,31 +1,15 @@
-# TODO - Product Categories Update
+# TODO - Fix Special Launch Offer Issues
 
-## Status: ✅ Completed
+## Issues to Fix:
+1. **Images not showing in cart/order summary** - Product name includes "(Bundle)" suffix which breaks image lookup
+2. **Verify only available soaps are added** - Ensure "Coming Soon" products are not added to bundles
+3. **Fix pricing mismatch** - HTML shows ₹279/₹399 but JS shows ₹249/₹349
 
-### Tasks:
-- [x] 1. Analyze existing code
-- [x] 2. Update CSS - Category button styling (inactive: light border, active: dark brown)
-- [x] 3. Update HTML - Improve Coming Soon card design
-- [x] 4. Update JavaScript - Fix filterCategory function (already working in inline script)
-- [x] 5. Add mobile responsive styles for Coming Soon card
+## Implementation Steps:
+- [x] 1. Fix getProductImage() to handle "(Bundle)" suffix in product names
+- [x] 2. Update LAUNCH_OFFER pricing in script.js to match HTML (₹279 for 2, ₹399 for 3)
+- [x] 3. Test the fixes
 
-### Summary of Changes:
-1. **CSS (style.css):**
-   - Updated category buttons: inactive = transparent with light beige border, active = dark brown background
-   - Added hover effects with subtle background highlight
-   - Created beautiful Coming Soon card design with:
-     - Gradient background
-     - Floating emoji animation
-     - Premium typography
-     - Hover effects
-   - Added mobile responsive styles for the Coming Soon card
-
-2. **HTML (index.html):**
-   - Updated Coming Soon section with new card structure
-   - Added proper classes for styling
-
-3. **Functionality:**
-   - Soaps button (default active) shows all 8 soap products
-   - Other category buttons (Body Oils, Body Scrubs, Whipped Soap, Travel Soaps, Shampoo Bars) show beautiful Coming Soon card
-   - Category buttons are properly styled with active/inactive states
+## Files to Edit:
+- script.js
 

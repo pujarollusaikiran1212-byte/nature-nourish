@@ -49,9 +49,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // Launch Offer Pricing Tiers (with FREE Shipping included)
 const LAUNCH_OFFER = {
-    tier1: { quantity: 1, price: 149 },      // 1 Soap → ₹149 (was ₹130 with shipping)
-    tier2: { quantity: 2, price: 249 },      // 2 Soaps → ₹249 (was ₹230 with shipping, save ₹31!)
-    tier3: { quantity: 3, price: 349 }        // 3+ Soaps → ₹349 (was ₹330 with shipping, save ₹131!)
+    tier1: { quantity: 1, price: 149 },      // 1 Soap → ₹149
+    tier2: { quantity: 2, price: 279 },      // 2 Soaps → ₹279
+    tier3: { quantity: 3, price: 399 }        // 3+ Soaps → ₹399
 };
 
 /**
@@ -307,9 +307,11 @@ function updateCartDisplay() {
 
     cart.forEach((item, index) => {
         const itemTotal = (item.price || 0) * (item.quantity || 1);
+        // Use stored image if available, otherwise fallback to getProductImage
+        const imageSrc = item.image || getProductImage(item.name.replace(' (Bundle)', ''));
         cartHTML += `
             <div class="cart-item">
-                <img src="${getProductImage(item.name)}" alt="${item.name}" class="cart-item-image" onerror="this.src='https://via.placeholder.com/100/667eea/ffffff?text=${item.name}'">
+                <img src="${imageSrc}" alt="${item.name}" class="cart-item-image" onerror="this.src='https://via.placeholder.com/100/667eea/ffffff?text=${encodeURIComponent(item.name)}'">
                 <div class="cart-item-details">
                     <h4>${item.name}</h4>
                     <p class="cart-item-price">₹${item.price} x ${item.quantity}</p>

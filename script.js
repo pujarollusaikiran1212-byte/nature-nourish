@@ -75,7 +75,8 @@ function addOfferBundle(quantity) {
             price: Math.floor(offer.price / quantity), // Split the price across items
             quantity: 1,
             isOfferBundle: true,
-            bundleTotal: offer.price
+            bundleTotal: offer.price,
+            image: getProductImage(randomProduct)
         });
     }
 
@@ -255,7 +256,8 @@ function addToCart(productName, price) {
             id: Date.now(),
             name: productName,
             price: price,
-            quantity: 1
+            quantity: 1,
+            image: getProductImage(productName)
         });
     }
 
@@ -433,7 +435,8 @@ function openCODForm(productName, price) {
     const directProduct = {
         name: productName,
         price: price,
-        quantity: 1
+        quantity: 1,
+        image: getProductImage(productName)
     };
     localStorage.setItem('directProduct', JSON.stringify(directProduct));
 

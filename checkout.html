@@ -690,7 +690,9 @@
                 var qty = parseInt(item.quantity) || 1;
                 var price = parseFloat(item.price) || 0;
                 var total = price * qty;
-                html += '<div class="order-item"><img src="' + getProductImage(item.name) + '" alt="' + item.name + '" class="order-item-image"><div class="order-item-details"><div class="order-item-name">' + item.name + '</div><div class="order-item-price">₹' + price + ' x ' + qty + '</div><div class="order-item-total">₹' + total + '</div></div></div>';
+                // Use stored image if available, otherwise fallback to getProductImage
+                var imageSrc = item.image || getProductImage(item.name);
+                html += '<div class="order-item"><img src="' + imageSrc + '" alt="' + item.name + '" class="order-item-image" onerror="this.src=\'https://via.placeholder.com/70/667eea/ffffff?text=' + encodeURIComponent(item.name) + '\'"><div class="order-item-details"><div class="order-item-name">' + item.name + '</div><div class="order-item-price">₹' + price + ' x ' + qty + '</div><div class="order-item-total">₹' + total + '</div></div></div>';
             });
             container.innerHTML = html;
         }

@@ -9,12 +9,13 @@ const connectDB = async () => {
     }
 
     try {
-        // Use environment variable for Railway deployment
-        const mongoURI = process.env.MONGODB_URI;
+        // Try environment variable first, then use default
+        let mongoURI = process.env.MONGODB_URI;
 
+        // If no env variable, use the provided URI
         if (!mongoURI) {
-            console.error('MongoDB URI not configured! Set MONGODB_URI environment variable in Railway.');
-            return;
+            mongoURI = 'mongodb+srv://asus:01lWUs7yjxFnX126@cluster1.mpartvh.mongodb.net/SoapWebsite?appName=Cluster1&retryWrites=true&w=majority';
+            console.log('Using default MongoDB URI from code');
         }
 
         await mongoose.connect(mongoURI, {

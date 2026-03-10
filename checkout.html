@@ -422,41 +422,6 @@
                 font-size: 0.95rem;
             }
         }
-
-        /* Extra small devices */
-        @media (max-width: 480px) {
-            .checkout-container {
-                padding: 12px;
-            }
-
-            .checkout-main {
-                padding: 16px;
-            }
-
-            .checkout-form input,
-            .checkout-form select,
-            .checkout-form textarea {
-                padding: 12px 14px;
-                font-size: 1rem;
-            }
-
-            .order-item-image {
-                width: 50px;
-                height: 50px;
-            }
-
-            .price-summary {
-                padding: 16px;
-            }
-        }
-
-        /* Ensure proper stacking on mobile */
-        @media (max-width: 768px) {
-            #checkout-content.checkout-container {
-                display: flex;
-                flex-direction: column;
-            }
-        }
     </style>
 </head>
 
@@ -548,369 +513,295 @@
                                         <textarea id="address" placeholder="Enter your complete address" rows="3"
                                             required></textarea>
                                     </div>
-                                </div>
-                                <div class="form-section">
-                                    <h2 class="section-title-checkout">Payment Method</h2>
-                                    <div class="payment-method">
-                                        <label class="payment-option selected">
-                                            <input type="radio" name="payment-method" value="cod" checked>
-                                            <span class="payment-option-text">Cash on Delivery (COD)</span>
-                                        </label>
+                                    <div class="form-section">
+                                        <h2 class="section-title-checkout">Payment Method</h2>
+                                        <div class="payment-method">
+                                            <label class="payment-option selected">
+                                                <input type="radio" name="payment-method" value="cod" checked>
+                                                <span class="payment-option-text">Cash on Delivery (COD)</span>
+                                            </label>
+                                        </div>
+                                        <p style="margin-top: 12px; color: var(--text-secondary); font-size: 0.9rem;">
+                                            Pay with cash when your order is delivered.</p>
                                     </div>
-                                    <p style="margin-top: 12px; color: var(--text-secondary); font-size: 0.9rem;">Pay
-                                        with cash when your order is delivered.</p>
-                                </div>
-                                <button type="submit" id="place-order-btn" class="btn-place-order">Place COD
-                                    Order</button>
+                                    <button type="submit" id="place-order-btn" class="btn-place-order">Place COD
+                                        Order</button>
                         </form>
                     </div>
                     <div class="checkout-sidebar">
                         <div class="price-summary">
                             <h3 style="margin-bottom: 20px; color: var(--text-dark);">Price Details</h3>
                             <div class="free-shipping-badge">Free Shipping</div>
-                            <div class="price-row">
-                                <span>Subtotal</span>
-                                <span id="subtotal">Rs.0</span>
-                            </div>
-                            <div class="price-row">
-                                <span>Shipping</span>
-                                <span>FREE</span>
-                            </div>
-                            <div class="price-row total">
-                                <span>Total</span>
-                                <span id="total">Rs.0</span>
-                            </div>
+                            <div class="price-row"><span>Subtotal</span><span id="subtotal">Rs.0</span></div>
+                            <div class="price-row"><span>Shipping</span><span>FREE</span></div>
+                            <div class="price-row total"><span>Total</span><span id="total">Rs.0</span></div>
                             <button onclick="goBackToCart()" class="btn"
                                 style="width: 100%; margin-top: 16px; background: var(--bg-secondary); color: var(--text-dark);">Back
                                 to Cart</button>
                         </div>
-                    </div>
-                    <div id="empty-cart" class="empty-cart-message" style="display: none;">
-                        <h2>Your cart is empty!</h2>
-                        <p>Add some products to your cart before proceeding to checkout.</p>
-                        <a href="index.html#products" class="btn-continue-shopping">Continue Shopping</a>
-                    </div>
-                </div>
-                <div id="success-checkout-modal" class="success-checkout-modal">
-                    <div class="success-checkout-content">
-                        <h2>Order Placed Successfully!</h2>
-                        <div class="order-id" id="order-success-id"></div>
-                        <p style="color: var(--text-secondary); margin-bottom: 24px;">Thank you for your order!</p>
-                        <button class="btn-continue-shopping" onclick="handleContinueShopping()">Continue
-                            Shopping</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+                        <div id="empty-cart" class="empty-cart-message" style="display: none;">
+                            <h2>Your cart is empty!</h2>
+                            <p>Add some products to your cart before proceeding to checkout.</p>
+                            <a href="index.html#products" class="btn-continue-shopping">Continue Shopping</a>
+                        </div>
+                        <div id="success-checkout-modal" class="success-checkout-modal">
+                            <div class="success-checkout-content">
+                                <h2>Order Placed Successfully!</h2>
+                                <div class="order-id" id="order-success-id"></div>
+                                <p style="color: var(--text-secondary); margin-bottom: 24px;">Thank you for your order!
+                                </p>
+                                <button class="btn-continue-shopping" onclick="handleContinueShopping()">Continue
+                                    Shopping</button>
+                            </div>
+                        </div>
 
-    <script src="script.js"></script>
-    <script>
-        // Railway backend URL - Update this to your Railway app URL
-        var RAILWAY_API_URL = 'https://nature-nourish-production.up.railway.app';
-        var checkoutItems = [];
-        document.addEventListener('DOMContentLoaded', function () {
-            loadCheckoutItems();
-            testAPIConnection();
-        });
+                        <script src="script.js"></script>
+                        <script>
+                            var RAILWAY_API_URL = 'https://nature-nourish-production.up.railway.app';
+                            var checkoutItems = [];
 
-        // Test API connection on page load
-        async function testAPIConnection() {
-            console.log("Testing API connection to:", RAILWAY_API_URL);
-            try {
-                const response = await fetch(RAILWAY_API_URL + "/api/health");
-                const data = await response.json();
-                console.log("✅ API Connected! Status:", data);
-            } catch (error) {
-                console.error("❌ API Connection Failed:", error);
-            }
-        }
+                            document.addEventListener('DOMContentLoaded', function () {
+                                loadCheckoutItems();
+                                testAPIConnection();
+                            });
 
-        function loadCheckoutItems() {
-            // First try to get from checkoutCart (set by proceedToCheckout), then from cart
-            var checkoutCartData = localStorage.getItem("checkoutCart");
-            var savedCart = localStorage.getItem("cart");
-            var directProductData = localStorage.getItem("directProduct");
+                            async function testAPIConnection() {
+                                console.log("Testing API connection to:", RAILWAY_API_URL);
+                                try {
+                                    const response = await fetch(RAILWAY_API_URL + "/api/health");
+                                    const data = await response.json();
+                                    console.log("✅ API Connected! Status:", data);
+                                } catch (error) {
+                                    console.error("❌ API Connection Failed:", error);
+                                }
+                            }
 
-            console.log("=== CHECKOUT LOAD DEBUG ===");
-            console.log("checkoutCart:", checkoutCartData);
-            console.log("cart:", savedCart);
-            console.log("directProduct:", directProductData);
+                            function loadCheckoutItems() {
+                                var checkoutCartData = localStorage.getItem("checkoutCart");
+                                var savedCart = localStorage.getItem("cart");
+                                var directProductData = localStorage.getItem("directProduct");
 
-            var cartItems = [];
-            var directProduct = null;
+                                console.log("=== CHECKOUT LOAD DEBUG ===");
+                                console.log("checkoutCart:", checkoutCartData);
+                                console.log("cart:", savedCart);
 
-            // Try checkoutCart first (priority - from proceed to checkout)
-            if (checkoutCartData && checkoutCartData !== '[]' && checkoutCartData !== 'null') {
-                try {
-                    cartItems = JSON.parse(checkoutCartData);
-                    console.log("Using checkoutCart, items:", cartItems);
-                } catch (e) {
-                    console.error("Error parsing checkoutCart:", e);
-                    cartItems = [];
-                }
-            }
-            // Fall back to cart (if opened directly without proceed to checkout)
-            else if (savedCart && savedCart !== '[]' && savedCart !== 'null') {
-                try {
-                    cartItems = JSON.parse(savedCart);
-                    console.log("Using savedCart, items:", cartItems);
-                } catch (e) {
-                    console.error("Error parsing cart:", e);
-                    cartItems = [];
-                }
-            }
+                                var cartItems = [];
+                                var directProduct = null;
 
-            // Check for direct product
-            if (directProductData && directProductData !== 'null') {
-                try {
-                    directProduct = JSON.parse(directProductData);
-                    console.log("Parsed direct product:", directProduct);
-                } catch (e) {
-                    console.error("Error parsing directProduct:", e);
-                    directProduct = null;
-                }
-            }
+                                if (checkoutCartData && checkoutCartData !== '[]' && checkoutCartData !== 'null') {
+                                    try {
+                                        cartItems = JSON.parse(checkoutCartData);
+                                        console.log("Using checkoutCart, items:", cartItems);
+                                    } catch (e) {
+                                        console.error("Error parsing checkoutCart:", e);
+                                        cartItems = [];
+                                    }
+                                } else if (savedCart && savedCart !== '[]' && savedCart !== 'null') {
+                                    try {
+                                        cartItems = JSON.parse(savedCart);
+                                        console.log("Using savedCart, items:", cartItems);
+                                    } catch (e) {
+                                        console.error("Error parsing cart:", e);
+                                        cartItems = [];
+                                    }
+                                }
 
-            // Use cart items if available, otherwise use direct product
-            if (cartItems && cartItems.length > 0) {
-                checkoutItems = cartItems;
-            } else if (directProduct && directProduct.name) {
-                checkoutItems = [directProduct];
-            }
+                                if (directProductData && directProductData !== 'null') {
+                                    try {
+                                        directProduct = JSON.parse(directProductData);
+                                        console.log("Parsed direct product:", directProduct);
+                                    } catch (e) {
+                                        console.error("Error parsing directProduct:", e);
+                                        directProduct = null;
+                                    }
+                                }
 
-            console.log("Final checkoutItems:", checkoutItems);
+                                if (cartItems && cartItems.length > 0) {
+                                    checkoutItems = cartItems;
+                                } else if (directProduct && directProduct.name) {
+                                    checkoutItems = [directProduct];
+                                }
 
-            if (!checkoutItems || checkoutItems.length === 0) {
-                document.getElementById('checkout-content').style.display = 'none';
-                document.getElementById('empty-cart').style.display = 'block';
-                console.log("Cart is empty!");
-                return;
-            }
+                                console.log("Final checkoutItems:", checkoutItems);
 
-            // Show checkout content and hide empty cart message
-            document.getElementById('checkout-content').style.display = 'grid';
-            document.getElementById('empty-cart').style.display = 'none';
+                                if (!checkoutItems || checkoutItems.length === 0) {
+                                    document.getElementById('checkout-content').style.display = 'none';
+                                    document.getElementById('empty-cart').style.display = 'block';
+                                    console.log("Cart is empty!");
+                                    return;
+                                }
 
-            displayOrderItems();
-            calculateTotals();
-        }
+                                document.getElementById('checkout-content').style.display = 'grid';
+                                document.getElementById('empty-cart').style.display = 'none';
 
-        function displayOrderItems() {
-            var container = document.getElementById('order-items');
-            if (!container) return;
+                                displayOrderItems();
+                                calculateTotals();
+                            }
 
-            var html = '';
-            checkoutItems.forEach(function (item) {
-                var qty = parseInt(item.quantity) || 1;
-                var price = parseFloat(item.price) || 0;
-                var total = price * qty;
-                // Use stored image if available, otherwise fallback to getProductImage
-                var imageSrc = item.image || getProductImage(item.name);
-                html += '<div class="order-item"><img src="' + imageSrc + '" alt="' + item.name + '" class="order-item-image" onerror="this.src=\'https://via.placeholder.com/70/667eea/ffffff?text=' + encodeURIComponent(item.name) + '\'"><div class="order-item-details"><div class="order-item-name">' + item.name + '</div><div class="order-item-price">₹' + price + ' x ' + qty + '</div><div class="order-item-total">₹' + total + '</div></div></div>';
-            });
-            container.innerHTML = html;
-        }
+                            function displayOrderItems() {
+                                var container = document.getElementById('order-items');
+                                if (!container) return;
 
-        function calculateTotals() {
-            var subtotal = 0;
-            var totalQuantity = 0;
+                                var html = '';
+                                checkoutItems.forEach(function (item) {
+                                    var qty = parseInt(item.quantity) || 1;
+                                    var price = parseFloat(item.price) || 0;
+                                    var total = price * qty;
+                                    // Use getProductImage for full URLs
+                                    var imageSrc = getProductImage(item.name);
+                                    html += '<div class="order-item"><img src="' + imageSrc + '" alt="' + item.name + '" class="order-item-image" onerror="this.src=\'https://via.placeholder.com/70/667eea/ffffff?text=' + encodeURIComponent(item.name) + '\'"><div class="order-item-details"><div class="order-item-name">' + item.name + '</div><div class="order-item-price">₹' + price + ' x ' + qty + '</div><div class="order-item-total">₹' + total + '</div></div>';
+                                });
+                                container.innerHTML = html;
+                            }
 
-            // Calculate total quantity and subtotal
-            checkoutItems.forEach(function (item) {
-                var price = parseFloat(item.price) || 0;
-                var qty = parseInt(item.quantity) || 1;
-                subtotal += price * qty;
-                totalQuantity += qty;
-            });
+                            function calculateTotals() {
+                                var subtotal = 0;
+                                checkoutItems.forEach(function (item) {
+                                    var price = parseFloat(item.price) || 0;
+                                    var qty = parseInt(item.quantity) || 1;
+                                    subtotal += price * qty;
+                                });
 
-            console.log("Calculated subtotal:", subtotal, "Total quantity:", totalQuantity);
+                                console.log("Calculated subtotal:", subtotal);
 
-            var subtotalEl = document.getElementById("subtotal");
-            var totalEl = document.getElementById("total");
+                                var subtotalEl = document.getElementById("subtotal");
+                                var totalEl = document.getElementById("total");
 
-            if (subtotalEl) subtotalEl.innerText = "₹" + subtotal;
-            if (totalEl) totalEl.innerText = "₹" + subtotal;
+                                if (subtotalEl) subtotalEl.innerText = "₹" + subtotal;
+                                if (totalEl) totalEl.innerText = "₹" + subtotal;
 
-            return subtotal;
-        }
+                                return subtotal;
+                            }
 
-        function getProductImage(name) {
-            if (!name) return 'https://via.placeholder.com/70';
-            // Use full URLs for images - update these to your actual image URLs
-            var imgs = {
-                'Solar Calm': 'https://naturenourish.in/solar%20calm.jpeg',
-                'Clearwave': 'https://naturenourish.in/clear%20wave.jpeg',
-                'Milk Cloud': 'https://naturenourish.in/milk%20cloud.jpeg',
-                'Glow Dust': 'https://naturenourish.in/glow%20dust.jpeg',
-                'Lavender Bliss': 'https://naturenourish.in/lavender%20bliss.jpeg',
-                'Rose Petal': 'https://naturenourish.in/rose%20petal.jpeg',
-                'Charcoal Cleanse': 'https://naturenourish.in/charcoal.jpeg',
-                'Aloe Vera Glow': 'https://naturenourish.in/aloe%20vera.jpeg'
-            };
-            return imgs[name] || 'https://via.placeholder.com/70/667eea/ffffff?text=' + encodeURIComponent(name);
-        }
+                            function getProductImage(name) {
+                                if (!name) return 'https://via.placeholder.com/70';
+                                var imgs = {
+                                    'Solar Calm': 'https://naturenourish.in/solar%20calm.jpeg',
+                                    'Clearwave': 'https://naturenourish.in/clear%20wave.jpeg',
+                                    'Milk Cloud': 'https://naturenourish.in/milk%20cloud.jpeg',
+                                    'Glow Dust': 'https://naturenourish.in/glow%20dust.jpeg',
+                                    'Lavender Bliss': 'https://naturenourish.in/lavender%20bliss.jpeg',
+                                    'Rose Petal': 'https://naturenourish.in/rose%20petal.jpeg',
+                                    'Charcoal Cleanse': 'https://naturenourish.in/charcoal.jpeg',
+                                    'Aloe Vera Glow': 'https://naturenourish.in/aloe%20vera.jpeg'
+                                };
+                                return imgs[name] || 'https://via.placeholder.com/70/667eea/ffffff?text=' + encodeURIComponent(name);
+                            }
 
-        function goBackToCart() { window.location.href = 'index.html#cart'; }
+                            function goBackToCart() { window.location.href = 'index.html#cart'; }
 
-        document.getElementById("checkout-form").addEventListener("submit", function (e) {
-            e.preventDefault();
+                            document.getElementById("checkout-form").addEventListener("submit", function (e) {
+                                e.preventDefault();
+                                loadCheckoutItems();
 
-            // Reload items to ensure we have the latest data
-            loadCheckoutItems();
+                                if (checkoutItems.length === 0) {
+                                    alert("Your cart is empty. Please add products to your cart first.");
+                                    return;
+                                }
 
-            if (checkoutItems.length === 0) {
-                alert("Your cart is empty. Please add products to your cart first.");
-                return;
-            }
+                                var subtotal = 0;
+                                var validItems = [];
 
-            // Calculate totals from cart items
-            var subtotal = 0;
-            var totalQuantity = 0;
-            var validItems = [];
+                                checkoutItems.forEach(function (item) {
+                                    var price = parseFloat(item.price) || 0;
+                                    var qty = parseInt(item.quantity) || 1;
+                                    if (price >= 0 && qty > 0) {
+                                        validItems.push({ name: item.name, price: price, quantity: qty });
+                                        subtotal += price * qty;
+                                    }
+                                });
 
-            checkoutItems.forEach(function (item) {
-                var price = parseFloat(item.price) || 0;
-                var qty = parseInt(item.quantity) || 1;
-                totalQuantity += qty;
-                if (price >= 0 && qty > 0) {
-                    validItems.push({
-                        name: item.name,
-                        price: price,
-                        quantity: qty
-                    });
-                    subtotal += price * qty;
-                }
-            });
+                                console.log("Valid items:", validItems);
 
-            console.log("Valid items:", validItems);
-            console.log("Calculated subtotal:", subtotal, "Total quantity:", totalQuantity);
+                                if (validItems.length === 0) {
+                                    alert("Invalid cart items. Please add products to your cart.");
+                                    return;
+                                }
 
-            if (validItems.length === 0) {
-                alert("Invalid cart items. Please add products to your cart.");
-                return;
-            }
+                                var customerData = {
+                                    name: document.getElementById('full-name').value,
+                                    email: document.getElementById('email').value,
+                                    mobile: document.getElementById('phone').value,
+                                    state: document.getElementById('state').value,
+                                    address: document.getElementById('address').value,
+                                    city: document.getElementById('city').value,
+                                    pinCode: document.getElementById('pincode').value
+                                };
 
-            console.log("Submitting order with items:", validItems);
-            console.log("Final total:", subtotal);
+                                if (!customerData.name || !customerData.email || !customerData.mobile || !customerData.state || !customerData.address || !customerData.city || !customerData.pinCode) {
+                                    alert("Please fill in all customer details.");
+                                    return;
+                                }
 
-            var customerData = {
-                name: document.getElementById('full-name').value,
-                email: document.getElementById('email').value,
-                mobile: document.getElementById('phone').value,
-                state: document.getElementById('state').value,
-                address: document.getElementById('address').value,
-                city: document.getElementById('city').value,
-                pinCode: document.getElementById('pincode').value
-            };
+                                var orderId = 'ORD-' + Date.now();
+                                var order = {
+                                    orderId: orderId,
+                                    products: validItems,
+                                    customer: customerData,
+                                    staff: { name: 'Website Customer', id: 'N/A' },
+                                    subtotal: subtotal,
+                                    shipping: 0,
+                                    deliveryCharge: 0,
+                                    total: subtotal,
+                                    paymentMethod: 'Cash on Delivery',
+                                    paymentStatus: 'Pending',
+                                    orderStatus: 'Pending',
+                                    deliveryStatus: 'Pending Delivery',
+                                    orderSource: 'Website',
+                                    createdAt: new Date().toISOString()
+                                };
 
-            // Validate customer data
-            if (!customerData.name || !customerData.email || !customerData.mobile ||
-                !customerData.state || !customerData.address || !customerData.city || !customerData.pinCode) {
-                alert("Please fill in all customer details.");
-                return;
-            }
+                                console.log("Sending order to API:", JSON.stringify(order));
 
-            var orderId = 'ORD-' + Date.now();
-            var order = {
-                orderId: orderId,
-                products: validItems,
-                customer: customerData,
-                staff: { name: 'Website Customer', id: 'N/A' },
-                subtotal: subtotal,
-                shipping: 0,
-                deliveryCharge: 0,
-                total: subtotal,
-                paymentMethod: 'Cash on Delivery',
-                paymentStatus: 'Pending',
-                orderStatus: 'Pending',
-                deliveryStatus: 'Pending Delivery',
-                orderSource: 'Website',
-                createdAt: new Date().toISOString()
-            };
+                                var btn = document.getElementById('place-order-btn');
+                                if (btn) {
+                                    btn.textContent = 'Placing Order...';
+                                    btn.disabled = true;
+                                }
 
-            console.log("Sending order to API:", JSON.stringify(order));
-            console.log("Using endpoint: " + RAILWAY_API_URL + "/place-order");
+                                fetch(RAILWAY_API_URL + "/place-order", {
+                                    method: "POST",
+                                    headers: { "Content-Type": "application/json" },
+                                    body: JSON.stringify(order)
+                                })
+                                    .then(function (res) {
+                                        console.log("Response status:", res.status);
+                                        if (!res.ok) {
+                                            return res.text().then(function (text) {
+                                                throw new Error('Server error: ' + res.status + ' - ' + text);
+                                            });
+                                        }
+                                        return res.json();
+                                    })
+                                    .then(function (data) {
+                                        console.log("✅ Order saved successfully:", data);
+                                        localStorage.removeItem('cart');
+                                        localStorage.removeItem('checkoutCart');
+                                        localStorage.removeItem('directProduct');
+                                        checkoutItems = [];
 
-            var btn = document.getElementById('place-order-btn');
-            if (btn) {
-                btn.textContent = 'Placing Order...';
-                btn.disabled = true;
-            }
+                                        var orderSuccessId = document.getElementById('order-success-id');
+                                        var successModal = document.getElementById('success-checkout-modal');
+                                        if (orderSuccessId) orderSuccessId.textContent = 'Order ID: ' + (data.orderId || orderId);
+                                        if (successModal) successModal.style.display = 'block';
+                                    })
+                                    .catch(function (err) {
+                                        console.error("Error placing order:", err);
+                                        alert('Error placing order: ' + err.message);
+                                    })
+                                    .finally(function () {
+                                        if (btn) {
+                                            btn.textContent = 'Place COD Order';
+                                            btn.disabled = false;
+                                        }
+                                    });
+                            });
 
-            // NEW: Use /place-order endpoint as specified
-            fetch(RAILWAY_API_URL + "/place-order", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(order)
-            })
-                .then(function (res) {
-                    console.log("Response status:", res.status);
-                    if (!res.ok) {
-                        return res.text().then(function (text) {
-                            throw new Error('Server error: ' + res.status + ' - ' + text);
-                        });
-                    }
-                    return res.json();
-                })
-                .then(function (data) {
-                    console.log("✅ Order saved successfully:", data);
-
-                    // Clear localStorage cart, checkoutCart, and directProduct
-                    localStorage.removeItem('cart');
-                    localStorage.removeItem('checkoutCart');
-                    localStorage.removeItem('directProduct');
-
-                    // Update checkoutItems to empty
-                    checkoutItems = [];
-
-                    // Show success modal
-                    var orderSuccessId = document.getElementById('order-success-id');
-                    var successModal = document.getElementById('success-checkout-modal');
-
-                    if (orderSuccessId) {
-                        orderSuccessId.textContent = 'Order ID: ' + (data.orderId || orderId);
-                    }
-                    if (successModal) {
-                        successModal.style.display = 'block';
-                    }
-                })
-                .catch(function (err) {
-                    console.error("Error placing order:", err);
-                    alert('Error placing order: ' + err.message + '\n\nPlease try again or contact support.');
-                })
-                .finally(function () {
-                    if (btn) {
-                        btn.textContent = 'Place COD Order';
-                        btn.disabled = false;
-                    }
-                });
-        });
-
-        function handleContinueShopping() {
-            document.getElementById('success-checkout-modal').style.display = 'none';
-            window.location.href = 'index.html';
-        }
-
-        // Test API connectivity
-        async function testAPI() {
-            console.log("Testing API connectivity...");
-            try {
-                const response = await fetch(API_URL + "/api/health");
-                const data = await response.json();
-                console.log("API Health:", data);
-                alert("API is connected! Status: " + data.status);
-            } catch (error) {
-                console.error("API Error:", error);
-                alert("API is NOT accessible: " + error.message);
-            }
-        }
-
-        // Uncomment to test API on page load
-        // testAPI();
-    </script>
+                            function handleContinueShopping() {
+                                document.getElementById('success-checkout-modal').style.display = 'none';
+                                window.location.href = 'index.html';
+                            }
+                        </script>
 </body>
 
 </html>

@@ -6,32 +6,11 @@ const { connectDB, getConnectionStatus } = require('./src/config/db');
 
 const app = express();
 
-// Configure CORS for the specific domain - Allow custom domain and localhost
+// Configure CORS - Allow ALL origins (fixes custom domain issue)
 app.use(cors({
-    origin: function (origin, callback) {
-        // Allow requests with no origin (like mobile apps or Postman)
-        if (!origin) return callback(null, true);
-
-        const allowedOrigins = [
-            "https://naturenourish.in",
-            "http://localhost:3000",
-            "http://localhost:5500",
-            "http://127.0.0.1:5500",
-            "http://127.0.0.1:3000"
-        ];
-
-        // Also allow any Railway preview domains
-        if (origin && origin.includes('railway.app')) {
-            return callback(null, true);
-        }
-
-        if (allowedOrigins.indexOf(origin) === -1) {
-            console.log('Blocked by CORS:', origin);
-            return callback(new Error('Not allowed by CORS'), false);
-        }
-        return callback(null, true);
-    },
-    credentials: true
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 // Express JSON middleware - required for parsing JSON bodies

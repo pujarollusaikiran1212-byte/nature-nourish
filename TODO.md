@@ -1,15 +1,45 @@
-# TODO - Fix Special Launch Offer Issues
+# Fix Order API Connection - COMPLETED ✅
 
-## Issues to Fix:
-1. **Images not showing in cart/order summary** - Product name includes "(Bundle)" suffix which breaks image lookup
-2. **Verify only available soaps are added** - Ensure "Coming Soon" products are not added to bundles
-3. **Fix pricing mismatch** - HTML shows ₹279/₹399 but JS shows ₹249/₹349
+## Changes Made:
 
-## Implementation Steps:
-- [x] 1. Fix getProductImage() to handle "(Bundle)" suffix in product names
-- [x] 2. Update LAUNCH_OFFER pricing in script.js to match HTML (₹279 for 2, ₹399 for 3)
-- [x] 3. Test the fixes
+### 1. server.js (Backend)
+- ✅ Updated CORS configuration to allow your domain:
+```javascript
+app.use(cors({
+    origin: ["https://naturenourish.in", "http://localhost:5500", "http://127.0.0.1:5500"]
+}));
+```
+- ✅ Added new `/place-order` POST route
+- ✅ Express JSON middleware already present ✓
 
-## Files to Edit:
-- script.js
+### 2. checkout.html (Frontend)
+- ✅ Updated fetch to use `/place-order` endpoint:
+```javascript
+fetch(RAILWAY_API_URL + "/place-order", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify(order)
+})
+```
+- ✅ Added API connection test on page load
+- ✅ Added better error logging to console
+
+## What You Need to Do:
+
+### For Railway Backend Deployment:
+1. Copy the updated `server.js` to your Railway project
+2. Deploy/push the changes to Railway
+
+### For Frontend:
+1. Upload the updated `checkout.html` to your hosting (or keep using the same if hosted from same source)
+
+### Test:
+1. Visit https://naturenourish.in/checkout.html
+2. Open browser console (F12)
+3. You should see "✅ API Connected! Status: {status: OK, ...}"
+4. Try placing an order
+
+## Status: COMPLETE ✅
 

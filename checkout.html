@@ -606,10 +606,25 @@
 
     <script src="script.js"></script>
     <script>
-        // Use Railway API for orders since local MongoDB may not be connected
-        var API_URL = 'https://nature-nourish-production.up.railway.app';
+        // Railway backend URL - Update this to your Railway app URL
+        var RAILWAY_API_URL = 'https://nature-nourish-production.up.railway.app';
         var checkoutItems = [];
-        document.addEventListener('DOMContentLoaded', function () { loadCheckoutItems(); });
+        document.addEventListener('DOMContentLoaded', function () {
+            loadCheckoutItems();
+            testAPIConnection();
+        });
+
+        // Test API connection on page load
+        async function testAPIConnection() {
+            console.log("Testing API connection to:", RAILWAY_API_URL);
+            try {
+                const response = await fetch(RAILWAY_API_URL + "/api/health");
+                const data = await response.json();
+                console.log("✅ API Connected! Status:", data);
+            } catch (error) {
+                console.error("❌ API Connection Failed:", error);
+            }
+        }
 
         function loadCheckoutItems() {
             // First try to get from checkoutCart (set by proceedToCheckout), then from cart
@@ -814,6 +829,7 @@
             };
 
             console.log("Sending order to API:", JSON.stringify(order));
+            console.log("Using endpoint: " + RAILWAY_API_URL + "/place-order");
 
             var btn = document.getElementById('place-order-btn');
             if (btn) {
@@ -821,7 +837,8 @@
                 btn.disabled = true;
             }
 
-            fetch(API_URL + "/api/orders", {
+            // NEW: Use /place-order endpoint as specified
+            fetch(RAILWAY_API_URL + "/place-order", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -838,7 +855,7 @@
                     return res.json();
                 })
                 .then(function (data) {
-                    console.log("Order saved successfully:", data);
+                    console.log("✅ Order saved successfully:", data);
 
                     // Clear localStorage cart, checkoutCart, and directProduct
                     localStorage.removeItem('cart');

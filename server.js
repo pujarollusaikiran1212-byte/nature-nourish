@@ -6,7 +6,35 @@ const { connectDB, getConnectionStatus } = require('./src/config/db');
 
 const app = express();
 
-app.use(cors());
+// Configure CORS for the specific domain - Allow custom domain and localhost
+app.use(cors({
+    origin: function (origin, callback) {
+        // Allow requests with no origin (like mobile apps or Postman)
+        if (!origin) return callback(null, true);
+
+        const allowedOrigins = [
+            "https://naturenourish.in",
+            "http://localhost:3000",
+            "http://localhost:5500",
+            "http://127.0.0.1:5500",
+            "http://127.0.0.1:3000"
+        ];
+
+        // Also allow any Railway preview domains
+        if (origin && origin.includes('railway.app')) {
+            return callback(null, true);
+        }
+
+        if (allowedOrigins.indexOf(origin) === -1) {
+            console.log('Blocked by CORS:', origin);
+            return callback(new Error('Not allowed by CORS'), false);
+        }
+        return callback(null, true);
+    },
+    credentials: true
+}));
+
+// Express JSON middleware - required for parsing JSON bodies
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -18,6 +46,85 @@ app.use('/api/products', require('./src/routes/productRoutes'));
 app.use('/api/orders', require('./src/routes/orderRoutes'));
 app.use('/api/proformas', require('./src/routes/proformaRoutes'));
 app.use('/api/reviews', require('./src/routes/reviewRoutes'));
+
+// NEW: Direct /place-order route for frontend checkout
+app.post('/place-order', async (req, res) => {
+    try {
+        const orderData = req.body;
+
+        // Generate orderId if not provided
+        const orderId = orderData.orderId || 'ORD-' + Date.now();
+
+        // Convert items to products format if needed
+        let products = [];
+        if (orderData.items && Array.isArray(orderData.items)) {
+            products = orderData.items.map(item => ({
+                name: item.name,
+                price: item.price,
+                quantity: item.quantity
+            }));
+        } else if (orderData.products && Array.isArray(orderData.products)) {
+            products = orderData.products;
+        }
+
+        // Extract customer info
+        const customer = orderData.customer || {
+            name: orderData.name || '',
+            email: orderData.email || '',
+            mobile: orderData.phone || orderData.mobile || '',
+            address: orderData.address || '',
+            city: orderData.city || '',
+            state: orderData.state || '',
+            pinCode: orderData.pincode || orderData.pinCode || ''
+        };
+
+        // Calculate totals
+        const subtotal = orderData.subtotal || orderData.totalAmount ||
+            products.reduce((sum, p) => sum + (p.price * p.quantity), 0);
+        const shipping = orderData.shipping || 0;
+        const deliveryCharge = orderData.deliveryCharge || 0;
+        const total = orderData.total || orderData.totalAmount || subtotal;
+
+        // Create order object
+        const order = {
+            orderId: orderId,
+            products: products,
+            customer: customer,
+            staff: orderData.staff || {
+                name: 'Website Customer',
+                id: 'N/A'
+            },
+            subtotal: subtotal,
+            shipping: shipping,
+            deliveryCharge: deliveryCharge,
+            total: total,
+            paymentMethod: orderData.paymentMethod || 'COD',
+            paymentStatus: orderData.paymentStatus || 'Pending',
+            orderStatus: orderData.orderStatus || 'Pending',
+            deliveryStatus: orderData.deliveryStatus || 'Pending Delivery',
+            orderSource: orderData.orderSource || 'Website',
+            createdAt: orderData.createdAt || new Date().toISOString()
+        };
+
+        // Import Order model and save
+        const Order = require('./src/models/Order');
+        const newOrder = new Order(order);
+        const savedOrder = await newOrder.save();
+
+        console.log('Order placed successfully:', savedOrder.orderId);
+        res.status(201).json({
+            success: true,
+            orderId: savedOrder.orderId,
+            message: 'Order placed successfully'
+        });
+    } catch (error) {
+        console.error('Error placing order:', error);
+        res.status(400).json({
+            success: false,
+            message: error.message
+        });
+    }
+});
 
 // Default health check route
 app.get('/', (req, res) => {

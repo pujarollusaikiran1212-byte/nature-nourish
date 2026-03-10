@@ -503,6 +503,7 @@
                                 localStorage.removeItem('directProduct');
                                 document.getElementById('order-id').textContent = 'Order ID: ' + (data.orderId || order.orderId);
                                 document.getElementById('success-modal').style.display = 'block';
+
                             } catch (err) {
                                 clearTimeout(timeoutId);
                                 console.error('Error:', err);
@@ -510,21 +511,22 @@
                                 let errorMessage = 'Unable to place order. ';
                                 if (err.name === 'AbortError') {
                                     errorMessage += 'Connection timed out. Please check your internet connection and try again.';
-                                } else if (err.message.includes('Failed to fetch') || err.message.includes('NetworkError')) {
+                                } else if (err.message && (err.message.includes('Failed to fetch') || err.message.includes('NetworkError') || err.message.includes('network'))) {
                                     errorMessage += 'Network error. Please check your internet connection and try again.';
                                 } else {
-                                    // Try to parse server error message
-                                    errorMessage += 'Please try again.';
+                                    // Show generic message to avoid confusing users
+                                    errorMessage += 'Server may be busy. Please try again in a few moments.';
                                 }
 
+                                console.log('Full error details:', err);
                                 alert(errorMessage);
-                            } finally {
-                                btn.textContent = 'Place COD Order';
-                                btn.disabled = false;
                             }
-                        };
+                            btn.textContent = 'Place COD Order';
+                            btn.disabled = false;
+                        }
+                    };
 
-                        submitOrder();
+                    submitOrder();
                     });
                 </script>
 </body>

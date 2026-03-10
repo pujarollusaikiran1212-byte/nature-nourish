@@ -378,19 +378,27 @@ function updateCartDisplay() {
 
     console.log(`Cart updated: ${cart.length} items, Subtotal: ₹${subtotal}, Total: ₹${total}`);
 }
+
 function getProductImage(productName) {
-    // Use full URLs for images - update these to your actual image URLs
-    const images = {
-        'Solar Calm': 'https://naturenourish.in/solar%20calm.jpeg',
-        'Clearwave': 'https://naturenourish.in/clear%20wave.jpeg',
-        'Milk Cloud': 'https://naturenourish.in/milk%20cloud.jpeg',
-        'Glow Dust': 'https://naturenourish.in/glow%20dust.jpeg',
-        'Lavender Bliss': 'https://naturenourish.in/lavender%20bliss.jpeg',
-        'Rose Petal': 'https://naturenourish.in/rose%20petal.jpeg',
-        'Charcoal Cleanse': 'https://naturenourish.in/charcoal.jpeg',
-        'Aloe Vera Glow': 'https://naturenourish.in/aloe%20vera.jpeg'
+    // Try custom domain first, then Railway, then placeholder
+    const imagePaths = {
+        'Solar Calm': ['solar%20calm.jpeg', 'solar calm.jpeg'],
+        'Clearwave': ['clear%20wave.jpeg', 'clear wave.jpeg'],
+        'Milk Cloud': ['milk%20cloud.jpeg', 'milk cloud.jpeg'],
+        'Glow Dust': ['glow%20dust.jpeg', 'glow dust.jpeg'],
+        'Lavender Bliss': ['lavender%20bliss.jpeg', 'lavender bliss.jpeg'],
+        'Rose Petal': ['rose%20petal.jpeg', 'rose petal.jpeg'],
+        'Charcoal Cleanse': ['charcoal.jpeg', 'charcoal.jpeg'],
+        'Aloe Vera Glow': ['aloe%20vera.jpeg', 'aloe vera.jpeg']
     };
-    return images[productName] || 'https://via.placeholder.com/100/667eea/ffffff?text=' + encodeURIComponent(productName);
+
+    const paths = imagePaths[productName];
+    if (!paths) {
+        return 'https://via.placeholder.com/100/667eea/ffffff?text=' + encodeURIComponent(productName);
+    }
+
+    // Return first URL - onerror in img tag will handle fallback
+    return 'https://naturenourish.in/' + paths[0];
 }
 
 function increaseQuantity(index) {

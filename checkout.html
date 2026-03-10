@@ -157,6 +157,11 @@
             background: #5568d3;
         }
 
+        .btn-place-order:disabled {
+            background: #999;
+            cursor: not-allowed;
+        }
+
         .empty-cart {
             text-align: center;
             padding: 60px 20px;
@@ -165,6 +170,22 @@
         .empty-cart h2 {
             color: #333;
             margin-bottom: 15px;
+        }
+
+        .error-message {
+            background: #fee;
+            border: 1px solid #fcc;
+            color: #c00;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            text-align: center;
+        }
+
+        .loading-message {
+            text-align: center;
+            padding: 20px;
+            color: #666;
         }
 
         .success-modal {
@@ -217,16 +238,25 @@
     </header>
 
     <div class="checkout-page">
-        <div id="empty-cart" class="empty-cart" style="display:none;">
+        <!-- Error message container -->
+        <div id="error-container" style="display: none; max-width: 1100px; margin: 20px auto; padding: 0 20px;">
+            <div id="error-message" class="error-message"></div>
+        </div>
+
+        <!-- Empty cart message -->
+        <div id="empty-cart" class="empty-cart" style="display: none;">
             <h2>Your cart is empty!</h2>
             <p>Add products from the store first.</p>
             <a href="index.html#products" class="btn" style="display:inline-block; margin-top:15px;">Browse Products</a>
         </div>
 
-        <div id="checkout-content" class="checkout-container" style="display:none;">
+        <!-- Checkout content -->
+        <div id="checkout-content" class="checkout-container">
             <div class="checkout-main">
                 <h2 class="section-title">Order Summary</h2>
-                <div id="order-items"></div>
+                <div id="order-items">
+                    <p class="loading-message">Loading cart items...</p>
+                </div>
 
                 <h2 class="section-title" style="margin-top:30px;">Customer Details</h2>
                 <form id="checkout-form" class="checkout-form">
@@ -319,216 +349,395 @@
                     <div class="price-row total"><span>Total</span><span id="total">₹0</span></div>
                 </div>
             </div>
+        </div>
 
-            <div id="success-modal" class="success-modal">
-                <div class="success-content">
-                    <h2>Order Placed Successfully!</h2>
-                    <p id="order-id"></p>
-                    <p>Thank you for your order!</p>
-                    <a href="index.html#products" class="btn" style="display:inline-block; margin-top:20px;">Continue
-                        Shopping</a>
-                </div>
+        <div id="success-modal" class="success-modal">
+            <div class="success-content">
+                <h2>Order Placed Successfully!</h2>
+                <p id="order-id"></p>
+                <p>Thank you for your order!</p>
+                <a href="index.html#products" class="btn" style="display:inline-block; margin-top:20px;">Continue
+                    Shopping</a>
+            </div>
+        </div>
+    </div>
 
-                <script src="script.js"></script>
-                <script>
-                    const API_URL = 'https://nature-nourish-production.up.railway.app';
-                    let checkoutItems = [];
+    <script src="script.js"></script>
+    <script>
+        // ============================================
+        // CONFIGURATION - Override script.js settings
+        // ============================================
+        // Use Railway production URL
+        window.RAILWAY_API_URL = 'https://nature-nourish-production.up.railway.app';
 
-                    function getProductImage(name) {
-                        const images = {
-                            'Solar Calm': 'https://naturenourish.in/solar%20calm.jpeg',
-                            'Clearwave': 'https://naturenourish.in/clear%20wave.jpeg',
-                            'Milk Cloud': 'https://naturenourish.in/milk%20cloud.jpeg',
-                            'Glow Dust': 'https://naturenourish.in/glow%20dust.jpeg',
-                            'Lavender Bliss': 'https://naturenourish.in/lavender%20bliss.jpeg',
-                            'Rose Petal': 'https://naturenourish.in/rose%20petal.jpeg',
-                            'Charcoal Cleanse': 'https://naturenourish.in/charcoal.jpeg',
-                            'Aloe Vera Glow': 'https://naturenourish.in/aloe%20vera.jpeg'
-                        };
-                        return images[name] || 'https://via.placeholder.com/60';
+        // Ensure checkoutItems is properly initialized
+        var checkoutItems = [];
+        var isSubmitting = false;
+
+
+        // ============================================
+        // IMAGE HANDLING
+        // ============================================
+        function getProductImage(name) {
+            const imageMap = {
+                'Solar Calm': 'https://naturenourish.in/solar%20calm.jpeg',
+                'Clearwave': 'https://naturenourish.in/clear%20wave.jpeg',
+                'Milk Cloud': 'https://naturenourish.in/milk%20cloud.jpeg',
+                'Glow Dust': 'https://naturenourish.in/glow%20dust.jpeg',
+                'Lavender Bliss': 'https://naturenourish.in/lavender%20bliss.jpeg',
+                'Rose Petal': 'https://naturenourish.in/rose%20petal.jpeg',
+                'Charcoal Cleanse': 'https://naturenourish.in/charcoal.jpeg',
+                'Aloe Vera Glow': 'https://naturenourish.in/aloe%20vera.jpeg'
+            };
+            return imageMap[name] || '';
+        }
+
+        function getPlaceholderImage(name) {
+            return 'https://via.placeholder.com/60/667eea/ffffff?text=' + encodeURIComponent(name.substring(0, 2).toUpperCase());
+        }
+
+        // ============================================
+        // ERROR HANDLING
+        // ============================================
+        function showError(message) {
+            console.error('Checkout Error:', message);
+            const errorContainer = document.getElementById('error-container');
+            const errorMessage = document.getElementById('error-message');
+            if (errorContainer && errorMessage) {
+                errorMessage.textContent = message;
+                errorContainer.style.display = 'block';
+            }
+        }
+
+        function hideError() {
+            const errorContainer = document.getElementById('error-container');
+            if (errorContainer) {
+                errorContainer.style.display = 'none';
+            }
+        }
+
+        // ============================================
+        // INITIALIZATION
+        // ============================================
+        document.addEventListener('DOMContentLoaded', function () {
+            console.log('Checkout page loaded');
+            try {
+                updateHeaderCartCount();
+                loadCheckoutItems();
+            } catch (error) {
+                console.error('Initialization error:', error);
+                showError('Failed to initialize checkout. Please refresh the page.');
+            }
+        });
+
+        // Global error handler
+        window.onerror = function (message, source, lineno, colno, error) {
+            console.error('Global error:', { message, source, lineno, colno, error });
+            showError('An error occurred. Please refresh the page and try again.');
+            return true;
+        };
+
+        // ============================================
+        // CART FUNCTIONS
+        // ============================================
+        function updateHeaderCartCount() {
+            try {
+                const savedCart = localStorage.getItem('cart');
+                if (savedCart) {
+                    const cart = JSON.parse(savedCart);
+                    if (Array.isArray(cart)) {
+                        const count = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+                        const cartCountEl = document.getElementById('cart-count');
+                        if (cartCountEl) cartCountEl.textContent = count;
                     }
+                }
+            } catch (error) {
+                console.error('Error updating cart count:', error);
+            }
+        }
 
-                    document.addEventListener('DOMContentLoaded', function () {
-                        loadCheckoutItems();
-                        updateHeaderCartCount();
-                    });
+        function loadCheckoutItems() {
+            console.log('Loading checkout items...');
+            hideError();
 
-                    function updateHeaderCartCount() {
-                        const savedCart = localStorage.getItem('cart');
-                        if (savedCart) {
-                            const cart = JSON.parse(savedCart);
-                            const count = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
-                            document.getElementById('cart-count').textContent = count;
-                        }
-                    }
+            try {
+                // Try checkoutCart first, then cart
+                let cartData = localStorage.getItem('checkoutCart');
 
-                    function loadCheckoutItems() {
-                        console.log('Loading checkout items...');
-                        let cartData = localStorage.getItem('checkoutCart');
-                        if (!cartData || cartData === 'null' || cartData === '[]' || cartData === 'undefined') {
-                            cartData = localStorage.getItem('cart');
-                        }
-                        if (!cartData || cartData === 'null' || cartData === '[]' || cartData === 'undefined') {
-                            const directProduct = localStorage.getItem('directProduct');
-                            if (directProduct && directProduct !== 'null') {
-                                try {
-                                    const product = JSON.parse(directProduct);
-                                    if (product && product.name) checkoutItems = [product];
-                                } catch (e) { console.error(e); }
+                if (!cartData || cartData === 'null' || cartData === '[]' || cartData === 'undefined') {
+                    cartData = localStorage.getItem('cart');
+                }
+
+                // Try directProduct as last resort
+                if (!cartData || cartData === 'null' || cartData === '[]' || cartData === 'undefined') {
+                    const directProduct = localStorage.getItem('directProduct');
+                    if (directProduct && directProduct !== 'null' && directProduct !== 'undefined') {
+                        try {
+                            const product = JSON.parse(directProduct);
+                            if (product && product.name) {
+                                checkoutItems = [product];
+                                renderCheckout();
+                                return;
                             }
-                        } else {
-                            try { checkoutItems = JSON.parse(cartData); } catch (e) { checkoutItems = []; }
+                        } catch (e) {
+                            console.error('Error parsing directProduct:', e);
                         }
-                        if (!checkoutItems || !Array.isArray(checkoutItems) || checkoutItems.length === 0) {
-                            document.getElementById('checkout-content').style.display = 'none';
-                            document.getElementById('empty-cart').style.display = 'block';
-                            return;
-                        }
-                        document.getElementById('checkout-content').style.display = 'grid';
-                        document.getElementById('empty-cart').style.display = 'none';
-                        displayOrderItems();
-                        calculateTotals();
                     }
+                }
 
-                    function displayOrderItems() {
-                        const container = document.getElementById('order-items');
-                        if (!container) return;
-                        let html = '';
-                        checkoutItems.forEach(function (item) {
-                            const qty = parseInt(item.quantity) || 1;
-                            const price = parseFloat(item.price) || 0;
-                            const total = price * qty;
-                            html += '<div class="order-item">';
-                            html += '<img src="' + getProductImage(item.name) + '" alt="' + item.name + '" class="order-item-image" onerror="this.src=\'https://via.placeholder.com/60\'">';
-                            html += '<div class="order-item-details">';
-                            html += '<div class="order-item-name">' + item.name + '</div>';
-                            html += '<div class="order-item-price">₹' + price + ' x ' + qty + '</div>';
-                            html += '<div class="order-item-total">₹' + total + '</div>';
-                            html += '</div>';
-                        });
-                        container.innerHTML = html;
+                // Parse cart data
+                if (cartData && cartData !== 'null' && cartData !== '[]' && cartData !== 'undefined') {
+                    try {
+                        checkoutItems = JSON.parse(cartData);
+                    } catch (e) {
+                        console.error('Error parsing cart data:', e);
+                        checkoutItems = [];
                     }
+                }
 
-                    function calculateTotals() {
-                        let subtotal = 0;
-                        checkoutItems.forEach(function (item) {
-                            subtotal += (parseFloat(item.price) || 0) * (parseInt(item.quantity) || 1);
-                        });
-                        const total = subtotal;
-                        document.getElementById('subtotal').textContent = '₹' + subtotal;
-                        document.getElementById('total').textContent = '₹' + total;
-                        return { subtotal, total };
+                // Validate checkoutItems
+                if (!checkoutItems || !Array.isArray(checkoutItems) || checkoutItems.length === 0) {
+                    showEmptyCart();
+                    return;
+                }
+
+                // Render the checkout page
+                renderCheckout();
+
+            } catch (error) {
+                console.error('Error loading checkout items:', error);
+                showError('Failed to load cart items. Please go back and add items to your cart.');
+            }
+        }
+
+        function showEmptyCart() {
+            const checkoutContent = document.getElementById('checkout-content');
+            const emptyCart = document.getElementById('empty-cart');
+
+            if (checkoutContent) checkoutContent.style.display = 'none';
+            if (emptyCart) emptyCart.style.display = 'block';
+        }
+
+        function renderCheckout() {
+            const checkoutContent = document.getElementById('checkout-content');
+            const emptyCart = document.getElementById('empty-cart');
+
+            // Show checkout content, hide empty cart
+            if (checkoutContent) checkoutContent.style.display = 'grid';
+            if (emptyCart) emptyCart.style.display = 'none';
+
+            // Render order items
+            displayOrderItems();
+
+            // Calculate totals
+            calculateTotals();
+
+            console.log('Checkout rendered with', checkoutItems.length, 'items');
+        }
+
+        function displayOrderItems() {
+            const container = document.getElementById('order-items');
+            if (!container) {
+                console.error('Order items container not found');
+                return;
+            }
+
+            if (!checkoutItems || checkoutItems.length === 0) {
+                container.innerHTML = '<p class="error-message">No items in cart</p>';
+                return;
+            }
+
+            let html = '';
+
+            try {
+                checkoutItems.forEach(function (item) {
+                    const qty = parseInt(item.quantity) || 1;
+                    const price = parseFloat(item.price) || 0;
+                    const total = price * qty;
+                    const imageUrl = getProductImage(item.name);
+                    const placeholderUrl = getPlaceholderImage(item.name);
+
+                    html += '<div class="order-item">';
+                    html += '<img src="' + imageUrl + '" alt="' + (item.name || 'Product') + '" class="order-item-image" onerror="this.src=\'' + placeholderUrl + '\'">';
+                    html += '<div class="order-item-details">';
+                    html += '<div class="order-item-name">' + (item.name || 'Unknown Product') + '</div>';
+                    html += '<div class="order-item-price">₹' + price + ' x ' + qty + '</div>';
+                    html += '<div class="order-item-total">₹' + total + '</div>';
+                    html += '</div>';
+                    html += '</div>';
+                });
+            } catch (error) {
+                console.error('Error rendering order items:', error);
+                html = '<p class="error-message">Error displaying items</p>';
+            }
+
+            container.innerHTML = html;
+        }
+
+        function calculateTotals() {
+            let subtotal = 0;
+
+            try {
+                checkoutItems.forEach(function (item) {
+                    subtotal += (parseFloat(item.price) || 0) * (parseInt(item.quantity) || 1);
+                });
+            } catch (error) {
+                console.error('Error calculating totals:', error);
+            }
+
+            const total = subtotal;
+
+            const subtotalEl = document.getElementById('subtotal');
+            const totalEl = document.getElementById('total');
+
+            if (subtotalEl) subtotalEl.textContent = '₹' + subtotal;
+            if (totalEl) totalEl.textContent = '₹' + total;
+
+            return { subtotal, total };
+        }
+
+        // ============================================
+        // ORDER SUBMISSION
+        // ============================================
+        document.getElementById('checkout-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            if (isSubmitting) return;
+            if (checkoutItems.length === 0) {
+                alert('Your cart is empty!');
+                return;
+            }
+
+            // Get form values
+            const customer = {
+                name: document.getElementById('full-name').value,
+                email: document.getElementById('email').value,
+                mobile: document.getElementById('phone').value,
+                state: document.getElementById('state').value,
+                city: document.getElementById('city').value,
+                pinCode: document.getElementById('pincode').value,
+                address: document.getElementById('address').value
+            };
+
+            // Validate
+            if (!customer.name || !customer.email || !customer.mobile || !customer.state ||
+                !customer.city || !customer.pinCode || !customer.address) {
+                alert('Please fill all fields');
+                return;
+            }
+
+            // Calculate totals
+            const { subtotal, total } = calculateTotals();
+
+            // Build products array
+            const products = checkoutItems.map(item => ({
+                name: item.name,
+                price: parseFloat(item.price) || 0,
+                quantity: parseInt(item.quantity) || 1
+            }));
+
+            // Build order object
+            const order = {
+                orderId: 'ORD-' + Date.now(),
+                customerName: customer.name,
+                email: customer.email,
+                phone: customer.mobile,
+                address: customer.address,
+                city: customer.city,
+                state: customer.state,
+                pincode: customer.pinCode,
+                items: products,
+                subtotal: subtotal,
+                shipping: 0,
+                total: total,
+                paymentMethod: 'COD',
+                createdAt: new Date().toISOString()
+            };
+
+            console.log('Submitting order:', order);
+
+            // Get button and show loading
+            const btn = document.querySelector('.btn-place-order');
+            if (btn) {
+                btn.textContent = 'Placing Order...';
+                btn.disabled = true;
+            }
+            isSubmitting = true;
+
+            // Submit order with timeout and retry
+            submitOrder(order, 0, 3);
+        });
+
+        async function submitOrder(order, retryCount, maxRetries) {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 30000);
+
+            try {
+                // Use Railway API URL
+                const API_URL = window.RAILWAY_API_URL || 'https://nature-nourish-production.up.railway.app';
+
+                console.log('Attempting to place order (attempt ' + (retryCount + 1) + '/' + maxRetries + ')');
+
+                const res = await fetch(API_URL + '/api/orders', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(order),
+                    signal: controller.signal
+                });
+
+                clearTimeout(timeoutId);
+
+                if (!res.ok) {
+                    if ((res.status === 0 || res.status >= 500) && retryCount < maxRetries - 1) {
+                        console.log('Server error, retrying...');
+                        await new Promise(r => setTimeout(r, 1000 * (retryCount + 1)));
+                        submitOrder(order, retryCount + 1, maxRetries);
+                        return;
                     }
+                    throw new Error('Server error: ' + res.status);
+                }
 
-                    document.getElementById('checkout-form').addEventListener('submit', function (e) {
-                        e.preventDefault();
-                        loadCheckoutItems();
-                        if (checkoutItems.length === 0) { alert('Your cart is empty!'); return; }
+                const data = await res.json();
 
-                        const customer = {
-                            name: document.getElementById('full-name').value,
-                            email: document.getElementById('email').value,
-                            mobile: document.getElementById('phone').value,
-                            state: document.getElementById('state').value,
-                            city: document.getElementById('city').value,
-                            pinCode: document.getElementById('pincode').value,
-                            address: document.getElementById('address').value
-                        };
+                console.log('Order saved:', data);
 
-                        if (!customer.name || !customer.email || !customer.mobile || !customer.state || !customer.city || !customer.pinCode || !customer.address) {
-                            alert('Please fill all fields'); return;
-                        }
+                // Clear cart
+                localStorage.removeItem('cart');
+                localStorage.removeItem('checkoutCart');
+                localStorage.removeItem('directProduct');
 
-                        const { subtotal, total } = calculateTotals();
-                        const products = checkoutItems.map(item => ({
-                            name: item.name,
-                            price: parseFloat(item.price) || 0,
-                            quantity: parseInt(item.quantity) || 1
-                        }));
+                // Show success
+                document.getElementById('order-id').textContent = 'Order ID: ' + (data.orderId || order.orderId);
+                document.getElementById('success-modal').style.display = 'block';
 
-                        const order = {
-                            orderId: 'ORD-' + Date.now(),
-                            customerName: customer.name,
-                            email: customer.email,
-                            phone: customer.mobile,
-                            address: customer.address,
-                            city: customer.city,
-                            state: customer.state,
-                            pincode: customer.pinCode,
-                            items: products,
-                            subtotal: subtotal,
-                            shipping: 0,
-                            total: total,
-                            paymentMethod: 'COD',
-                            createdAt: new Date().toISOString()
-                        };
+            } catch (err) {
+                clearTimeout(timeoutId);
+                console.error('Order submission error:', err);
 
-                        console.log('Submitting order:', order);
-                        const btn = document.querySelector('.btn-place-order');
-                        btn.textContent = 'Placing Order...';
-                        btn.disabled = true;
+                let errorMessage = 'Unable to place order. ';
 
-                        // Better fetch with retry logic and timeout
-                        const controller = new AbortController();
-                        const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+                if (err.name === 'AbortError') {
+                    errorMessage += 'Connection timed out. Please check your internet and try again.';
+                } else if (err.message && (err.message.includes('Failed to fetch') || err.message.includes('network'))) {
+                    errorMessage += 'Network error. Please check your internet connection.';
+                } else {
+                    errorMessage += 'Server may be busy. Please try again in a few moments.';
+                }
 
-                        const submitOrder = async (retryCount = 0) => {
-                            try {
-                                const maxRetries = 3;
-                                const res = await fetch(API_URL + '/api/orders', {
-                                    method: 'POST',
-                                    headers: { 'Content-Type': 'application/json' },
-                                    body: JSON.stringify(order),
-                                    signal: controller.signal
-                                });
+                alert(errorMessage);
 
-                                clearTimeout(timeoutId);
-
-                                if (!res.ok) {
-                                    if (res.status === 0 || res.status >= 500) {
-                                        // Network error, try retry
-                                        if (retryCount < maxRetries) {
-                                            console.log(`Retry ${retryCount + 1}/${maxRetries}...`);
-                                            await new Promise(r => setTimeout(r, 1000 * (retryCount + 1)));
-                                            return submitOrder(retryCount + 1);
-                                        }
-                                    }
-                                    throw new Error('Server error: ' + res.status);
-                                }
-
-                                const data = await res.json();
-                                console.log('Order saved:', data);
-                                localStorage.removeItem('cart');
-                                localStorage.removeItem('checkoutCart');
-                                localStorage.removeItem('directProduct');
-                                document.getElementById('order-id').textContent = 'Order ID: ' + (data.orderId || order.orderId);
-                                document.getElementById('success-modal').style.display = 'block';
-
-                            } catch (err) {
-                                clearTimeout(timeoutId);
-                                console.error('Error:', err);
-
-                                let errorMessage = 'Unable to place order. ';
-                                if (err.name === 'AbortError') {
-                                    errorMessage += 'Connection timed out. Please check your internet connection and try again.';
-                                } else if (err.message && (err.message.includes('Failed to fetch') || err.message.includes('NetworkError') || err.message.includes('network'))) {
-                                    errorMessage += 'Network error. Please check your internet connection and try again.';
-                                } else {
-                                    // Show generic message to avoid confusing users
-                                    errorMessage += 'Server may be busy. Please try again in a few moments.';
-                                }
-
-                                console.log('Full error details:', err);
-                                alert(errorMessage);
-                            }
-                            btn.textContent = 'Place COD Order';
-                            btn.disabled = false;
-                        }
-                    };
-
-                    submitOrder();
-                    });
-                </script>
+                // Reset button
+                const btn = document.querySelector('.btn-place-order');
+                if (btn) {
+                    btn.textContent = 'Place COD Order';
+                    btn.disabled = false;
+                }
+                isSubmitting = false;
+            }
+        }
+    </script>
 </body>
 
 </html>

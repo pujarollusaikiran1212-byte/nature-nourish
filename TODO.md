@@ -1,45 +1,47 @@
-# Fix Order API Connection - COMPLETED ✅
+# 🚂 RAILWAY DEPLOY GUIDE
 
-## Changes Made:
+## ✅ All Code Ready!
 
-### 1. server.js (Backend)
-- ✅ Updated CORS configuration to allow your domain:
-```javascript
-app.use(cors({
-    origin: ["https://naturenourish.in", "http://localhost:5500", "http://127.0.0.1:5500"]
-}));
+---
+
+## DEPLOY STEPS:
+
+### Step 1: Set MongoDB in Railway
+Go to Railway Dashboard → Your Service → **Variables** tab
+
+Add this variable:
+- **Name:** `MONGODB_URI`
+- **Value:** `mongodb+srv://asus:01lWUs7yjxFnX126@cluster1.mpartvh.mongodb.net/SoapWebsite?appName=Cluster1`
+
+### Step 2: Deploy Backend to Railway
+Upload these files:
+- server.js
+- src/ folder (config, models, routes)
+- package.json
+- package-lock.json
+
+### Step 3: Upload Frontend to naturenourish.in
+- checkout.html
+- script.js
+- index.html
+- style.css
+
+---
+
+## Flow:
 ```
-- ✅ Added new `/place-order` POST route
-- ✅ Express JSON middleware already present ✓
-
-### 2. checkout.html (Frontend)
-- ✅ Updated fetch to use `/place-order` endpoint:
-```javascript
-fetch(RAILWAY_API_URL + "/place-order", {
-    method: "POST",
-    headers: {
-        "Content-Type": "application/json"
-    },
-    body: JSON.stringify(order)
-})
+naturenourish.in → Railway Backend → MongoDB
+                     ↓
+            Orders saved to MongoDB
+                     ↓
+        Admin panel shows orders ✅
 ```
-- ✅ Added API connection test on page load
-- ✅ Added better error logging to console
 
-## What You Need to Do:
+---
 
-### For Railway Backend Deployment:
-1. Copy the updated `server.js` to your Railway project
-2. Deploy/push the changes to Railway
-
-### For Frontend:
-1. Upload the updated `checkout.html` to your hosting (or keep using the same if hosted from same source)
-
-### Test:
-1. Visit https://naturenourish.in/checkout.html
-2. Open browser console (F12)
-3. You should see "✅ API Connected! Status: {status: OK, ...}"
-4. Try placing an order
-
-## Status: COMPLETE ✅
-
+## Test:
+1. Set MONGODB_URI in Railway (Step 1)
+2. Deploy backend (Step 2)
+3. Upload frontend (Step 3)
+4. Place order at naturenourish.in/checkout.html
+5. Check admin panel at naturenourish.in/admin.html

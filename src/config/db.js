@@ -1,7 +1,3 @@
-
-
-
-
 const mongoose = require('mongoose');
 
 let isConnected = false;
@@ -13,9 +9,14 @@ const connectDB = async () => {
     }
 
     try {
-        const mongoose = require('mongoose');
-        // Use the correct MongoDB Atlas connection string with database name
-        const mongoURI = process.env.MONGODB_URI || 'mongodb+srv://asus:01lWUs7yjxFnX126@cluster1.mpartvh.mongodb.net/storeDB?retryWrites=true&w=majority';
+        // Use environment variable for Railway deployment
+        const mongoURI = process.env.MONGODB_URI;
+
+        if (!mongoURI) {
+            console.error('MongoDB URI not configured! Set MONGODB_URI environment variable in Railway.');
+            return;
+        }
+
         await mongoose.connect(mongoURI, {
             serverSelectionTimeoutMS: 10000,
             socketTimeoutMS: 45000,

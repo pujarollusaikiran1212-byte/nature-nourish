@@ -217,14 +217,12 @@
     </header>
 
     <div class="checkout-page">
-        <!-- Empty Cart -->
         <div id="empty-cart" class="empty-cart" style="display:none;">
             <h2>Your cart is empty!</h2>
             <p>Add products from the store first.</p>
             <a href="index.html#products" class="btn" style="display:inline-block; margin-top:15px;">Browse Products</a>
         </div>
 
-        <!-- Checkout Content -->
         <div id="checkout-content" class="checkout-container" style="display:none;">
             <div class="checkout-main">
                 <h2 class="section-title">Order Summary</h2>
@@ -250,15 +248,42 @@
                             <select id="state" required>
                                 <option value="">Select State</option>
                                 <option value="Andhra Pradesh">Andhra Pradesh</option>
-                                <option value="Maharashtra">Maharashtra</option>
-                                <option value="Karnataka">Karnataka</option>
-                                <option value="Tamil Nadu">Tamil Nadu</option>
-                                <option value="Uttar Pradesh">Uttar Pradesh</option>
-                                <option value="West Bengal">West Bengal</option>
+                                <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                                <option value="Assam">Assam</option>
+                                <option value="Bihar">Bihar</option>
+                                <option value="Chhattisgarh">Chhattisgarh</option>
+                                <option value="Goa">Goa</option>
                                 <option value="Gujarat">Gujarat</option>
-                                <option value="Rajasthan">Rajasthan</option>
-                                <option value="Madhya Pradesh">Madhya Pradesh</option>
+                                <option value="Haryana">Haryana</option>
+                                <option value="Himachal Pradesh">Himachal Pradesh</option>
+                                <option value="Jharkhand">Jharkhand</option>
+                                <option value="Karnataka">Karnataka</option>
                                 <option value="Kerala">Kerala</option>
+                                <option value="Madhya Pradesh">Madhya Pradesh</option>
+                                <option value="Maharashtra">Maharashtra</option>
+                                <option value="Manipur">Manipur</option>
+                                <option value="Meghalaya">Meghalaya</option>
+                                <option value="Mizoram">Mizoram</option>
+                                <option value="Nagaland">Nagaland</option>
+                                <option value="Odisha">Odisha</option>
+                                <option value="Punjab">Punjab</option>
+                                <option value="Rajasthan">Rajasthan</option>
+                                <option value="Sikkim">Sikkim</option>
+                                <option value="Tamil Nadu">Tamil Nadu</option>
+                                <option value="Telangana">Telangana</option>
+                                <option value="Tripura">Tripura</option>
+                                <option value="Uttar Pradesh">Uttar Pradesh</option>
+                                <option value="Uttarakhand">Uttarakhand</option>
+                                <option value="West Bengal">West Bengal</option>
+                                <option value="Delhi">Delhi</option>
+                                <option value="Chandigarh">Chandigarh</option>
+                                <option value="Puducherry">Puducherry</option>
+                                <option value="Jammu and Kashmir">Jammu and Kashmir</option>
+                                <option value="Ladakh">Ladakh</option>
+                                <option value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</option>
+                                <option value="Dadra and Nagar Haveli and Daman and Diu">Dadra and Nagar Haveli and
+                                    Daman and Diu</option>
+                                <option value="Lakshadweep">Lakshadweep</option>
                             </select>
                         </div>
                         <div>
@@ -289,22 +314,12 @@
             <div class="checkout-sidebar">
                 <div class="price-summary">
                     <h3>Price Details</h3>
-                    <div class="price-row">
-                        <span>Subtotal</span>
-                        <span id="subtotal">₹0</span>
-                    </div>
-                    <div class="price-row">
-                        <span>Shipping</span>
-                        <span>FREE</span>
-                    </div>
-                    <div class="price-row total">
-                        <span>Total</span>
-                        <span id="total">₹0</span>
-                    </div>
+                    <div class="price-row"><span>Subtotal</span><span id="subtotal">₹0</span></div>
+                    <div class="price-row"><span>Shipping</span><span>FREE</span></div>
+                    <div class="price-row total"><span>Total</span><span id="total">₹0</span></div>
                 </div>
             </div>
 
-            <!-- Success Modal -->
             <div id="success-modal" class="success-modal">
                 <div class="success-content">
                     <h2>Order Placed Successfully!</h2>
@@ -319,7 +334,6 @@
                     const API_URL = 'https://nature-nourish-production.up.railway.app';
                     let checkoutItems = [];
 
-                    // Image mapping - uses full URLs
                     function getProductImage(name) {
                         const images = {
                             'Solar Calm': 'https://naturenourish.in/solar%20calm.jpeg',
@@ -334,7 +348,6 @@
                         return images[name] || 'https://via.placeholder.com/60';
                     }
 
-                    // Load cart items on page load
                     document.addEventListener('DOMContentLoaded', function () {
                         loadCheckoutItems();
                         updateHeaderCartCount();
@@ -351,54 +364,28 @@
 
                     function loadCheckoutItems() {
                         console.log('Loading checkout items...');
-
-                        // First try 'checkoutCart' (set by proceedToCheckout)
                         let cartData = localStorage.getItem('checkoutCart');
-                        console.log('checkoutCart:', cartData);
-
-                        // Fall back to 'cart'
                         if (!cartData || cartData === 'null' || cartData === '[]' || cartData === 'undefined') {
                             cartData = localStorage.getItem('cart');
-                            console.log('cart:', cartData);
                         }
-
-                        // Try directProduct for single product checkout
                         if (!cartData || cartData === 'null' || cartData === '[]' || cartData === 'undefined') {
                             const directProduct = localStorage.getItem('directProduct');
-                            console.log('directProduct:', directProduct);
                             if (directProduct && directProduct !== 'null') {
                                 try {
                                     const product = JSON.parse(directProduct);
-                                    if (product && product.name) {
-                                        checkoutItems = [product];
-                                        console.log('Using directProduct:', checkoutItems);
-                                    }
-                                } catch (e) {
-                                    console.error('Error parsing directProduct:', e);
-                                }
+                                    if (product && product.name) checkoutItems = [product];
+                                } catch (e) { console.error(e); }
                             }
                         } else {
-                            try {
-                                checkoutItems = JSON.parse(cartData);
-                                console.log('Parsed cart items:', checkoutItems);
-                            } catch (e) {
-                                console.error('Error parsing cart:', e);
-                                checkoutItems = [];
-                            }
+                            try { checkoutItems = JSON.parse(cartData); } catch (e) { checkoutItems = []; }
                         }
-
-                        // Validate items
                         if (!checkoutItems || !Array.isArray(checkoutItems) || checkoutItems.length === 0) {
                             document.getElementById('checkout-content').style.display = 'none';
                             document.getElementById('empty-cart').style.display = 'block';
                             return;
                         }
-
-                        // Show checkout
                         document.getElementById('checkout-content').style.display = 'grid';
                         document.getElementById('empty-cart').style.display = 'none';
-
-                        // Render items and calculate totals
                         displayOrderItems();
                         calculateTotals();
                     }
@@ -406,61 +393,38 @@
                     function displayOrderItems() {
                         const container = document.getElementById('order-items');
                         if (!container) return;
-
                         let html = '';
-
                         checkoutItems.forEach(function (item) {
                             const qty = parseInt(item.quantity) || 1;
                             const price = parseFloat(item.price) || 0;
                             const total = price * qty;
-                            const imageSrc = getProductImage(item.name);
-
                             html += '<div class="order-item">';
-                            html += '<img src="' + imageSrc + '" alt="' + item.name + '" class="order-item-image" onerror="this.src=\'https://via.placeholder.com/60\'">';
+                            html += '<img src="' + getProductImage(item.name) + '" alt="' + item.name + '" class="order-item-image" onerror="this.src=\'https://via.placeholder.com/60\'">';
                             html += '<div class="order-item-details">';
                             html += '<div class="order-item-name">' + item.name + '</div>';
                             html += '<div class="order-item-price">₹' + price + ' x ' + qty + '</div>';
                             html += '<div class="order-item-total">₹' + total + '</div>';
                             html += '</div>';
                         });
-
                         container.innerHTML = html;
-                        console.log('Rendered order items');
                     }
 
                     function calculateTotals() {
                         let subtotal = 0;
-
                         checkoutItems.forEach(function (item) {
-                            const price = parseFloat(item.price) || 0;
-                            const qty = parseInt(item.quantity) || 1;
-                            subtotal += (price * qty);
+                            subtotal += (parseFloat(item.price) || 0) * (parseInt(item.quantity) || 1);
                         });
-
-                        const shipping = 0; // Free shipping
-                        const total = subtotal + shipping;
-
-                        console.log('Calculated - Subtotal:', subtotal, 'Total:', total);
-
+                        const total = subtotal;
                         document.getElementById('subtotal').textContent = '₹' + subtotal;
                         document.getElementById('total').textContent = '₹' + total;
-
-                        return { subtotal, shipping, total };
+                        return { subtotal, total };
                     }
 
-                    // Form submission
                     document.getElementById('checkout-form').addEventListener('submit', function (e) {
                         e.preventDefault();
-
-                        // Reload items to ensure we have latest
                         loadCheckoutItems();
+                        if (checkoutItems.length === 0) { alert('Your cart is empty!'); return; }
 
-                        if (checkoutItems.length === 0) {
-                            alert('Your cart is empty!');
-                            return;
-                        }
-
-                        // Get customer data
                         const customer = {
                             name: document.getElementById('full-name').value,
                             email: document.getElementById('email').value,
@@ -471,23 +435,17 @@
                             address: document.getElementById('address').value
                         };
 
-                        // Validate
                         if (!customer.name || !customer.email || !customer.mobile || !customer.state || !customer.city || !customer.pinCode || !customer.address) {
-                            alert('Please fill all fields');
-                            return;
+                            alert('Please fill all fields'); return;
                         }
 
-                        // Calculate totals
-                        const { subtotal, shipping, total } = calculateTotals();
-
-                        // Build products array
+                        const { subtotal, total } = calculateTotals();
                         const products = checkoutItems.map(item => ({
                             name: item.name,
                             price: parseFloat(item.price) || 0,
                             quantity: parseInt(item.quantity) || 1
                         }));
 
-                        // Build order
                         const order = {
                             orderId: 'ORD-' + Date.now(),
                             customerName: customer.name,
@@ -499,37 +457,28 @@
                             pincode: customer.pinCode,
                             items: products,
                             subtotal: subtotal,
-                            shipping: shipping,
+                            shipping: 0,
                             total: total,
                             paymentMethod: 'COD',
                             createdAt: new Date().toISOString()
                         };
 
                         console.log('Submitting order:', order);
-
                         const btn = document.querySelector('.btn-place-order');
                         btn.textContent = 'Placing Order...';
                         btn.disabled = true;
 
-                        // Send to backend
                         fetch(API_URL + '/api/orders', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify(order)
                         })
-                            .then(res => {
-                                if (!res.ok) throw new Error('Server error: ' + res.status);
-                                return res.json();
-                            })
+                            .then(res => { if (!res.ok) throw new Error('Server error: ' + res.status); return res.json(); })
                             .then(data => {
                                 console.log('Order saved:', data);
-
-                                // Clear cart
                                 localStorage.removeItem('cart');
                                 localStorage.removeItem('checkoutCart');
                                 localStorage.removeItem('directProduct');
-
-                                // Show success
                                 document.getElementById('order-id').textContent = 'Order ID: ' + (data.orderId || order.orderId);
                                 document.getElementById('success-modal').style.display = 'block';
                             })

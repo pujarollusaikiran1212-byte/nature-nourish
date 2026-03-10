@@ -7,10 +7,23 @@
     <title>Checkout - Nature Nourish</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        .checkout-page {
-            padding-top: 100px;
-            min-height: 100vh;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
             background: #f9f9f9;
+            color: #333;
+            min-height: 100vh;
+        }
+
+        .checkout-page {
+            padding-top: 80px;
+            min-height: 100vh;
+            padding-bottom: 40px;
         }
 
         .checkout-container {
@@ -62,6 +75,11 @@
             object-fit: cover;
             border-radius: 8px;
             background: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: #666;
         }
 
         .order-item-details {
@@ -119,6 +137,7 @@
             border: 1px solid #ddd;
             border-radius: 6px;
             font-size: 1rem;
+            font-family: inherit;
         }
 
         .checkout-form input:focus {
@@ -151,6 +170,7 @@
             font-weight: 600;
             cursor: pointer;
             margin-top: 20px;
+            transition: background 0.3s;
         }
 
         .btn-place-order:hover {
@@ -165,11 +185,18 @@
         .empty-cart {
             text-align: center;
             padding: 60px 20px;
+            max-width: 600px;
+            margin: 0 auto;
         }
 
         .empty-cart h2 {
             color: #333;
             margin-bottom: 15px;
+        }
+
+        .empty-cart p {
+            color: #666;
+            margin-bottom: 20px;
         }
 
         .error-message {
@@ -213,6 +240,16 @@
             margin-bottom: 15px;
         }
 
+        .alert-box {
+            background: #e7f3ff;
+            border: 1px solid #b3d9ff;
+            color: #004080;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
         @media (max-width: 768px) {
             .checkout-container {
                 grid-template-columns: 1fr;
@@ -226,518 +263,539 @@
 </head>
 
 <body>
-    <header class="navbar">
-        <div class="container">
-            <div class="logo">Nature Nourish</div>
-            <nav class="nav-links">
-                <a href="index.html#home">Home</a>
-                <a href="index.html#products">Products</a>
-                <a href="index.html#cart">Cart (<span id="cart-count">0</span>)</a>
-            </nav>
-        </div>
-    </header>
+    <!-- Navigation -->
+    <nav class="navbar"
+        style="background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: fixed; width: 100%; top: 0; z-index: 100;">
+        <div class="container"
+            style="max-width: 1200px; margin: 0 auto; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center;">
+            <div class="logo" style="font-size: 1.5rem; font-weight: bold; color: #667eea;">Nature Nourish</div>
+            <div class="nav-links" style="display: flex; gap: 20px;">
+                <a href="index.html#home" style="color: #333; text-decoration: none;">Home</a>
+                <a href="index.html#products" style="color: #333; text-decoration: none;">Products</a>
+                <a href="index.html#cart" style="color: #333; text-decoration: none;">Cart (<span
+                        id="cart-count">0</span>)</a>
+            </div>
+    </nav>
 
     <div class="checkout-page">
         <!-- Error message container -->
         <div id="error-container" style="display: none; max-width: 1100px; margin: 20px auto; padding: 0 20px;">
             <div id="error-message" class="error-message"></div>
-        </div>
 
-        <!-- Empty cart message -->
-        <div id="empty-cart" class="empty-cart" style="display: none;">
-            <h2>Your cart is empty!</h2>
-            <p>Add products from the store first.</p>
-            <a href="index.html#products" class="btn" style="display:inline-block; margin-top:15px;">Browse Products</a>
-        </div>
+            <!-- Empty cart message -->
+            <div id="empty-cart" class="empty-cart" style="display: none;">
+                <h2>Your cart is empty!</h2>
+                <p>Add products from the store first.</p>
+                <a href="index.html#products" class="btn"
+                    style="display:inline-block; margin-top:15px; background: #667eea; color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none;">Browse
+                    Products</a>
+            </div>
 
-        <!-- Checkout content -->
-        <div id="checkout-content" class="checkout-container">
-            <div class="checkout-main">
-                <h2 class="section-title">Order Summary</h2>
-                <div id="order-items">
-                    <p class="loading-message">Loading cart items...</p>
+            <!-- Checkout content -->
+            <div id="checkout-content" class="checkout-container" style="display: none;">
+                <div class="checkout-main">
+                    <h2 class="section-title">Order Summary</h2>
+                    <div id="order-items">
+                        <p class="loading-message">Loading cart items...</p>
+                    </div>
+
+                    <h2 class="section-title" style="margin-top:30px;">Customer Details</h2>
+                    <form id="checkout-form" class="checkout-form">
+                        <div class="form-grid">
+                            <div class="form-group-full">
+                                <label>Full Name *</label>
+                                <input type="text" id="full-name" required>
+                            </div>
+                            <div class="form-group-full">
+                                <label>Email *</label>
+                                <input type="email" id="email" required>
+                            </div>
+                            <div class="form-group-full">
+                                <label>Phone *</label>
+                                <input type="tel" id="phone" pattern="[0-9]{10}" placeholder="10-digit mobile number"
+                                    required>
+                            </div>
+                            <div class="form-group-full">
+                                <label>State *</label>
+                                <select id="state" required>
+                                    <option value="">Select State</option>
+                                    <option value="Andhra Pradesh">Andhra Pradesh</option>
+                                    <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                                    <option value="Assam">Assam</option>
+                                    <option value="Bihar">Bihar</option>
+                                    <option value="Chhattisgarh">Chhattisgarh</option>
+                                    <option value="Goa">Goa</option>
+                                    <option value="Gujarat">Gujarat</option>
+                                    <option value="Haryana">Haryana</option>
+                                    <option value="Himachal Pradesh">Himachal Pradesh</option>
+                                    <option value="Jharkhand">Jharkhand</option>
+                                    <option value="Karnataka">Karnataka</option>
+                                    <option value="Kerala">Kerala</option>
+                                    <option value="Madhya Pradesh">Madhya Pradesh</option>
+                                    <option value="Maharashtra">Maharashtra</option>
+                                    <option value="Manipur">Manipur</option>
+                                    <option value="Meghalaya">Meghalaya</option>
+                                    <option value="Mizoram">Mizoram</option>
+                                    <option value="Nagaland">Nagaland</option>
+                                    <option value="Odisha">Odisha</option>
+                                    <option value="Punjab">Punjab</option>
+                                    <option value="Rajasthan">Rajasthan</option>
+                                    <option value="Sikkim">Sikkim</option>
+                                    <option value="Tamil Nadu">Tamil Nadu</option>
+                                    <option value="Telangana">Telangana</option>
+                                    <option value="Tripura">Tripura</option>
+                                    <option value="Uttar Pradesh">Uttar Pradesh</option>
+                                    <option value="Uttarakhand">Uttarakhand</option>
+                                    <option value="West Bengal">West Bengal</option>
+                                    <option value="Delhi">Delhi</option>
+                                    <option value="Chandigarh">Chandigarh</option>
+                                    <option value="Puducherry">Puducherry</option>
+                                    <option value="Jammu and Kashmir">Jammu and Kashmir</option>
+                                    <option value="Ladakh">Ladakh</option>
+                                    <option value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</option>
+                                    <option value="Dadra and Nagar Haveli and Daman and Diu">Dadra and Nagar Haveli and
+                                        Daman and Diu</option>
+                                    <option value="Lakshadweep">Lakshadweep</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label>City *</label>
+                                <input type="text" id="city" required>
+                            </div>
+                            <div>
+                                <label>Pincode *</label>
+                                <input type="text" id="pincode" pattern="[0-9]{6}" placeholder="6-digit pincode"
+                                    required>
+                            </div>
+                            <div class="form-group-full">
+                                <label>Address *</label>
+                                <textarea id="address" rows="3" required></textarea>
+                            </div>
+
+                            <h2 class="section-title" style="margin-top:25px;">Payment Method</h2>
+                            <div class="payment-method">
+                                <label style="display:flex; align-items:center;">
+                                    <input type="radio" name="payment" value="COD" checked>
+                                    <span style="margin-left:10px;">Cash on Delivery (COD)</span>
+                                </label>
+                            </div>
+
+                            <button type="submit" class="btn-place-order">Place COD Order</button>
+                    </form>
                 </div>
 
-                <h2 class="section-title" style="margin-top:30px;">Customer Details</h2>
-                <form id="checkout-form" class="checkout-form">
-                    <div class="form-grid">
-                        <div class="form-group-full">
-                            <label>Full Name *</label>
-                            <input type="text" id="full-name" required>
+                <div class="checkout-sidebar">
+                    <div class="price-summary">
+                        <h3>Price Details</h3>
+                        <div class="price-row"><span>Subtotal</span><span id="subtotal">₹0</span></div>
+                        <div class="price-row"><span>Shipping</span><span>FREE</span></div>
+                        <div class="price-row total"><span>Total</span><span id="total">₹0</span></div>
+                    </div>
+
+                    <div id="success-modal" class="success-modal">
+                        <div class="success-content">
+                            <h2>Order Placed Successfully!</h2>
+                            <p id="order-id"></p>
+                            <p>Thank you for your order!</p>
+                            <a href="index.html#products" class="btn"
+                                style="display:inline-block; margin-top:20px; background: #667eea; color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none;">Continue
+                                Shopping</a>
                         </div>
-                        <div class="form-group-full">
-                            <label>Email *</label>
-                            <input type="email" id="email" required>
-                        </div>
-                        <div class="form-group-full">
-                            <label>Phone *</label>
-                            <input type="tel" id="phone" pattern="[0-9]{10}" required>
-                        </div>
-                        <div class="form-group-full">
-                            <label>State *</label>
-                            <select id="state" required>
-                                <option value="">Select State</option>
-                                <option value="Andhra Pradesh">Andhra Pradesh</option>
-                                <option value="Arunachal Pradesh">Arunachal Pradesh</option>
-                                <option value="Assam">Assam</option>
-                                <option value="Bihar">Bihar</option>
-                                <option value="Chhattisgarh">Chhattisgarh</option>
-                                <option value="Goa">Goa</option>
-                                <option value="Gujarat">Gujarat</option>
-                                <option value="Haryana">Haryana</option>
-                                <option value="Himachal Pradesh">Himachal Pradesh</option>
-                                <option value="Jharkhand">Jharkhand</option>
-                                <option value="Karnataka">Karnataka</option>
-                                <option value="Kerala">Kerala</option>
-                                <option value="Madhya Pradesh">Madhya Pradesh</option>
-                                <option value="Maharashtra">Maharashtra</option>
-                                <option value="Manipur">Manipur</option>
-                                <option value="Meghalaya">Meghalaya</option>
-                                <option value="Mizoram">Mizoram</option>
-                                <option value="Nagaland">Nagaland</option>
-                                <option value="Odisha">Odisha</option>
-                                <option value="Punjab">Punjab</option>
-                                <option value="Rajasthan">Rajasthan</option>
-                                <option value="Sikkim">Sikkim</option>
-                                <option value="Tamil Nadu">Tamil Nadu</option>
-                                <option value="Telangana">Telangana</option>
-                                <option value="Tripura">Tripura</option>
-                                <option value="Uttar Pradesh">Uttar Pradesh</option>
-                                <option value="Uttarakhand">Uttarakhand</option>
-                                <option value="West Bengal">West Bengal</option>
-                                <option value="Delhi">Delhi</option>
-                                <option value="Chandigarh">Chandigarh</option>
-                                <option value="Puducherry">Puducherry</option>
-                                <option value="Jammu and Kashmir">Jammu and Kashmir</option>
-                                <option value="Ladakh">Ladakh</option>
-                                <option value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</option>
-                                <option value="Dadra and Nagar Haveli and Daman and Diu">Dadra and Nagar Haveli and
-                                    Daman and Diu</option>
-                                <option value="Lakshadweep">Lakshadweep</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label>City *</label>
-                            <input type="text" id="city" required>
-                        </div>
-                        <div>
-                            <label>Pincode *</label>
-                            <input type="text" id="pincode" pattern="[0-9]{6}" required>
-                        </div>
-                        <div class="form-group-full">
-                            <label>Address *</label>
-                            <textarea id="address" rows="3" required></textarea>
-                        </div>
+                    </div>
 
-                        <h2 class="section-title" style="margin-top:25px;">Payment Method</h2>
-                        <div class="payment-method">
-                            <label style="display:flex; align-items:center;">
-                                <input type="radio" name="payment" value="COD" checked>
-                                <span style="margin-left:10px;">Cash on Delivery (COD)</span>
-                            </label>
-                        </div>
+                    <script>
+                        // ============================================
+                        // CONFIGURATION - Self-contained checkout
+                        // ============================================
 
-                        <button type="submit" class="btn-place-order">Place COD Order</button>
-                </form>
-            </div>
+                        // Railway production URL - UPDATE THIS IF DIFFERENT
+                        const API_URL = 'https://nature-nourish-production.up.railway.app';
 
-            <div class="checkout-sidebar">
-                <div class="price-summary">
-                    <h3>Price Details</h3>
-                    <div class="price-row"><span>Subtotal</span><span id="subtotal">₹0</span></div>
-                    <div class="price-row"><span>Shipping</span><span>FREE</span></div>
-                    <div class="price-row total"><span>Total</span><span id="total">₹0</span></div>
-                </div>
-            </div>
-        </div>
+                        console.log('Checkout initializing with API:', API_URL);
 
-        <div id="success-modal" class="success-modal">
-            <div class="success-content">
-                <h2>Order Placed Successfully!</h2>
-                <p id="order-id"></p>
-                <p>Thank you for your order!</p>
-                <a href="index.html#products" class="btn" style="display:inline-block; margin-top:20px;">Continue
-                    Shopping</a>
-            </div>
-        </div>
-    </div>
+                        // Global state
+                        let checkoutItems = [];
+                        let isSubmitting = false;
 
-    <script src="script.js"></script>
-    <script>
-        // ============================================
-        // CONFIGURATION - Override script.js settings
-        // ============================================
-        // Use Railway production URL
-        window.RAILWAY_API_URL = 'https://nature-nourish-production.up.railway.app';
+                        // ============================================
+                        // IMAGE HANDLING
+                        // ============================================
+                        function getProductImage(name) {
+                            if (!name) return '';
+                            const imageMap = {
+                                'Solar Calm': 'solar calm.jpeg',
+                                'Clearwave': 'clear wave.jpeg',
+                                'Milk Cloud': 'milk cloud.jpeg',
+                                'Glow Dust': 'glow dust.jpeg',
+                                'Lavender Bliss': 'lavender bliss.jpeg',
+                                'Rose Petal': 'rose petal.jpeg',
+                                'Charcoal Cleanse': 'charcoal.jpeg',
+                                'Aloe Vera Glow': 'aloe vera.jpeg'
+                            };
+                            return imageMap[name] || '';
+                        }
 
-        // Ensure checkoutItems is properly initialized
-        var checkoutItems = [];
-        var isSubmitting = false;
+                        function getPlaceholderText(name) {
+                            return name ? name.substring(0, 2).toUpperCase() : '??';
+                        }
 
+                        // ============================================
+                        // ERROR HANDLING
+                        // ============================================
+                        function showError(message) {
+                            console.error('Checkout Error:', message);
+                            const errorContainer = document.getElementById('error-container');
+                            const errorMessage = document.getElementById('error-message');
+                            if (errorContainer && errorMessage) {
+                                errorMessage.textContent = message;
+                                errorContainer.style.display = 'block';
+                            }
+                        }
 
-        // ============================================
-        // IMAGE HANDLING
-        // ============================================
-        function getProductImage(name) {
-            const imageMap = {
-                'Solar Calm': 'https://naturenourish.in/solar%20calm.jpeg',
-                'Clearwave': 'https://naturenourish.in/clear%20wave.jpeg',
-                'Milk Cloud': 'https://naturenourish.in/milk%20cloud.jpeg',
-                'Glow Dust': 'https://naturenourish.in/glow%20dust.jpeg',
-                'Lavender Bliss': 'https://naturenourish.in/lavender%20bliss.jpeg',
-                'Rose Petal': 'https://naturenourish.in/rose%20petal.jpeg',
-                'Charcoal Cleanse': 'https://naturenourish.in/charcoal.jpeg',
-                'Aloe Vera Glow': 'https://naturenourish.in/aloe%20vera.jpeg'
-            };
-            return imageMap[name] || '';
-        }
+                        function hideError() {
+                            const errorContainer = document.getElementById('error-container');
+                            if (errorContainer) {
+                                errorContainer.style.display = 'none';
+                            }
+                        }
 
-        function getPlaceholderImage(name) {
-            return 'https://via.placeholder.com/60/667eea/ffffff?text=' + encodeURIComponent(name.substring(0, 2).toUpperCase());
-        }
+                        // ============================================
+                        // INITIALIZATION
+                        // ============================================
+                        document.addEventListener('DOMContentLoaded', function () {
+                            console.log('Checkout page loaded at', new Date().toISOString());
+                            try {
+                                updateHeaderCartCount();
+                                loadCheckoutItems();
+                            } catch (error) {
+                                console.error('Initialization error:', error);
+                                showError('Failed to initialize checkout. Please refresh the page.');
+                            }
+                        });
 
-        // ============================================
-        // ERROR HANDLING
-        // ============================================
-        function showError(message) {
-            console.error('Checkout Error:', message);
-            const errorContainer = document.getElementById('error-container');
-            const errorMessage = document.getElementById('error-message');
-            if (errorContainer && errorMessage) {
-                errorMessage.textContent = message;
-                errorContainer.style.display = 'block';
-            }
-        }
+                        // Global error handler
+                        window.onerror = function (message, source, lineno, colno, error) {
+                            console.error('Global error:', { message, source, lineno, colno, error });
+                            showError('An error occurred. Please refresh the page and try again.');
+                            return true;
+                        };
 
-        function hideError() {
-            const errorContainer = document.getElementById('error-container');
-            if (errorContainer) {
-                errorContainer.style.display = 'none';
-            }
-        }
+                        // ============================================
+                        // CART FUNCTIONS
+                        // ============================================
+                        function updateHeaderCartCount() {
+                            try {
+                                const savedCart = localStorage.getItem('cart');
+                                if (savedCart) {
+                                    const cart = JSON.parse(savedCart);
+                                    if (Array.isArray(cart)) {
+                                        const count = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+                                        const cartCountEl = document.getElementById('cart-count');
+                                        if (cartCountEl) cartCountEl.textContent = count;
+                                    }
+                                }
+                            } catch (error) {
+                                console.error('Error updating cart count:', error);
+                            }
+                        }
 
-        // ============================================
-        // INITIALIZATION
-        // ============================================
-        document.addEventListener('DOMContentLoaded', function () {
-            console.log('Checkout page loaded');
-            try {
-                updateHeaderCartCount();
-                loadCheckoutItems();
-            } catch (error) {
-                console.error('Initialization error:', error);
-                showError('Failed to initialize checkout. Please refresh the page.');
-            }
-        });
+                        function loadCheckoutItems() {
+                            console.log('Loading checkout items...');
+                            hideError();
 
-        // Global error handler
-        window.onerror = function (message, source, lineno, colno, error) {
-            console.error('Global error:', { message, source, lineno, colno, error });
-            showError('An error occurred. Please refresh the page and try again.');
-            return true;
-        };
+                            try {
+                                // Try multiple sources for cart data
+                                let cartData = null;
 
-        // ============================================
-        // CART FUNCTIONS
-        // ============================================
-        function updateHeaderCartCount() {
-            try {
-                const savedCart = localStorage.getItem('cart');
-                if (savedCart) {
-                    const cart = JSON.parse(savedCart);
-                    if (Array.isArray(cart)) {
-                        const count = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
-                        const cartCountEl = document.getElementById('cart-count');
-                        if (cartCountEl) cartCountEl.textContent = count;
-                    }
-                }
-            } catch (error) {
-                console.error('Error updating cart count:', error);
-            }
-        }
+                                // Source 1: checkoutCart (from direct buy)
+                                const checkoutCart = localStorage.getItem('checkoutCart');
+                                if (checkoutCart && checkoutCart !== 'null' && checkoutCart !== '[]' && checkoutCart !== 'undefined') {
+                                    try {
+                                        cartData = JSON.parse(checkoutCart);
+                                        console.log('Found checkoutCart:', cartData);
+                                    } catch (e) {
+                                        console.error('Error parsing checkoutCart:', e);
+                                    }
+                                }
 
-        function loadCheckoutItems() {
-            console.log('Loading checkout items...');
-            hideError();
+                                // Source 2: cart (from add to cart)
+                                if (!cartData || !Array.isArray(cartData) || cartData.length === 0) {
+                                    const cart = localStorage.getItem('cart');
+                                    if (cart && cart !== 'null' && cart !== '[]' && cart !== 'undefined') {
+                                        try {
+                                            cartData = JSON.parse(cart);
+                                            console.log('Found cart:', cartData);
+                                        } catch (e) {
+                                            console.error('Error parsing cart:', e);
+                                        }
+                                    }
+                                }
 
-            try {
-                // Try checkoutCart first, then cart
-                let cartData = localStorage.getItem('checkoutCart');
+                                // Source 3: directProduct (from buy now)
+                                if (!cartData || !Array.isArray(cartData) || cartData.length === 0) {
+                                    const directProduct = localStorage.getItem('directProduct');
+                                    if (directProduct && directProduct !== 'null' && directProduct !== 'undefined') {
+                                        try {
+                                            const product = JSON.parse(directProduct);
+                                            if (product && product.name) {
+                                                cartData = [product];
+                                                console.log('Found directProduct:', product);
+                                            }
+                                        } catch (e) {
+                                            console.error('Error parsing directProduct:', e);
+                                        }
+                                    }
+                                }
 
-                if (!cartData || cartData === 'null' || cartData === '[]' || cartData === 'undefined') {
-                    cartData = localStorage.getItem('cart');
-                }
+                                // Set checkout items
+                                if (cartData && Array.isArray(cartData) && cartData.length > 0) {
+                                    checkoutItems = cartData;
+                                    console.log('Checkout items loaded:', checkoutItems.length);
+                                    renderCheckout();
+                                } else {
+                                    console.log('No items found in cart');
+                                    showEmptyCart();
+                                }
 
-                // Try directProduct as last resort
-                if (!cartData || cartData === 'null' || cartData === '[]' || cartData === 'undefined') {
-                    const directProduct = localStorage.getItem('directProduct');
-                    if (directProduct && directProduct !== 'null' && directProduct !== 'undefined') {
-                        try {
-                            const product = JSON.parse(directProduct);
-                            if (product && product.name) {
-                                checkoutItems = [product];
-                                renderCheckout();
+                            } catch (error) {
+                                console.error('Error loading checkout items:', error);
+                                showError('Failed to load cart items. Please go back and add items to your cart.');
+                            }
+                        }
+
+                        function showEmptyCart() {
+                            const checkoutContent = document.getElementById('checkout-content');
+                            const emptyCart = document.getElementById('empty-cart');
+
+                            if (checkoutContent) checkoutContent.style.display = 'none';
+                            if (emptyCart) emptyCart.style.display = 'block';
+                        }
+
+                        function renderCheckout() {
+                            const checkoutContent = document.getElementById('checkout-content');
+                            const emptyCart = document.getElementById('empty-cart');
+
+                            // Always show checkout content - this prevents blank page
+                            if (checkoutContent) checkoutContent.style.display = 'grid';
+                            if (emptyCart) emptyCart.style.display = 'none';
+
+                            // Render order items
+                            displayOrderItems();
+
+                            // Calculate totals
+                            calculateTotals();
+
+                            console.log('Checkout rendered with', checkoutItems.length, 'items');
+                        }
+
+                        function displayOrderItems() {
+                            const container = document.getElementById('order-items');
+                            if (!container) {
+                                console.error('Order items container not found');
+                                container.innerHTML = '<p class="error-message">Error: Container not found</p>';
                                 return;
                             }
-                        } catch (e) {
-                            console.error('Error parsing directProduct:', e);
+
+                            if (!checkoutItems || checkoutItems.length === 0) {
+                                container.innerHTML = '<div class="alert-box">No items in cart</div>';
+                                return;
+                            }
+
+                            let html = '';
+
+                            try {
+                                checkoutItems.forEach(function (item) {
+                                    const qty = parseInt(item.quantity) || 1;
+                                    const price = parseFloat(item.price) || 0;
+                                    const total = price * qty;
+                                    const productImage = getProductImage(item.name);
+                                    const placeholderText = getPlaceholderText(item.name);
+
+                                    html += '<div class="order-item">';
+                                    // Use local image or placeholder
+                                    html += '<div class="order-item-image">' + placeholderText + '</div>';
+                                    html += '<div class="order-item-details">';
+                                    html += '<div class="order-item-name">' + (item.name || 'Unknown Product') + '</div>';
+                                    html += '<div class="order-item-price">₹' + price + ' x ' + qty + '</div>';
+                                    html += '<div class="order-item-total">₹' + total + '</div>';
+                                    html += '</div>';
+                                    html += '</div>';
+                                });
+                            } catch (error) {
+                                console.error('Error rendering order items:', error);
+                                html = '<p class="error-message">Error displaying items</p>';
+                            }
+
+                            container.innerHTML = html;
                         }
-                    }
-                }
 
-                // Parse cart data
-                if (cartData && cartData !== 'null' && cartData !== '[]' && cartData !== 'undefined') {
-                    try {
-                        checkoutItems = JSON.parse(cartData);
-                    } catch (e) {
-                        console.error('Error parsing cart data:', e);
-                        checkoutItems = [];
-                    }
-                }
+                        function calculateTotals() {
+                            let subtotal = 0;
 
-                // Validate checkoutItems
-                if (!checkoutItems || !Array.isArray(checkoutItems) || checkoutItems.length === 0) {
-                    showEmptyCart();
-                    return;
-                }
+                            try {
+                                checkoutItems.forEach(function (item) {
+                                    subtotal += (parseFloat(item.price) || 0) * (parseInt(item.quantity) || 1);
+                                });
+                            } catch (error) {
+                                console.error('Error calculating totals:', error);
+                            }
 
-                // Render the checkout page
-                renderCheckout();
+                            const total = subtotal;
 
-            } catch (error) {
-                console.error('Error loading checkout items:', error);
-                showError('Failed to load cart items. Please go back and add items to your cart.');
-            }
-        }
+                            const subtotalEl = document.getElementById('subtotal');
+                            const totalEl = document.getElementById('total');
 
-        function showEmptyCart() {
-            const checkoutContent = document.getElementById('checkout-content');
-            const emptyCart = document.getElementById('empty-cart');
+                            if (subtotalEl) subtotalEl.textContent = '₹' + subtotal;
+                            if (totalEl) totalEl.textContent = '₹' + total;
 
-            if (checkoutContent) checkoutContent.style.display = 'none';
-            if (emptyCart) emptyCart.style.display = 'block';
-        }
+                            return { subtotal, total };
+                        }
 
-        function renderCheckout() {
-            const checkoutContent = document.getElementById('checkout-content');
-            const emptyCart = document.getElementById('empty-cart');
+                        // ============================================
+                        // ORDER SUBMISSION
+                        // ============================================
+                        document.getElementById('checkout-form').addEventListener('submit', function (e) {
+                            e.preventDefault();
 
-            // Show checkout content, hide empty cart
-            if (checkoutContent) checkoutContent.style.display = 'grid';
-            if (emptyCart) emptyCart.style.display = 'none';
+                            if (isSubmitting) {
+                                console.log('Already submitting...');
+                                return;
+                            }
 
-            // Render order items
-            displayOrderItems();
+                            if (!checkoutItems || checkoutItems.length === 0) {
+                                alert('Your cart is empty!');
+                                return;
+                            }
 
-            // Calculate totals
-            calculateTotals();
+                            // Get form values
+                            const customer = {
+                                name: document.getElementById('full-name').value,
+                                email: document.getElementById('email').value,
+                                mobile: document.getElementById('phone').value,
+                                state: document.getElementById('state').value,
+                                city: document.getElementById('city').value,
+                                pinCode: document.getElementById('pincode').value,
+                                address: document.getElementById('address').value
+                            };
 
-            console.log('Checkout rendered with', checkoutItems.length, 'items');
-        }
+                            // Validate
+                            if (!customer.name || !customer.email || !customer.mobile || !customer.state ||
+                                !customer.city || !customer.pinCode || !customer.address) {
+                                alert('Please fill all fields');
+                                return;
+                            }
 
-        function displayOrderItems() {
-            const container = document.getElementById('order-items');
-            if (!container) {
-                console.error('Order items container not found');
-                return;
-            }
+                            // Calculate totals
+                            const { subtotal, total } = calculateTotals();
 
-            if (!checkoutItems || checkoutItems.length === 0) {
-                container.innerHTML = '<p class="error-message">No items in cart</p>';
-                return;
-            }
+                            // Build products array
+                            const products = checkoutItems.map(item => ({
+                                name: item.name,
+                                price: parseFloat(item.price) || 0,
+                                quantity: parseInt(item.quantity) || 1
+                            }));
 
-            let html = '';
+                            // Build order object - using format expected by backend
+                            const order = {
+                                orderId: 'ORD-' + Date.now(),
+                                customerName: customer.name,
+                                email: customer.email,
+                                phone: customer.mobile,
+                                address: customer.address,
+                                city: customer.city,
+                                state: customer.state,
+                                pincode: customer.pinCode,
+                                items: products,
+                                subtotal: subtotal,
+                                shipping: 0,
+                                total: total,
+                                paymentMethod: 'COD',
+                                createdAt: new Date().toISOString()
+                            };
 
-            try {
-                checkoutItems.forEach(function (item) {
-                    const qty = parseInt(item.quantity) || 1;
-                    const price = parseFloat(item.price) || 0;
-                    const total = price * qty;
-                    const imageUrl = getProductImage(item.name);
-                    const placeholderUrl = getPlaceholderImage(item.name);
+                            console.log('Submitting order to:', API_URL + '/place-order');
+                            console.log('Order data:', JSON.stringify(order, null, 2));
 
-                    html += '<div class="order-item">';
-                    html += '<img src="' + imageUrl + '" alt="' + (item.name || 'Product') + '" class="order-item-image" onerror="this.src=\'' + placeholderUrl + '\'">';
-                    html += '<div class="order-item-details">';
-                    html += '<div class="order-item-name">' + (item.name || 'Unknown Product') + '</div>';
-                    html += '<div class="order-item-price">₹' + price + ' x ' + qty + '</div>';
-                    html += '<div class="order-item-total">₹' + total + '</div>';
-                    html += '</div>';
-                    html += '</div>';
-                });
-            } catch (error) {
-                console.error('Error rendering order items:', error);
-                html = '<p class="error-message">Error displaying items</p>';
-            }
+                            // Get button and show loading
+                            const btn = document.querySelector('.btn-place-order');
+                            if (btn) {
+                                btn.textContent = 'Placing Order...';
+                                btn.disabled = true;
+                            }
+                            isSubmitting = true;
 
-            container.innerHTML = html;
-        }
+                            // Submit order
+                            submitOrder(order);
+                        });
 
-        function calculateTotals() {
-            let subtotal = 0;
+                        async function submitOrder(order) {
+                            const controller = new AbortController();
+                            const timeoutId = setTimeout(() => controller.abort(), 30000);
 
-            try {
-                checkoutItems.forEach(function (item) {
-                    subtotal += (parseFloat(item.price) || 0) * (parseInt(item.quantity) || 1);
-                });
-            } catch (error) {
-                console.error('Error calculating totals:', error);
-            }
+                            try {
+                                console.log('Making request to:', API_URL + '/place-order');
 
-            const total = subtotal;
+                                const res = await fetch(API_URL + '/place-order', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify(order),
+                                    signal: controller.signal
+                                });
 
-            const subtotalEl = document.getElementById('subtotal');
-            const totalEl = document.getElementById('total');
+                                clearTimeout(timeoutId);
+                                console.log('Response status:', res.status);
 
-            if (subtotalEl) subtotalEl.textContent = '₹' + subtotal;
-            if (totalEl) totalEl.textContent = '₹' + total;
+                                if (!res.ok) {
+                                    const errorText = await res.text();
+                                    console.error('Server error:', res.status, errorText);
+                                    throw new Error('Server error: ' + res.status + ' - ' + errorText);
+                                }
 
-            return { subtotal, total };
-        }
+                                const data = await res.json();
+                                console.log('Order saved successfully:', data);
 
-        // ============================================
-        // ORDER SUBMISSION
-        // ============================================
-        document.getElementById('checkout-form').addEventListener('submit', function (e) {
-            e.preventDefault();
+                                // Clear cart
+                                localStorage.removeItem('cart');
+                                localStorage.removeItem('checkoutCart');
+                                localStorage.removeItem('directProduct');
 
-            if (isSubmitting) return;
-            if (checkoutItems.length === 0) {
-                alert('Your cart is empty!');
-                return;
-            }
+                                // Show success
+                                document.getElementById('order-id').textContent = 'Order ID: ' + (data.orderId || order.orderId);
+                                document.getElementById('success-modal').style.display = 'block';
 
-            // Get form values
-            const customer = {
-                name: document.getElementById('full-name').value,
-                email: document.getElementById('email').value,
-                mobile: document.getElementById('phone').value,
-                state: document.getElementById('state').value,
-                city: document.getElementById('city').value,
-                pinCode: document.getElementById('pincode').value,
-                address: document.getElementById('address').value
-            };
+                            } catch (err) {
+                                clearTimeout(timeoutId);
+                                console.error('Order submission error:', err);
 
-            // Validate
-            if (!customer.name || !customer.email || !customer.mobile || !customer.state ||
-                !customer.city || !customer.pinCode || !customer.address) {
-                alert('Please fill all fields');
-                return;
-            }
+                                let errorMessage = 'Unable to place order. ';
 
-            // Calculate totals
-            const { subtotal, total } = calculateTotals();
+                                if (err.name === 'AbortError') {
+                                    errorMessage += 'Connection timed out. Please check your internet and try again.';
+                                } else if (err.message && (err.message.includes('Failed to fetch') || err.message.includes('network'))) {
+                                    errorMessage += 'Network error. Please check your internet connection.';
+                                } else {
+                                    errorMessage += 'Error: ' + err.message;
+                                }
 
-            // Build products array
-            const products = checkoutItems.map(item => ({
-                name: item.name,
-                price: parseFloat(item.price) || 0,
-                quantity: parseInt(item.quantity) || 1
-            }));
+                                alert(errorMessage);
 
-            // Build order object
-            const order = {
-                orderId: 'ORD-' + Date.now(),
-                customerName: customer.name,
-                email: customer.email,
-                phone: customer.mobile,
-                address: customer.address,
-                city: customer.city,
-                state: customer.state,
-                pincode: customer.pinCode,
-                items: products,
-                subtotal: subtotal,
-                shipping: 0,
-                total: total,
-                paymentMethod: 'COD',
-                createdAt: new Date().toISOString()
-            };
+                                // Reset button
+                                const btn = document.querySelector('.btn-place-order');
+                                if (btn) {
+                                    btn.textContent = 'Place COD Order';
+                                    btn.disabled = false;
+                                }
+                                isSubmitting = false;
+                            }
+                        }
 
-            console.log('Submitting order:', order);
-
-            // Get button and show loading
-            const btn = document.querySelector('.btn-place-order');
-            if (btn) {
-                btn.textContent = 'Placing Order...';
-                btn.disabled = true;
-            }
-            isSubmitting = true;
-
-            // Submit order with timeout and retry
-            submitOrder(order, 0, 3);
-        });
-
-        async function submitOrder(order, retryCount, maxRetries) {
-            const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 30000);
-
-            try {
-                // Use Railway API URL
-                const API_URL = window.RAILWAY_API_URL || 'https://nature-nourish-production.up.railway.app';
-
-                console.log('Attempting to place order (attempt ' + (retryCount + 1) + '/' + maxRetries + ')');
-
-                const res = await fetch(API_URL + '/api/orders', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(order),
-                    signal: controller.signal
-                });
-
-                clearTimeout(timeoutId);
-
-                if (!res.ok) {
-                    if ((res.status === 0 || res.status >= 500) && retryCount < maxRetries - 1) {
-                        console.log('Server error, retrying...');
-                        await new Promise(r => setTimeout(r, 1000 * (retryCount + 1)));
-                        submitOrder(order, retryCount + 1, maxRetries);
-                        return;
-                    }
-                    throw new Error('Server error: ' + res.status);
-                }
-
-                const data = await res.json();
-
-                console.log('Order saved:', data);
-
-                // Clear cart
-                localStorage.removeItem('cart');
-                localStorage.removeItem('checkoutCart');
-                localStorage.removeItem('directProduct');
-
-                // Show success
-                document.getElementById('order-id').textContent = 'Order ID: ' + (data.orderId || order.orderId);
-                document.getElementById('success-modal').style.display = 'block';
-
-            } catch (err) {
-                clearTimeout(timeoutId);
-                console.error('Order submission error:', err);
-
-                let errorMessage = 'Unable to place order. ';
-
-                if (err.name === 'AbortError') {
-                    errorMessage += 'Connection timed out. Please check your internet and try again.';
-                } else if (err.message && (err.message.includes('Failed to fetch') || err.message.includes('network'))) {
-                    errorMessage += 'Network error. Please check your internet connection.';
-                } else {
-                    errorMessage += 'Server may be busy. Please try again in a few moments.';
-                }
-
-                alert(errorMessage);
-
-                // Reset button
-                const btn = document.querySelector('.btn-place-order');
-                if (btn) {
-                    btn.textContent = 'Place COD Order';
-                    btn.disabled = false;
-                }
-                isSubmitting = false;
-            }
-        }
-    </script>
+                        // Log when page is fully loaded
+                        window.addEventListener('load', function () {
+                            console.log('Page fully loaded');
+                        });
+                    </script>
 </body>
 
 </html>

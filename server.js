@@ -31,24 +31,41 @@ app.post('/place-order', async (req, res) => {
     try {
         const orderData = req.body;
 
+        console.log('Received order data:', JSON.stringify(orderData));
+
         // Generate orderId if not provided
         const orderId = orderData.orderId || 'ORD-' + Date.now();
 
         // Convert items to products format if needed
         let products = [];
-        if (orderData.items && Array.isArray(orderData.items)) {
-            products = orderData.items.map(item => ({
-                name: item.name,
-                price: item.price,
-                quantity: item.quantity
+        let items = [];
+
+        if (orderData.items && Array.isArray(orderData.items) && orderData.items.length > 0) {
+            items = orderData.items.map(item => ({
+                name: String(item.name || ''),
+                price: Number(item.price) || 0,
+                quantity: Number(item.quantity) || 1
             }));
-        } else if (orderData.products && Array.isArray(orderData.products)) {
-            products = orderData.products;
+            products = items;
+        } else if (orderData.products && Array.isArray(orderData.products) && orderData.products.length > 0) {
+            products = orderData.products.map(p => ({
+                name: String(p.name || ''),
+                price: Number(p.price) || 0,
+                quantity: Number(p.quantity) || 1
+            }));
+            items = products;
         }
+
+        // Calculate totals - ensure valid numbers
+        const subtotal = Number(orderData.subtotal) || Number(orderData.totalAmount) ||
+            products.reduce((sum, p) => sum + ((p.price || 0) * (p.quantity || 1)), 0);
+        const shipping = Number(orderData.shipping) || 0;
+        const deliveryCharge = Number(orderData.deliveryCharge) || 0;
+        const total = Number(orderData.total) || Number(orderData.totalAmount) || subtotal;
 
         // Extract customer info
         const customer = orderData.customer || {
-            name: orderData.name || '',
+            name: orderData.customerName || orderData.name || '',
             email: orderData.email || '',
             mobile: orderData.phone || orderData.mobile || '',
             address: orderData.address || '',
@@ -57,22 +74,42 @@ app.post('/place-order', async (req, res) => {
             pinCode: orderData.pincode || orderData.pinCode || ''
         };
 
-        // Calculate totals
-        const subtotal = orderData.subtotal || orderData.totalAmount ||
-            products.reduce((sum, p) => sum + (p.price * p.quantity), 0);
-        const shipping = orderData.shipping || 0;
-        const deliveryCharge = orderData.deliveryCharge || 0;
-        const total = orderData.total || orderData.totalAmount || subtotal;
+        // Validate required fields
+        if (!customer.name || !String(customer.name).trim()) {
+            return res.status(400).json({ success: false, message: 'Customer name is required' });
+        }
+        if (!customer.mobile || !String(customer.mobile).trim()) {
+            return res.status(400).json({ success: false, message: 'Customer mobile is required' });
+        }
+        if (!customer.address || !String(customer.address).trim()) {
+            return res.status(400).json({ success: false, message: 'Customer address is required' });
+        }
+        if (!customer.city || !String(customer.city).trim()) {
+            return res.status(400).json({ success: false, message: 'Customer city is required' });
+        }
+        if (!customer.state || !String(customer.state).trim()) {
+            return res.status(400).json({ success: false, message: 'Customer state is required' });
+        }
+        if (!customer.pinCode || !String(customer.pinCode).trim()) {
+            return res.status(400).json({ success: false, message: 'Customer pincode is required' });
+        }
+        if (products.length === 0) {
+            return res.status(400).json({ success: false, message: 'At least one product is required' });
+        }
 
         // Create order object
         const order = {
             orderId: orderId,
+            customerName: String(customer.name).trim(),
+            email: String(customer.email || '').trim(),
+            phone: String(customer.mobile).trim(),
+            address: String(customer.address).trim(),
+            city: String(customer.city).trim(),
+            state: String(customer.state).trim(),
+            pincode: String(customer.pinCode).trim(),
+            items: items,
             products: products,
             customer: customer,
-            staff: orderData.staff || {
-                name: 'Website Customer',
-                id: 'N/A'
-            },
             subtotal: subtotal,
             shipping: shipping,
             deliveryCharge: deliveryCharge,
@@ -82,6 +119,7 @@ app.post('/place-order', async (req, res) => {
             orderStatus: orderData.orderStatus || 'Pending',
             deliveryStatus: orderData.deliveryStatus || 'Pending Delivery',
             orderSource: orderData.orderSource || 'Website',
+            staff: orderData.staff || { name: 'Website Customer', id: 'N/A' },
             createdAt: orderData.createdAt || new Date().toISOString()
         };
 

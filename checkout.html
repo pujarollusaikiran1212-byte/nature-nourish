@@ -513,7 +513,8 @@
                                 } else if (err.message.includes('Failed to fetch') || err.message.includes('NetworkError')) {
                                     errorMessage += 'Network error. Please check your internet connection and try again.';
                                 } else {
-                                    errorMessage += 'Error: ' + err.message;
+                                    // Try to parse server error message
+                                    errorMessage += 'Please try again.';
                                 }
 
                                 alert(errorMessage);

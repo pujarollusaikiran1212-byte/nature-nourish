@@ -5,138 +5,106 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Checkout - Nature Nourish</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <style>
         .checkout-page {
             padding-top: 100px;
             min-height: 100vh;
-            background: var(--bg-primary);
+            background: #f9f9f9;
         }
 
         .checkout-container {
             max-width: 1100px;
             margin: 0 auto;
-            padding: 40px 20px;
+            padding: 20px;
             display: grid;
             grid-template-columns: 1fr 350px;
-            gap: 40px;
+            gap: 30px;
         }
 
         .checkout-main {
-            background: var(--bg-white);
-            border-radius: var(--radius-lg);
-            padding: 32px;
-            box-shadow: var(--shadow-soft);
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
         .checkout-sidebar {
             position: sticky;
             top: 100px;
-            height: fit-content;
         }
 
-        .section-title-checkout {
-            font-size: 1.5rem;
-            margin-bottom: 24px;
-            color: var(--text-dark);
-            font-weight: 500;
-            border-bottom: 1px solid var(--beige-soft);
-            padding-bottom: 12px;
+        .price-summary {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: #333;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
         }
 
         .order-item {
             display: flex;
             align-items: center;
-            padding: 16px 0;
-            border-bottom: 1px solid var(--bg-secondary);
-        }
-
-        .order-item:last-child {
-            border-bottom: none;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
         }
 
         .order-item-image {
-            width: 70px;
-            height: 70px;
+            width: 60px;
+            height: 60px;
             object-fit: cover;
-            border-radius: var(--radius-sm);
-            background: var(--bg-secondary);
+            border-radius: 8px;
+            background: #f0f0f0;
         }
 
         .order-item-details {
             flex: 1;
-            margin-left: 16px;
+            margin-left: 15px;
         }
 
         .order-item-name {
             font-weight: 500;
-            color: var(--text-dark);
-            margin-bottom: 4px;
+            color: #333;
+            margin-bottom: 5px;
         }
 
         .order-item-price {
-            color: var(--text-secondary);
+            color: #666;
             font-size: 0.9rem;
         }
 
         .order-item-total {
             font-weight: 600;
-            color: var(--text-dark);
-            font-size: 1.1rem;
-        }
-
-        .price-summary {
-            background: var(--bg-primary);
-            border-radius: var(--radius-lg);
-            padding: 24px;
-            box-shadow: var(--shadow-soft);
+            color: #333;
         }
 
         .price-row {
             display: flex;
             justify-content: space-between;
             padding: 10px 0;
-            color: var(--text-secondary);
+            color: #666;
         }
 
         .price-row.total {
-            border-top: 2px solid var(--brown-luxury);
-            margin-top: 12px;
-            padding-top: 16px;
-            font-size: 1.25rem;
+            border-top: 2px solid #667eea;
+            margin-top: 10px;
+            padding-top: 15px;
             font-weight: 600;
-            color: var(--text-dark);
-        }
-
-        .price-row.total span:last-child {
-            color: var(--brown-luxury);
-            font-size: 1.5rem;
-        }
-
-        .free-shipping-badge {
-            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
-            color: white;
-            padding: 8px 12px;
-            border-radius: var(--radius-sm);
-            font-size: 0.85rem;
-            font-weight: 500;
-            display: inline-block;
-            margin-bottom: 8px;
-        }
-
-        .form-section {
-            margin-bottom: 32px;
+            font-size: 1.2rem;
+            color: #333;
         }
 
         .form-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 16px;
+            gap: 15px;
         }
 
         .form-group-full {
@@ -147,168 +115,86 @@
         .checkout-form select,
         .checkout-form textarea {
             width: 100%;
-            padding: 14px 16px;
-            border: 1px solid var(--beige-soft);
-            border-radius: var(--radius-sm);
-            font-size: 0.95rem;
-            background: var(--bg-white);
-            font-family: inherit;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
         }
 
-        .checkout-form input:focus,
-        .checkout-form select:focus,
-        .checkout-form textarea:focus {
+        .checkout-form input:focus {
             outline: none;
-            border-color: var(--brown-luxury);
+            border-color: #667eea;
         }
 
         .checkout-form label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             font-weight: 500;
-            color: var(--text-dark);
-            font-size: 0.9rem;
+            color: #333;
         }
 
         .payment-method {
-            background: var(--bg-primary);
-            padding: 20px;
-            border-radius: var(--radius-md);
-            border: 2px solid var(--brown-luxury);
-        }
-
-        .payment-option {
-            display: flex;
-            align-items: center;
-            padding: 14px 16px;
-            background: var(--bg-white);
-            border: 1px solid var(--beige-soft);
-            border-radius: var(--radius-sm);
-            cursor: pointer;
-            margin-bottom: 10px;
-        }
-
-        .payment-option:last-child {
-            margin-bottom: 0;
-        }
-
-        .payment-option input {
-            margin-right: 12px;
-            accent-color: var(--brown-luxury);
-            width: 18px;
-            height: 18px;
-        }
-
-        .payment-option.selected {
-            border-color: var(--brown-luxury);
-            background: rgba(181, 144, 114, 0.1);
-        }
-
-        .payment-option-text {
-            font-weight: 500;
-            color: var(--text-dark);
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid #667eea;
         }
 
         .btn-place-order {
-            background: var(--text-dark);
-            color: var(--bg-white);
+            background: #667eea;
+            color: white;
             width: 100%;
-            padding: 18px;
+            padding: 15px;
             border: none;
-            border-radius: var(--radius-sm);
+            border-radius: 8px;
             font-size: 1.1rem;
             font-weight: 600;
             cursor: pointer;
-            margin-top: 24px;
+            margin-top: 20px;
         }
 
         .btn-place-order:hover {
-            background: var(--brown-luxury);
+            background: #5568d3;
         }
 
-        .empty-cart-message {
+        .empty-cart {
             text-align: center;
             padding: 60px 20px;
         }
 
-        .empty-cart-message h2 {
-            color: var(--text-dark);
-            margin-bottom: 16px;
+        .empty-cart h2 {
+            color: #333;
+            margin-bottom: 15px;
         }
 
-        .empty-cart-message p {
-            color: var(--text-secondary);
-            margin-bottom: 24px;
-        }
-
-        .btn-continue-shopping {
-            background: var(--text-dark);
-            color: var(--bg-white);
-            padding: 14px 32px;
-            border: none;
-            border-radius: var(--radius-sm);
-            font-size: 1rem;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .success-checkout-modal {
+        .success-modal {
             display: none;
             position: fixed;
-            z-index: 2000;
+            z-index: 1000;
             left: 0;
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.5);
         }
 
-        .success-checkout-content {
-            background-color: var(--bg-white);
+        .success-content {
+            background: white;
             margin: 10% auto;
             padding: 40px;
-            border-radius: var(--radius-lg);
+            border-radius: 12px;
             max-width: 500px;
             text-align: center;
         }
 
-        .success-checkout-content h2 {
+        .success-content h2 {
             color: #28a745;
-            margin-bottom: 20px;
-        }
-
-        .success-checkout-content .order-id {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: var(--text-dark);
-            margin-bottom: 24px;
-            padding: 16px;
-            background: var(--bg-primary);
-            border-radius: var(--radius-md);
+            margin-bottom: 15px;
         }
 
         @media (max-width: 768px) {
-            .checkout-page {
-                padding-top: 80px;
-            }
-
             .checkout-container {
                 grid-template-columns: 1fr;
-                gap: 24px;
-                padding: 16px;
-            }
-
-            .checkout-main {
-                padding: 20px;
-            }
-
-            .checkout-sidebar {
-                position: static;
-            }
-
-            .price-summary {
-                padding: 20px;
             }
 
             .form-grid {
@@ -322,400 +208,341 @@
     <header class="navbar">
         <div class="container">
             <div class="logo">Nature Nourish</div>
-            <button class="hamburger" onclick="toggleMobileMenu()"><span></span><span></span><span></span></button>
-            <nav class="nav-links" id="navLinks">
+            <nav class="nav-links">
                 <a href="index.html#home">Home</a>
                 <a href="index.html#products">Products</a>
-                <a href="index.html#about">About</a>
-                <a href="index.html#reviews">Reviews</a>
-                <a href="index.html#contact">Contact</a>
-                <a href="index.html#cart" class="cart-icon">Cart (<span id="cart-count">0</span>)</a>
+                <a href="index.html#cart">Cart (<span id="cart-count">0</span>)</a>
             </nav>
         </div>
     </header>
 
     <div class="checkout-page">
-        <div class="container">
-            <h1 style="text-align: center; margin-bottom: 40px; color: var(--text-dark);">Checkout</h1>
+        <!-- Empty Cart -->
+        <div id="empty-cart" class="empty-cart" style="display:none;">
+            <h2>Your cart is empty!</h2>
+            <p>Add products from the store first.</p>
+            <a href="index.html#products" class="btn" style="display:inline-block; margin-top:15px;">Browse Products</a>
+        </div>
 
-            <!-- Empty Cart Message -->
-            <div id="empty-cart" class="empty-cart-message" style="display: none;">
-                <h2>Your cart is empty!</h2>
-                <p>Add some products to your cart before proceeding to checkout.</p>
-                <a href="index.html#products" class="btn-continue-shopping">Continue Shopping</a>
+        <!-- Checkout Content -->
+        <div id="checkout-content" class="checkout-container" style="display:none;">
+            <div class="checkout-main">
+                <h2 class="section-title">Order Summary</h2>
+                <div id="order-items"></div>
+
+                <h2 class="section-title" style="margin-top:30px;">Customer Details</h2>
+                <form id="checkout-form" class="checkout-form">
+                    <div class="form-grid">
+                        <div class="form-group-full">
+                            <label>Full Name *</label>
+                            <input type="text" id="full-name" required>
+                        </div>
+                        <div class="form-group-full">
+                            <label>Email *</label>
+                            <input type="email" id="email" required>
+                        </div>
+                        <div class="form-group-full">
+                            <label>Phone *</label>
+                            <input type="tel" id="phone" pattern="[0-9]{10}" required>
+                        </div>
+                        <div class="form-group-full">
+                            <label>State *</label>
+                            <select id="state" required>
+                                <option value="">Select State</option>
+                                <option value="Andhra Pradesh">Andhra Pradesh</option>
+                                <option value="Maharashtra">Maharashtra</option>
+                                <option value="Karnataka">Karnataka</option>
+                                <option value="Tamil Nadu">Tamil Nadu</option>
+                                <option value="Uttar Pradesh">Uttar Pradesh</option>
+                                <option value="West Bengal">West Bengal</option>
+                                <option value="Gujarat">Gujarat</option>
+                                <option value="Rajasthan">Rajasthan</option>
+                                <option value="Madhya Pradesh">Madhya Pradesh</option>
+                                <option value="Kerala">Kerala</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label>City *</label>
+                            <input type="text" id="city" required>
+                        </div>
+                        <div>
+                            <label>Pincode *</label>
+                            <input type="text" id="pincode" pattern="[0-9]{6}" required>
+                        </div>
+                        <div class="form-group-full">
+                            <label>Address *</label>
+                            <textarea id="address" rows="3" required></textarea>
+                        </div>
+
+                        <h2 class="section-title" style="margin-top:25px;">Payment Method</h2>
+                        <div class="payment-method">
+                            <label style="display:flex; align-items:center;">
+                                <input type="radio" name="payment" value="COD" checked>
+                                <span style="margin-left:10px;">Cash on Delivery (COD)</span>
+                            </label>
+                        </div>
+
+                        <button type="submit" class="btn-place-order">Place COD Order</button>
+                </form>
             </div>
 
-            <!-- Checkout Content -->
-            <div id="checkout-content" class="checkout-container">
-                <div class="checkout-main">
-                    <div class="form-section">
-                        <h2 class="section-title-checkout">Order Summary</h2>
-                        <div id="order-items"></div>
-
-                        <form id="checkout-form" class="checkout-form">
-                            <div class="form-section">
-                                <h2 class="section-title-checkout">Customer Details</h2>
-                                <div class="form-grid">
-                                    <div class="form-group-full">
-                                        <label for="full-name">Full Name *</label>
-                                        <input type="text" id="full-name" placeholder="Enter your full name" required>
-                                    </div>
-                                    <div class="form-group-full">
-                                        <label for="email">Email Address *</label>
-                                        <input type="email" id="email" placeholder="Enter your email address" required>
-                                    </div>
-                                    <div class="form-group-full">
-                                        <label for="phone">Phone Number *</label>
-                                        <input type="tel" id="phone" placeholder="Enter 10-digit mobile number"
-                                            pattern="[0-9]{10}" required>
-                                    </div>
-                                    <div class="form-group-full">
-                                        <label for="state">State *</label>
-                                        <select id="state" required>
-                                            <option value="">-- Select State --</option>
-                                            <option value="Andhra Pradesh">Andhra Pradesh</option>
-                                            <option value="Arunachal Pradesh">Arunachal Pradesh</option>
-                                            <option value="Assam">Assam</option>
-                                            <option value="Bihar">Bihar</option>
-                                            <option value="Chhattisgarh">Chhattisgarh</option>
-                                            <option value="Goa">Goa</option>
-                                            <option value="Gujarat">Gujarat</option>
-                                            <option value="Haryana">Haryana</option>
-                                            <option value="Himachal Pradesh">Himachal Pradesh</option>
-                                            <option value="Jharkhand">Jharkhand</option>
-                                            <option value="Karnataka">Karnataka</option>
-                                            <option value="Kerala">Kerala</option>
-                                            <option value="Madhya Pradesh">Madhya Pradesh</option>
-                                            <option value="Maharashtra">Maharashtra</option>
-                                            <option value="Punjab">Punjab</option>
-                                            <option value="Rajasthan">Rajasthan</option>
-                                            <option value="Tamil Nadu">Tamil Nadu</option>
-                                            <option value="Telangana">Telangana</option>
-                                            <option value="Uttar Pradesh">Uttar Pradesh</option>
-                                            <option value="West Bengal">West Bengal</option>
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label for="city">City *</label>
-                                        <input type="text" id="city" placeholder="Enter city" required>
-                                    </div>
-                                    <div>
-                                        <label for="pincode">Pincode *</label>
-                                        <input type="text" id="pincode" placeholder="Enter 6-digit PIN code"
-                                            pattern="[0-9]{6}" required>
-                                    </div>
-                                    <div class="form-group-full">
-                                        <label for="address">Address *</label>
-                                        <textarea id="address" placeholder="Enter your complete address" rows="3"
-                                            required></textarea>
-                                    </div>
-                                </div>
-
-                                <div class="form-section">
-                                    <h2 class="section-title-checkout">Payment Method</h2>
-                                    <div class="payment-method">
-                                        <label class="payment-option selected">
-                                            <input type="radio" name="payment-method" value="cod" checked>
-                                            <span class="payment-option-text">Cash on Delivery (COD)</span>
-                                        </label>
-                                    </div>
-                                    <p style="margin-top: 12px; color: var(--text-secondary); font-size: 0.9rem;">Pay
-                                        with cash when your order is delivered.</p>
-                                </div>
-
-                                <button type="submit" id="place-order-btn" class="btn-place-order">Place COD
-                                    Order</button>
-                        </form>
+            <div class="checkout-sidebar">
+                <div class="price-summary">
+                    <h3>Price Details</h3>
+                    <div class="price-row">
+                        <span>Subtotal</span>
+                        <span id="subtotal">₹0</span>
                     </div>
-
-                    <div class="checkout-sidebar">
-                        <div class="price-summary">
-                            <h3 style="margin-bottom: 20px; color: var(--text-dark);">Price Details</h3>
-                            <div class="free-shipping-badge">Free Shipping</div>
-                            <div class="price-row">
-                                <span>Subtotal</span>
-                                <span id="subtotal">Rs.0</span>
-                            </div>
-                            <div class="price-row">
-                                <span>Shipping</span>
-                                <span>FREE</span>
-                            </div>
-                            <div class="price-row total">
-                                <span>Total</span>
-                                <span id="total">Rs.0</span>
-                            </div>
-                            <button onclick="goBackToCart()" class="btn"
-                                style="width: 100%; margin-top: 16px; background: var(--bg-secondary); color: var(--text-dark);">Back
-                                to Cart</button>
-                        </div>
+                    <div class="price-row">
+                        <span>Shipping</span>
+                        <span>FREE</span>
+                    </div>
+                    <div class="price-row total">
+                        <span>Total</span>
+                        <span id="total">₹0</span>
                     </div>
                 </div>
+            </div>
 
-                <!-- Success Modal -->
-                <div id="success-checkout-modal" class="success-checkout-modal">
-                    <div class="success-checkout-content">
-                        <h2>Order Placed Successfully!</h2>
-                        <div class="order-id" id="order-success-id"></div>
-                        <p style="color: var(--text-secondary); margin-bottom: 24px;">Thank you for your order!</p>
-                        <button class="btn-continue-shopping" onclick="handleContinueShopping()">Continue
-                            Shopping</button>
-                    </div>
+            <!-- Success Modal -->
+            <div id="success-modal" class="success-modal">
+                <div class="success-content">
+                    <h2>Order Placed Successfully!</h2>
+                    <p id="order-id"></p>
+                    <p>Thank you for your order!</p>
+                    <a href="index.html#products" class="btn" style="display:inline-block; margin-top:20px;">Continue
+                        Shopping</a>
+                </div>
 
-                    <script src="script.js"></script>
-                    <script>
-                        // Railway API URL
-                        const RAILWAY_API_URL = 'https://nature-nourish-production.up.railway.app';
+                <script src="script.js"></script>
+                <script>
+                    const API_URL = 'https://nature-nourish-production.up.railway.app';
+                    let checkoutItems = [];
 
-                        // Cart items from localStorage
-                        let checkoutItems = [];
+                    // Image mapping - uses full URLs
+                    function getProductImage(name) {
+                        const images = {
+                            'Solar Calm': 'https://naturenourish.in/solar%20calm.jpeg',
+                            'Clearwave': 'https://naturenourish.in/clear%20wave.jpeg',
+                            'Milk Cloud': 'https://naturenourish.in/milk%20cloud.jpeg',
+                            'Glow Dust': 'https://naturenourish.in/glow%20dust.jpeg',
+                            'Lavender Bliss': 'https://naturenourish.in/lavender%20bliss.jpeg',
+                            'Rose Petal': 'https://naturenourish.in/rose%20petal.jpeg',
+                            'Charcoal Cleanse': 'https://naturenourish.in/charcoal.jpeg',
+                            'Aloe Vera Glow': 'https://naturenourish.in/aloe%20vera.jpeg'
+                        };
+                        return images[name] || 'https://via.placeholder.com/60';
+                    }
 
-                        // Product image mapping - uses full URLs for deployed site
-                        function getProductImage(name) {
-                            if (!name) return 'https://via.placeholder.com/70';
-                            const images = {
-                                'Solar Calm': 'https://naturenourish.in/solar%20calm.jpeg',
-                                'Clearwave': 'https://naturenourish.in/clear%20wave.jpeg',
-                                'Milk Cloud': 'https://naturenourish.in/milk%20cloud.jpeg',
-                                'Glow Dust': 'https://naturenourish.in/glow%20dust.jpeg',
-                                'Lavender Bliss': 'https://naturenourish.in/lavender%20bliss.jpeg',
-                                'Rose Petal': 'https://naturenourish.in/rose%20petal.jpeg',
-                                'Charcoal Cleanse': 'https://naturenourish.in/charcoal.jpeg',
-                                'Aloe Vera Glow': 'https://naturenourish.in/aloe%20vera.jpeg'
-                            };
-                            return images[name] || 'https://via.placeholder.com/70/667eea/ffffff?text=' + encodeURIComponent(name);
+                    // Load cart items on page load
+                    document.addEventListener('DOMContentLoaded', function () {
+                        loadCheckoutItems();
+                        updateHeaderCartCount();
+                    });
+
+                    function updateHeaderCartCount() {
+                        const savedCart = localStorage.getItem('cart');
+                        if (savedCart) {
+                            const cart = JSON.parse(savedCart);
+                            const count = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+                            document.getElementById('cart-count').textContent = count;
+                        }
+                    }
+
+                    function loadCheckoutItems() {
+                        console.log('Loading checkout items...');
+
+                        // First try 'checkoutCart' (set by proceedToCheckout)
+                        let cartData = localStorage.getItem('checkoutCart');
+                        console.log('checkoutCart:', cartData);
+
+                        // Fall back to 'cart'
+                        if (!cartData || cartData === 'null' || cartData === '[]' || cartData === 'undefined') {
+                            cartData = localStorage.getItem('cart');
+                            console.log('cart:', cartData);
                         }
 
-                        // Initialize on page load
-                        document.addEventListener('DOMContentLoaded', function () {
-                            console.log("Checkout page loaded");
-                            loadCheckoutItems();
-                            testAPIConnection();
-                        });
-
-                        // Test API connection
-                        async function testAPIConnection() {
-                            console.log("Testing API connection...");
-                            try {
-                                const response = await fetch(RAILWAY_API_URL + "/api/health");
-                                const data = await response.json();
-                                console.log("✅ API Connected! Status:", data);
-                            } catch (error) {
-                                console.error("❌ API Connection Failed:", error);
-                            }
-                        }
-
-                        // Load cart items from localStorage
-                        function loadCheckoutItems() {
-                            // Try checkoutCart first (from proceedToCheckout)
-                            let cartData = localStorage.getItem("checkoutCart");
-
-                            // Fall back to cart
-                            if (!cartData || cartData === 'null' || cartData === '[]') {
-                                cartData = localStorage.getItem("cart");
-                            }
-
-                            // Fall back to directProduct
-                            if (!cartData || cartData === 'null' || cartData === '[]') {
-                                const directProduct = localStorage.getItem("directProduct");
-                                if (directProduct && directProduct !== 'null') {
-                                    try {
-                                        const product = JSON.parse(directProduct);
-                                        if (product.name) {
-                                            checkoutItems = [product];
-                                        }
-                                    } catch (e) { }
-                                }
-                            } else {
+                        // Try directProduct for single product checkout
+                        if (!cartData || cartData === 'null' || cartData === '[]' || cartData === 'undefined') {
+                            const directProduct = localStorage.getItem('directProduct');
+                            console.log('directProduct:', directProduct);
+                            if (directProduct && directProduct !== 'null') {
                                 try {
-                                    checkoutItems = JSON.parse(cartData);
+                                    const product = JSON.parse(directProduct);
+                                    if (product && product.name) {
+                                        checkoutItems = [product];
+                                        console.log('Using directProduct:', checkoutItems);
+                                    }
                                 } catch (e) {
-                                    checkoutItems = [];
+                                    console.error('Error parsing directProduct:', e);
                                 }
                             }
-
-                            console.log("Loaded checkoutItems:", checkoutItems);
-
-                            // Check if cart is empty
-                            if (!checkoutItems || checkoutItems.length === 0) {
-                                document.getElementById('checkout-content').style.display = 'none';
-                                document.getElementById('empty-cart').style.display = 'block';
-                                return;
+                        } else {
+                            try {
+                                checkoutItems = JSON.parse(cartData);
+                                console.log('Parsed cart items:', checkoutItems);
+                            } catch (e) {
+                                console.error('Error parsing cart:', e);
+                                checkoutItems = [];
                             }
-
-                            // Show checkout content
-                            document.getElementById('checkout-content').style.display = 'grid';
-                            document.getElementById('empty-cart').style.display = 'none';
-
-                            // Display items and calculate totals
-                            displayOrderItems();
-                            calculateTotals();
                         }
 
-                        // Display order items in the summary
-                        function displayOrderItems() {
-                            const container = document.getElementById('order-items');
-                            if (!container) return;
-
-                            let html = '';
-
-                            checkoutItems.forEach(function (item) {
-                                const qty = parseInt(item.quantity) || 1;
-                                const price = parseFloat(item.price) || 0;
-                                const total = price * qty;
-                                const imageSrc = getProductImage(item.name);
-
-                                html += '<div class="order-item">';
-                                html += '<img src="' + imageSrc + '" alt="' + item.name + '" class="order-item-image" onerror="this.src=\'https://via.placeholder.com/70/667eea/ffffff?text=' + encodeURIComponent(item.name) + '\'">';
-                                html += '<div class="order-item-details">';
-                                html += '<div class="order-item-name">' + item.name + '</div>';
-                                html += '<div class="order-item-price">₹' + price + ' x ' + qty + '</div>';
-                                html += '<div class="order-item-total">₹' + total + '</div>';
-                                html += '</div>';
-                            });
-
-                            container.innerHTML = html;
+                        // Validate items
+                        if (!checkoutItems || !Array.isArray(checkoutItems) || checkoutItems.length === 0) {
+                            document.getElementById('checkout-content').style.display = 'none';
+                            document.getElementById('empty-cart').style.display = 'block';
+                            return;
                         }
 
-                        // Calculate and display totals
-                        function calculateTotals() {
-                            let subtotal = 0;
+                        // Show checkout
+                        document.getElementById('checkout-content').style.display = 'grid';
+                        document.getElementById('empty-cart').style.display = 'none';
 
-                            checkoutItems.forEach(function (item) {
-                                const price = parseFloat(item.price) || 0;
-                                const qty = parseInt(item.quantity) || 1;
-                                subtotal += (price * qty);
-                            });
+                        // Render items and calculate totals
+                        displayOrderItems();
+                        calculateTotals();
+                    }
 
-                            console.log("Calculated subtotal:", subtotal);
+                    function displayOrderItems() {
+                        const container = document.getElementById('order-items');
+                        if (!container) return;
 
-                            const subtotalEl = document.getElementById("subtotal");
-                            const totalEl = document.getElementById("total");
+                        let html = '';
 
-                            if (subtotalEl) subtotalEl.innerText = "₹" + subtotal;
-                            if (totalEl) totalEl.innerText = "₹" + subtotal;
+                        checkoutItems.forEach(function (item) {
+                            const qty = parseInt(item.quantity) || 1;
+                            const price = parseFloat(item.price) || 0;
+                            const total = price * qty;
+                            const imageSrc = getProductImage(item.name);
 
-                            return subtotal;
-                        }
-
-                        // Go back to cart
-                        function goBackToCart() {
-                            window.location.href = 'index.html#cart';
-                        }
-
-                        // Handle form submission
-                        document.getElementById("checkout-form").addEventListener("submit", function (e) {
-                            e.preventDefault();
-
-                            // Reload items
-                            loadCheckoutItems();
-
-                            if (checkoutItems.length === 0) {
-                                alert("Your cart is empty! Please add products first.");
-                                return;
-                            }
-
-                            // Build order data
-                            let validItems = [];
-                            let subtotal = 0;
-
-                            checkoutItems.forEach(function (item) {
-                                const price = parseFloat(item.price) || 0;
-                                const qty = parseInt(item.quantity) || 1;
-                                validItems.push({
-                                    name: item.name,
-                                    price: price,
-                                    quantity: qty
-                                });
-                                subtotal += (price * qty);
-                            });
-
-                            // Get customer data
-                            const customerData = {
-                                name: document.getElementById('full-name').value,
-                                email: document.getElementById('email').value,
-                                mobile: document.getElementById('phone').value,
-                                state: document.getElementById('state').value,
-                                address: document.getElementById('address').value,
-                                city: document.getElementById('city').value,
-                                pinCode: document.getElementById('pincode').value
-                            };
-
-                            // Validate
-                            if (!customerData.name || !customerData.email || !customerData.mobile || !customerData.state || !customerData.address || !customerData.city || !customerData.pinCode) {
-                                alert("Please fill in all customer details.");
-                                return;
-                            }
-
-                            // Build order
-                            const orderId = 'ORD-' + Date.now();
-                            const order = {
-                                orderId: orderId,
-                                products: validItems,
-                                customer: customerData,
-                                staff: { name: 'Website Customer', id: 'N/A' },
-                                subtotal: subtotal,
-                                shipping: 0,
-                                deliveryCharge: 0,
-                                total: subtotal,
-                                paymentMethod: 'Cash on Delivery',
-                                paymentStatus: 'Pending',
-                                orderStatus: 'Pending',
-                                deliveryStatus: 'Pending Delivery',
-                                orderSource: 'Website',
-                                createdAt: new Date().toISOString()
-                            };
-
-                            console.log("Submitting order:", order);
-
-                            // Show loading
-                            const btn = document.getElementById('place-order-btn');
-                            btn.textContent = 'Placing Order...';
-                            btn.disabled = true;
-
-                            // Send to API
-                            fetch(RAILWAY_API_URL + "/place-order", {
-                                method: "POST",
-                                headers: { "Content-Type": "application/json" },
-                                body: JSON.stringify(order)
-                            })
-                                .then(function (res) {
-                                    console.log("Response status:", res.status);
-                                    if (!res.ok) {
-                                        return res.text().then(function (text) {
-                                            throw new Error('Server error: ' + res.status + ' - ' + text);
-                                        });
-                                    }
-                                    return res.json();
-                                })
-                                .then(function (data) {
-                                    console.log("✅ Order saved:", data);
-
-                                    // Clear cart
-                                    localStorage.removeItem('cart');
-                                    localStorage.removeItem('checkoutCart');
-                                    localStorage.removeItem('directProduct');
-                                    checkoutItems = [];
-
-                                    // Show success
-                                    document.getElementById('order-success-id').textContent = 'Order ID: ' + (data.orderId || orderId);
-                                    document.getElementById('success-checkout-modal').style.display = 'block';
-                                })
-                                .catch(function (err) {
-                                    console.error("❌ Error:", err);
-                                    alert('Error placing order: ' + err.message);
-                                })
-                                .finally(function () {
-                                    btn.textContent = 'Place COD Order';
-                                    btn.disabled = false;
-                                });
+                            html += '<div class="order-item">';
+                            html += '<img src="' + imageSrc + '" alt="' + item.name + '" class="order-item-image" onerror="this.src=\'https://via.placeholder.com/60\'">';
+                            html += '<div class="order-item-details">';
+                            html += '<div class="order-item-name">' + item.name + '</div>';
+                            html += '<div class="order-item-price">₹' + price + ' x ' + qty + '</div>';
+                            html += '<div class="order-item-total">₹' + total + '</div>';
+                            html += '</div>';
                         });
 
-                        // Continue shopping
-                        function handleContinueShopping() {
-                            document.getElementById('success-checkout-modal').style.display = 'none';
-                            window.location.href = 'index.html';
+                        container.innerHTML = html;
+                        console.log('Rendered order items');
+                    }
+
+                    function calculateTotals() {
+                        let subtotal = 0;
+
+                        checkoutItems.forEach(function (item) {
+                            const price = parseFloat(item.price) || 0;
+                            const qty = parseInt(item.quantity) || 1;
+                            subtotal += (price * qty);
+                        });
+
+                        const shipping = 0; // Free shipping
+                        const total = subtotal + shipping;
+
+                        console.log('Calculated - Subtotal:', subtotal, 'Total:', total);
+
+                        document.getElementById('subtotal').textContent = '₹' + subtotal;
+                        document.getElementById('total').textContent = '₹' + total;
+
+                        return { subtotal, shipping, total };
+                    }
+
+                    // Form submission
+                    document.getElementById('checkout-form').addEventListener('submit', function (e) {
+                        e.preventDefault();
+
+                        // Reload items to ensure we have latest
+                        loadCheckoutItems();
+
+                        if (checkoutItems.length === 0) {
+                            alert('Your cart is empty!');
+                            return;
                         }
-                    </script>
+
+                        // Get customer data
+                        const customer = {
+                            name: document.getElementById('full-name').value,
+                            email: document.getElementById('email').value,
+                            mobile: document.getElementById('phone').value,
+                            state: document.getElementById('state').value,
+                            city: document.getElementById('city').value,
+                            pinCode: document.getElementById('pincode').value,
+                            address: document.getElementById('address').value
+                        };
+
+                        // Validate
+                        if (!customer.name || !customer.email || !customer.mobile || !customer.state || !customer.city || !customer.pinCode || !customer.address) {
+                            alert('Please fill all fields');
+                            return;
+                        }
+
+                        // Calculate totals
+                        const { subtotal, shipping, total } = calculateTotals();
+
+                        // Build products array
+                        const products = checkoutItems.map(item => ({
+                            name: item.name,
+                            price: parseFloat(item.price) || 0,
+                            quantity: parseInt(item.quantity) || 1
+                        }));
+
+                        // Build order
+                        const order = {
+                            orderId: 'ORD-' + Date.now(),
+                            customerName: customer.name,
+                            email: customer.email,
+                            phone: customer.mobile,
+                            address: customer.address,
+                            city: customer.city,
+                            state: customer.state,
+                            pincode: customer.pinCode,
+                            items: products,
+                            subtotal: subtotal,
+                            shipping: shipping,
+                            total: total,
+                            paymentMethod: 'COD',
+                            createdAt: new Date().toISOString()
+                        };
+
+                        console.log('Submitting order:', order);
+
+                        const btn = document.querySelector('.btn-place-order');
+                        btn.textContent = 'Placing Order...';
+                        btn.disabled = true;
+
+                        // Send to backend
+                        fetch(API_URL + '/api/orders', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(order)
+                        })
+                            .then(res => {
+                                if (!res.ok) throw new Error('Server error: ' + res.status);
+                                return res.json();
+                            })
+                            .then(data => {
+                                console.log('Order saved:', data);
+
+                                // Clear cart
+                                localStorage.removeItem('cart');
+                                localStorage.removeItem('checkoutCart');
+                                localStorage.removeItem('directProduct');
+
+                                // Show success
+                                document.getElementById('order-id').textContent = 'Order ID: ' + (data.orderId || order.orderId);
+                                document.getElementById('success-modal').style.display = 'block';
+                            })
+                            .catch(err => {
+                                console.error('Error:', err);
+                                alert('Error: ' + err.message);
+                            })
+                            .finally(() => {
+                                btn.textContent = 'Place COD Order';
+                                btn.disabled = false;
+                            });
+                    });
+                </script>
 </body>
 
 </html>

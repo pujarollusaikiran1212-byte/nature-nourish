@@ -28,13 +28,12 @@ router.get('/:id', async (req, res) => {
 // Create new order
 router.post('/', async (req, res) => {
     try {
-        // Accept flexible order format from checkout
         const orderData = req.body;
 
         // Generate orderId if not provided
         const orderId = orderData.orderId || 'ORD-' + Date.now();
 
-        // Convert items to products format if needed
+        // Convert items to products format
         let products = [];
         if (orderData.items && Array.isArray(orderData.items)) {
             products = orderData.items.map(item => ({
@@ -46,54 +45,72 @@ router.post('/', async (req, res) => {
             products = orderData.products;
         }
 
-        // Extract customer info - handle both formats
-        const customer = orderData.customer || {
-            name: orderData.name || '',
-            email: orderData.email || '',
-            mobile: orderData.phone || '',
-            address: orderData.address || '',
-            city: orderData.city || '',
-            state: orderData.state || '',
-            pinCode: orderData.pincode || orderData.pinCode || ''
+        // Build customer object
+        const customer = {
+            name: orderData.customerName || orderData.customer?.name || '',
+            email: orderData.email || orderData.customer?.email || '',
+            mobile: orderData.phone || orderData.customer?.mobile || '',
+            address: orderData.address || orderData.customer?.address || '',
+            city: orderData.city || orderData.customer?.city || '',
+            state: orderData.state || orderData.customer?.state || '',
+            pinCode: orderData.pincode || orderData.customer?.pinCode || ''
         };
 
         // Calculate totals
         const subtotal = orderData.subtotal || orderData.totalAmount ||
-            products.reduce((sum, p) => sum + (p.price * p.quantity), 0);
+            products.reduce((sum, p) => sum + ((p.price || 0) * (p.quantity || 1)), 0);
         const shipping = orderData.shipping || 0;
         const deliveryCharge = orderData.deliveryCharge || 0;
         const total = orderData.total || orderData.totalAmount || subtotal;
 
-        // Create order object in the format the model expects
+        // Create order object
         const order = {
             orderId: orderId,
+            // New format fields
+            customerName: customer.name,
+            email: customer.email,
+            phone: customer.mobile,
+            address: customer.address,
+            city: customer.city,
+            state: customer.state,
+            pincode: customer.pinCode,
+            items: products,
+            // Legacy format for compatibility
             products: products,
             customer: customer,
-            staff: orderData.staff || {
-                name: 'Website Customer',
-                id: 'N/A'
-            },
+            // Totals
             subtotal: subtotal,
             shipping: shipping,
             deliveryCharge: deliveryCharge,
             total: total,
+            // Status
             paymentMethod: orderData.paymentMethod || 'COD',
             paymentStatus: orderData.paymentStatus || 'Pending',
             orderStatus: orderData.orderStatus || 'Pending',
             deliveryStatus: orderData.deliveryStatus || 'Pending Delivery',
             orderSource: orderData.orderSource || 'Website',
+            // Staff info
+            staff: orderData.staff || { name: 'Website Customer', id: 'N/A' },
+            // Timestamps
             createdAt: orderData.createdAt || new Date().toISOString()
         };
 
         const newOrder = new Order(order);
         const savedOrder = await newOrder.save();
-        res.status(201).json(savedOrder);
+
+        console.log('Order saved:', savedOrder.orderId);
+        res.status(201).json({
+            success: true,
+            orderId: savedOrder.orderId,
+            message: 'Order placed successfully'
+        });
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        console.error('Error creating order:', error);
+        res.status(400).json({ success: false, message: error.message });
     }
 });
 
-// Update order
+// Update order status
 router.put('/:id', async (req, res) => {
     try {
         const order = await Order.findOneAndUpdate(

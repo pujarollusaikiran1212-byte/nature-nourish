@@ -379,17 +379,18 @@ function updateCartDisplay() {
     console.log(`Cart updated: ${cart.length} items, Subtotal: ₹${subtotal}, Total: ₹${total}`);
 }
 function getProductImage(productName) {
+    // Use full URLs for images - update these to your actual image URLs
     const images = {
-        'Solar Calm': 'solar calm.jpeg',
-        'Clearwave': 'clear wave.jpeg',
-        'Milk Cloud': 'milk cloud.jpeg',
-        'Glow Dust': 'glow dust.jpeg',
-        'Lavender Bliss': 'lavender bliss.jpeg',
-        'Rose Petal': 'rose petal.jpeg',
-        'Charcoal Cleanse': 'charcoal.jpeg',
-        'Aloe Vera Glow': 'aloe vera.jpeg'
+        'Solar Calm': 'https://naturenourish.in/solar%20calm.jpeg',
+        'Clearwave': 'https://naturenourish.in/clear%20wave.jpeg',
+        'Milk Cloud': 'https://naturenourish.in/milk%20cloud.jpeg',
+        'Glow Dust': 'https://naturenourish.in/glow%20dust.jpeg',
+        'Lavender Bliss': 'https://naturenourish.in/lavender%20bliss.jpeg',
+        'Rose Petal': 'https://naturenourish.in/rose%20petal.jpeg',
+        'Charcoal Cleanse': 'https://naturenourish.in/charcoal.jpeg',
+        'Aloe Vera Glow': 'https://naturenourish.in/aloe%20vera.jpeg'
     };
-    return images[productName] || 'placeholder.jpg';
+    return images[productName] || 'https://via.placeholder.com/100/667eea/ffffff?text=' + encodeURIComponent(productName);
 }
 
 function increaseQuantity(index) {

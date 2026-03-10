@@ -468,28 +468,62 @@
                         btn.textContent = 'Placing Order...';
                         btn.disabled = true;
 
-                        fetch(API_URL + '/api/orders', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(order)
-                        })
-                            .then(res => { if (!res.ok) throw new Error('Server error: ' + res.status); return res.json(); })
-                            .then(data => {
+                        // Better fetch with retry logic and timeout
+                        const controller = new AbortController();
+                        const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+
+                        const submitOrder = async (retryCount = 0) => {
+                            try {
+                                const maxRetries = 3;
+                                const res = await fetch(API_URL + '/api/orders', {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify(order),
+                                    signal: controller.signal
+                                });
+
+                                clearTimeout(timeoutId);
+
+                                if (!res.ok) {
+                                    if (res.status === 0 || res.status >= 500) {
+                                        // Network error, try retry
+                                        if (retryCount < maxRetries) {
+                                            console.log(`Retry ${retryCount + 1}/${maxRetries}...`);
+                                            await new Promise(r => setTimeout(r, 1000 * (retryCount + 1)));
+                                            return submitOrder(retryCount + 1);
+                                        }
+                                    }
+                                    throw new Error('Server error: ' + res.status);
+                                }
+
+                                const data = await res.json();
                                 console.log('Order saved:', data);
                                 localStorage.removeItem('cart');
                                 localStorage.removeItem('checkoutCart');
                                 localStorage.removeItem('directProduct');
                                 document.getElementById('order-id').textContent = 'Order ID: ' + (data.orderId || order.orderId);
                                 document.getElementById('success-modal').style.display = 'block';
-                            })
-                            .catch(err => {
+                            } catch (err) {
+                                clearTimeout(timeoutId);
                                 console.error('Error:', err);
-                                alert('Error: ' + err.message);
-                            })
-                            .finally(() => {
+
+                                let errorMessage = 'Unable to place order. ';
+                                if (err.name === 'AbortError') {
+                                    errorMessage += 'Connection timed out. Please check your internet connection and try again.';
+                                } else if (err.message.includes('Failed to fetch') || err.message.includes('NetworkError')) {
+                                    errorMessage += 'Network error. Please check your internet connection and try again.';
+                                } else {
+                                    errorMessage += 'Error: ' + err.message;
+                                }
+
+                                alert(errorMessage);
+                            } finally {
                                 btn.textContent = 'Place COD Order';
                                 btn.disabled = false;
-                            });
+                            }
+                        };
+
+                        submitOrder();
                     });
                 </script>
 </body>

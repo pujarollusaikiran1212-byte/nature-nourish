@@ -777,14 +777,48 @@
         async function loadOrders() {
             try {
                 document.getElementById('ordersTableBody').innerHTML = '<tr><td colspan="8" class="loading">Loading orders...</td></tr>';
-                const response = await fetch(`${API_URL}/orders`);
-                if (!response.ok) throw new Error('Failed to fetch orders');
-                const orders = await response.json();
-                allOrders = orders;
-                updateStats(orders);
-                renderOrders(orders);
+
+                const loadWithRetry = async (retryCount = 0) => {
+                    const maxRetries = 3;
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 15000);
+
+                    try {
+                        const response = await fetch(`${API_URL}/orders`, {
+                            method: 'GET',
+                            headers: { 'Content-Type': 'application/json' },
+                            signal: controller.signal
+                        });
+
+                        clearTimeout(timeoutId);
+                        if (!response.ok) {
+                            if (response.status === 0 || response.status >= 500) {
+                                if (retryCount < maxRetries) {
+                                    console.log(`Retry ${retryCount + 1}/${maxRetries}...`);
+                                    await new Promise(r => setTimeout(r, 1000 * (retryCount + 1)));
+                                    return loadWithRetry(retryCount + 1);
+                                }
+                            }
+                            throw new Error('Failed to fetch orders');
+                        }
+                        const orders = await response.json();
+                        allOrders = orders;
+                        updateStats(orders);
+                        renderOrders(orders);
+                    } catch (error) {
+                        clearTimeout(timeoutId);
+                        console.error('Error loading orders:', error);
+                        if (retryCount < maxRetries) {
+                            console.log(`Retry ${retryCount + 1}/${maxRetries}...`);
+                            await new Promise(r => setTimeout(r, 1000 * (retryCount + 1)));
+                            return loadWithRetry(retryCount + 1);
+                        }
+                        throw error;
+                    }
+                };
+
+                await loadWithRetry();
             } catch (error) {
-                console.error('Error loading orders:', error);
                 document.getElementById('ordersTableBody').innerHTML = `<tr><td colspan="8" class="empty-state"><h3>Error loading orders</h3><p style="color: red;">${error.message}</p><button onclick="loadOrders()">Try Again</button></td></tr>`;
             }
         }

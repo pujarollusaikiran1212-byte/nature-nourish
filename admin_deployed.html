@@ -415,40 +415,60 @@
                                                 document.getElementById(tabName + 'Tab').classList.add('active');
                                             }
 
-                                            // Load Orders - FIXED for mobile
+                                            // Load Orders - FIXED for mobile with retry logic
                                             async function loadOrders() {
                                                 const tbody = document.getElementById('ordersTableBody');
                                                 tbody.innerHTML = '<tr><td colspan="5" class="loading">Loading orders...</td></tr>';
 
-                                                try {
-                                                    console.log('Fetching orders from:', API_URL + '/api/orders');
+                                                const loadWithRetry = async (retryCount = 0) => {
+                                                    const maxRetries = 3;
+                                                    try {
+                                                        console.log('Fetching orders from:', API_URL + '/api/orders');
 
-                                                    const response = await fetch(API_URL + '/api/orders', {
-                                                        method: 'GET',
-                                                        headers: { 'Content-Type': 'application/json' },
-                                                        // Add timeout for mobile
-                                                        signal: AbortSignal.timeout(15000)
-                                                    });
+                                                        const controller = new AbortController();
+                                                        const timeoutId = setTimeout(() => controller.abort(), 15000);
 
-                                                    console.log('Response status:', response.status);
+                                                        const response = await fetch(API_URL + '/api/orders', {
+                                                            method: 'GET',
+                                                            headers: { 'Content-Type': 'application/json' },
+                                                            signal: controller.signal
+                                                        });
 
-                                                    if (!response.ok) {
-                                                        throw new Error('Server error: ' + response.status);
+                                                        clearTimeout(timeoutId);
+                                                        console.log('Response status:', response.status);
+
+                                                        if (!response.ok) {
+                                                            if (response.status === 0 || response.status >= 500) {
+                                                                if (retryCount < maxRetries) {
+                                                                    console.log(`Retry ${retryCount + 1}/${maxRetries}...`);
+                                                                    await new Promise(r => setTimeout(r, 1000 * (retryCount + 1)));
+                                                                    return loadWithRetry(retryCount + 1);
+                                                                }
+                                                            }
+                                                            throw new Error('Server error: ' + response.status);
+                                                        }
+
+                                                        const orders = await response.json();
+                                                        console.log('Orders loaded:', orders.length);
+
+                                                        allOrders = orders;
+                                                        updateStats(orders);
+                                                        renderOrders(orders);
+                                                    } catch (error) {
+                                                        console.error('Error loading orders:', error);
+                                                        if (retryCount < maxRetries) {
+                                                            console.log(`Retry ${retryCount + 1}/${maxRetries}...`);
+                                                            await new Promise(r => setTimeout(r, 1000 * (retryCount + 1)));
+                                                            return loadWithRetry(retryCount + 1);
+                                                        }
+                                                        tbody.innerHTML = '<tr><td colspan="5" class="error-msg">' +
+                                                            '<strong>Error loading orders</strong><br>' +
+                                                            error.message + '<br>' +
+                                                            '<button onclick="loadOrders()">Try Again</button></td></tr>';
                                                     }
+                                                };
 
-                                                    const orders = await response.json();
-                                                    console.log('Orders loaded:', orders.length);
-
-                                                    allOrders = orders;
-                                                    updateStats(orders);
-                                                    renderOrders(orders);
-                                                } catch (error) {
-                                                    console.error('Error loading orders:', error);
-                                                    tbody.innerHTML = '<tr><td colspan="5" class="error-msg">' +
-                                                        '<strong>Error loading orders</strong><br>' +
-                                                        error.message + '<br>' +
-                                                        '<button onclick="loadOrders()">Try Again</button></td></tr>';
-                                                }
+                                                loadWithRetry();
                                             }
 
                                             function updateStats(orders) {

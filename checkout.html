@@ -89,6 +89,25 @@
                                 <label><input type="radio" name="payment" value="cod" checked> Cash on Delivery</label>
                             </div>
 
+                            <!-- Price Summary Section -->
+                            <div class="price-summary">
+                                <h4>Price Details</h4>
+                                <div class="price-summary-box">
+                                    <div class="price-row">
+                                        <span>Subtotal</span>
+                                        <span>Rs.<span id="subtotal">0</span></span>
+                                    </div>
+                                    <div class="price-row">
+                                        <span>Shipping</span>
+                                        <span class="free-shipping">FREE</span>
+                                    </div>
+                                    <div class="price-row total">
+                                        <span>Total</span>
+                                        <span>Rs.<span id="summary-total">0</span></span>
+                                    </div>
+                                </div>
+                            </div>
+
                             <button type="submit" class="place-order-btn">Place Order</button>
                         </form>
                     </div>
@@ -188,7 +207,11 @@
                 }
 
                 container.innerHTML = html || '<p>No items</p>';
+
+                // Update all total displays
                 document.getElementById('total').textContent = total;
+                document.getElementById('subtotal').textContent = total;
+                document.getElementById('summary-total').textContent = total;
             }
 
             document.getElementById('checkout-form').addEventListener('submit', function (e) {

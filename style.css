@@ -927,6 +927,60 @@ p {
     background: var(--brown-luxury);
 }
 
+/* Price Summary Section - Checkout Page */
+.price-summary {
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.price-summary h4 {
+    color: var(--text-dark);
+    margin-bottom: 1rem;
+    font-weight: 500;
+    font-size: 1.1rem;
+}
+
+.price-summary-box {
+    background: var(--bg-white);
+    border-radius: var(--radius-md);
+    padding: 20px;
+    border: 1px solid var(--beige-soft);
+    box-shadow: var(--shadow-soft);
+}
+
+.price-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--beige-soft);
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+}
+
+.price-row:last-child {
+    border-bottom: none;
+}
+
+.price-row.total {
+    border-top: 2px solid var(--beige-soft);
+    margin-top: 8px;
+    padding-top: 16px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: var(--text-dark);
+}
+
+.price-row.total span:last-child {
+    color: var(--brown-luxury);
+    font-weight: 700;
+}
+
+.free-shipping {
+    color: #28a745 !important;
+    font-weight: 600 !important;
+}
+
 .back-btn {
     background: transparent;
     color: var(--text-secondary);

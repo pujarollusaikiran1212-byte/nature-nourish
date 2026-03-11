@@ -191,7 +191,13 @@ app.use((req, res) => {
 
 const PORT = parseInt(process.env.PORT, 10) || 5500;
 
-connectDB();
+// Connect to MongoDB and then start server
+connectDB().then(() => {
+    startServer(PORT);
+}).catch((err) => {
+    console.error('Failed to start server due to DB connection failure:', err);
+    process.exit(1);
+});
 
 // Function to start the server with port validation
 function startServer(port) {

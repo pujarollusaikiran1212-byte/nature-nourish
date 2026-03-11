@@ -1,6 +1,5 @@
 /* ============================================
    LUXURY SKINCARE THEME - NATURE NOURISH
-   Elegant, Minimal, Premium Design
    ============================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=Cormorant+Garamond:wght@400;500;600&display=swap');
@@ -75,6 +74,11 @@ p {
     padding: 10px;
     font-size: 14px;
     font-weight: 500;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1001;
 }
 
 .order-banner a {
@@ -235,16 +239,6 @@ p {
     background: var(--bg-white);
 }
 
-.products-section::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(181, 144, 114, 0.2), transparent);
-}
-
 .section-title {
     text-align: center;
     font-size: clamp(2rem, 4vw, 2.75rem);
@@ -294,83 +288,6 @@ p {
     background: var(--brown-dark);
     color: var(--bg-white);
     border-color: var(--brown-dark);
-}
-
-.coming-soon {
-    font-size: 1.2rem;
-    color: var(--text-secondary);
-    margin: 2rem 0;
-    text-align: center;
-}
-
-/* Coming Soon Section */
-.coming-soon-section {
-    display: none;
-    padding: 40px 20px;
-}
-
-.coming-soon-section.active {
-    display: block;
-}
-
-.coming-soon-card {
-    background: linear-gradient(135deg, #f5efe6 0%, #e8e0d5 100%);
-    border-radius: 20px;
-    padding: 60px 40px;
-    text-align: center;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
-    transition: all 0.3s ease;
-    border: 1px solid rgba(181, 144, 114, 0.2);
-    max-width: 600px;
-    margin: 0 auto;
-}
-
-.coming-soon-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
-    border-color: rgba(181, 144, 114, 0.4);
-}
-
-.coming-soon-emoji {
-    font-size: 4rem;
-    display: block;
-    margin-bottom: 1.5rem;
-    animation: float 3s ease-in-out infinite;
-}
-
-@keyframes float {
-
-    0%,
-    100% {
-        transform: translateY(0);
-    }
-
-    50% {
-        transform: translateY(-10px);
-    }
-}
-
-.coming-soon-title {
-    font-family: 'Playfair Display', Georgia, serif;
-    font-size: 2rem;
-    color: var(--text-dark);
-    margin-bottom: 1.5rem;
-    font-weight: 600;
-}
-
-.coming-soon-text {
-    color: var(--text-secondary);
-    font-size: 1rem;
-    line-height: 1.8;
-    margin-bottom: 1rem;
-}
-
-.coming-soon-launch {
-    display: inline-block;
-    margin-top: 1.5rem;
-    font-size: 1.1rem;
-    color: var(--brown-luxury);
-    font-weight: 500;
 }
 
 /* Products Grid */
@@ -531,15 +448,6 @@ p {
     letter-spacing: 0.05em;
 }
 
-.btn-coming-soon {
-    background: #999 !important;
-    color: #fff !important;
-    cursor: not-allowed !important;
-    opacity: 0.7;
-    border: none !important;
-    width: 100%;
-}
-
 .product-actions {
     padding: 0 28px 28px;
     display: flex;
@@ -594,6 +502,15 @@ p {
 .btn-customer-portal:hover {
     background: var(--brown-luxury) !important;
     color: var(--bg-white) !important;
+}
+
+.btn-coming-soon {
+    background: #999 !important;
+    color: #fff !important;
+    cursor: not-allowed !important;
+    opacity: 0.7;
+    border: none !important;
+    width: 100%;
 }
 
 /* Cart Section */
@@ -862,13 +779,6 @@ p {
     font-size: 0.95rem;
     background: var(--bg-white);
     margin-bottom: 1rem;
-}
-
-.checkout-form select {
-    width: 100%;
-    padding: 10px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
 }
 
 .checkout-form input:focus,
@@ -1446,13 +1356,12 @@ p {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 0;
+    padding: 15px 20px;
     font-size: 1.05rem;
     color: var(--text-dark);
     font-weight: 500;
     transition: all 0.3s ease;
     border-radius: 8px;
-    padding: 15px 20px;
     margin: 5px 0;
 }
 
@@ -1489,6 +1398,76 @@ p {
     font-size: 0.9rem;
     font-weight: 500;
     font-style: italic;
+}
+
+/* Coming Soon Section */
+.coming-soon-section {
+    display: none;
+    padding: 40px 20px;
+}
+
+.coming-soon-section.active {
+    display: block;
+}
+
+.coming-soon-card {
+    background: linear-gradient(135deg, #f5efe6 0%, #e8e0d5 100%);
+    border-radius: 20px;
+    padding: 60px 40px;
+    text-align: center;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(181, 144, 114, 0.2);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.coming-soon-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+    border-color: rgba(181, 144, 114, 0.4);
+}
+
+.coming-soon-emoji {
+    font-size: 4rem;
+    display: block;
+    margin-bottom: 1.5rem;
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.coming-soon-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 2rem;
+    color: var(--text-dark);
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+}
+
+.coming-soon-text {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    line-height: 1.8;
+    margin-bottom: 1rem;
+}
+
+.coming-soon-launch {
+    display: inline-block;
+    margin-top: 1.5rem;
+    font-size: 1.1rem;
+    color: var(--brown-luxury);
+    font-weight: 500;
 }
 
 /* Hamburger Menu */
@@ -1564,12 +1543,6 @@ p {
 
     .cart-icon {
         margin-top: 1rem;
-    }
-
-    .btn-customer-portal,
-    .btn-admin {
-        width: 100%;
-        margin: 5px 0;
     }
 
     .hero {

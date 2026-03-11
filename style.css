@@ -66,19 +66,17 @@ p {
     padding: 0 40px;
 }
 
-/* WhatsApp Help Banner */
+/* WhatsApp Help Banner (Inside About Section) */
 .order-banner {
     background: #25D366;
     color: white;
     text-align: center;
-    padding: 10px;
-    font-size: 14px;
+    padding: 16px;
+    font-size: 15px;
     font-weight: 500;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 1001;
+    border-radius: 12px;
+    margin: 0 auto 40px;
+    max-width: 600px;
 }
 
 .order-banner a {

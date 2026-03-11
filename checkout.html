@@ -143,6 +143,24 @@
                 document.getElementById('empty-cart').style.display = 'block';
             }
 
+            // Product image mapping
+            function getProductImage(name) {
+                var images = {
+                    'Solar Calm': 'solar calm.jpeg',
+                    'Clearwave': 'clear wave.jpeg',
+                    'Milk Cloud': 'milk cloud.jpeg',
+                    'Glow Dust': 'glow dust.jpeg',
+                    'Lavender Bliss': 'lavender bliss.jpeg',
+                    'Rose Petal': 'rose petal.jpeg',
+                    'Charcoal Cleanse': 'charcoal.jpeg',
+                    'Charcoal': 'charcoal.jpeg',
+                    'Aloe Vera Glow': 'aloe vera.jpeg',
+                    'Aloe Vera': 'aloe vera.jpeg'
+                };
+                var cleanName = name ? name.replace(' (Bundle)', '').trim() : '';
+                return images[cleanName] || 'https://via.placeholder.com/80';
+            }
+
             function renderCheckout() {
                 document.getElementById('checkout-container').style.display = 'block';
                 document.getElementById('empty-cart').style.display = 'none';
@@ -157,11 +175,15 @@
                     var price = item.price || 0;
                     var itemTotal = price * qty;
                     total += itemTotal;
+                    var imageSrc = item.image || getProductImage(item.name);
 
                     html += '<div class="checkout-item">';
-                    html += '<span>' + (item.name || 'Product') + '</span>';
-                    html += '<span>Rs.' + price + ' x ' + qty + '</span>';
-                    html += '<span>Rs.' + itemTotal + '</span>';
+                    html += '<img src="' + imageSrc + '" alt="' + (item.name || 'Product') + '" style="width:60px;height:60px;object-fit:cover;border-radius:6px;margin-right:12px;">';
+                    html += '<div style="flex:1;">';
+                    html += '<div style="font-weight:500;">' + (item.name || 'Product') + '</div>';
+                    html += '<div style="color:#666;font-size:0.9rem;">Rs.' + price + ' x ' + qty + '</div>';
+                    html += '</div>';
+                    html += '<div style="font-weight:600;">Rs.' + itemTotal + '</div>';
                     html += '</div>';
                 }
 
@@ -194,11 +216,13 @@
                 var products = [];
                 for (var i = 0; i < cartItems.length; i++) {
                     var item = cartItems[i];
+                    var imageSrc = item.image || getProductImage(item.name);
                     subtotal += (item.price || 0) * (item.quantity || 1);
                     products.push({
                         name: item.name,
                         price: item.price || 0,
-                        quantity: item.quantity || 1
+                        quantity: item.quantity || 1,
+                        image: imageSrc
                     });
                 }
 

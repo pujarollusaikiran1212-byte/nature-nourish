@@ -128,23 +128,36 @@
         </div>
 
         <script>
-            var API_URL = 'https://nature-nourish-production.up.railway.app';
+            // ============================================
+            // CONFIGURATION - Railway Backend URL
+            // ============================================
+
+            // IMPORTANT: Use FULL backend URL, NOT relative path
+            // This ensures orders work on all networks (Jio, Airtel, WiFi, etc.)
+            var API_BASE_URL = 'https://nature-nourish-production.up.railway.app';
+            var API_ORDERS_ENDPOINT = '/api/orders';
+
             var cartItems = [];
 
+            // ============================================
+            // INITIALIZATION
+            // ============================================
+
             function init() {
-                console.log('Checkout init...');
+                console.log('Checkout init - Loading cart...');
                 loadCart();
             }
 
             function loadCart() {
                 try {
+                    // Try checkoutCart first, then fall back to cart
                     var cartData = localStorage.getItem('checkoutCart') || localStorage.getItem('cart');
 
                     if (cartData && cartData !== 'null' && cartData !== 'undefined') {
                         cartItems = JSON.parse(cartData);
                     }
 
-                    console.log('Cart items:', cartItems);
+                    console.log('Cart items loaded:', cartItems);
 
                     if (!cartItems || !cartItems.length) {
                         showEmptyCart();
@@ -162,7 +175,10 @@
                 document.getElementById('empty-cart').style.display = 'block';
             }
 
-            // Product image mapping
+            // ============================================
+            // PRODUCT IMAGE MAPPING
+            // ============================================
+
             function getProductImage(name) {
                 var images = {
                     'Solar Calm': 'solar calm.jpeg',
@@ -179,6 +195,10 @@
                 var cleanName = name ? name.replace(' (Bundle)', '').trim() : '';
                 return images[cleanName] || 'https://via.placeholder.com/80';
             }
+
+            // ============================================
+            // RENDER CHECKOUT
+            // ============================================
 
             function renderCheckout() {
                 document.getElementById('checkout-container').style.display = 'block';
@@ -214,43 +234,120 @@
                 document.getElementById('summary-total').textContent = total;
             }
 
-            document.getElementById('checkout-form').addEventListener('submit', function (e) {
-                e.preventDefault();
+            // ============================================
+            // VALIDATION FUNCTIONS
+            // ============================================
 
-                if (!cartItems || !cartItems.length) {
-                    alert('Your cart is empty!');
-                    return;
-                }
+            function validateForm() {
+                var errors = [];
 
-                var name = document.getElementById('full-name').value;
-                var email = document.getElementById('email').value;
-                var phone = document.getElementById('phone').value;
+                var name = document.getElementById('full-name').value.trim();
+                var email = document.getElementById('email').value.trim();
+                var phone = document.getElementById('phone').value.trim();
                 var state = document.getElementById('state').value;
-                var city = document.getElementById('city').value;
-                var pincode = document.getElementById('pincode').value;
-                var address = document.getElementById('address').value;
+                var city = document.getElementById('city').value.trim();
+                var pincode = document.getElementById('pincode').value.trim();
+                var address = document.getElementById('address').value.trim();
 
-                if (!name || !email || !phone || !state || !city || !pincode || !address) {
-                    alert('Please fill all fields');
-                    return;
+                // Validate name
+                if (!name) {
+                    errors.push('Please enter your full name');
+                } else if (name.length < 2) {
+                    errors.push('Name must be at least 2 characters');
                 }
 
-                var subtotal = 0;
-                var products = [];
+                // Validate email
+                if (!email) {
+                    errors.push('Please enter your email address');
+                } else if (!isValidEmail(email)) {
+                    errors.push('Please enter a valid email address');
+                }
+
+                // Validate phone
+                if (!phone) {
+                    errors.push('Please enter your phone number');
+                } else if (!/^\d{10}$/.test(phone)) {
+                    errors.push('Phone number must be exactly 10 digits');
+                }
+
+                // Validate state
+                if (!state) {
+                    errors.push('Please select your state');
+                }
+
+                // Validate city
+                if (!city) {
+                    errors.push('Please enter your city');
+                }
+
+                // Validate pincode
+                if (!pincode) {
+                    errors.push('Please enter your postal code');
+                } else if (!/^\d{6}$/.test(pincode)) {
+                    errors.push('Postal code must be exactly 6 digits');
+                }
+
+                // Validate address
+                if (!address) {
+                    errors.push('Please enter your complete address');
+                } else if (address.length < 10) {
+                    errors.push('Please enter a complete address (at least 10 characters)');
+                }
+
+                // Validate cart
+                if (!cartItems || !cartItems.length) {
+                    errors.push('Your cart is empty');
+                }
+
+                return errors;
+            }
+
+            function isValidEmail(email) {
+                var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return emailRegex.test(email);
+            }
+
+            // ============================================
+            // COLLECT FORM DATA
+            // ============================================
+
+            function collectFormData() {
+                var name = document.getElementById('full-name').value.trim();
+                var email = document.getElementById('email').value.trim();
+                var phone = document.getElementById('phone').value.trim();
+                var state = document.getElementById('state').value;
+                var city = document.getElementById('city').value.trim();
+                var pincode = document.getElementById('pincode').value.trim();
+                var address = document.getElementById('address').value.trim();
+
+                // Get payment method
+                var paymentMethodRadio = document.querySelector('input[name="payment"]:checked');
+                var paymentMethod = paymentMethodRadio ? paymentMethodRadio.value : 'cod';
+
+                // Calculate totals from cart items
+                var total = 0;
+                var items = [];
+
                 for (var i = 0; i < cartItems.length; i++) {
                     var item = cartItems[i];
-                    var imageSrc = item.image || getProductImage(item.name);
-                    subtotal += (item.price || 0) * (item.quantity || 1);
-                    products.push({
+                    var qty = item.quantity || 1;
+                    var price = item.price || 0;
+                    var itemTotal = price * qty;
+                    total += itemTotal;
+
+                    items.push({
                         name: item.name,
-                        price: item.price || 0,
-                        quantity: item.quantity || 1,
-                        image: imageSrc
+                        price: price,
+                        quantity: qty
                     });
                 }
 
-                var order = {
-                    orderId: 'ORD-' + Date.now(),
+                // Return the order data in the format expected by backend
+                return {
+                    // Generate unique order ID
+                    orderId: 'ORD-' + Date.now() + '-' + Math.floor(Math.random() * 1000),
+
+                    // Customer info
                     customerName: name,
                     email: email,
                     phone: phone,
@@ -258,41 +355,205 @@
                     city: city,
                     state: state,
                     pincode: pincode,
-                    items: products,
-                    subtotal: subtotal,
-                    total: subtotal,
-                    paymentMethod: 'COD'
+                    postalCode: pincode, // Also send as postalCode for compatibility
+
+                    // Items
+                    items: items,
+
+                    // Totals
+                    subtotal: total,
+                    total: total,
+
+                    // Payment
+                    paymentMethod: paymentMethod,
+
+                    // Additional info
+                    orderSource: 'Website'
                 };
+            }
 
-                console.log('Submitting order:', order);
+            // ============================================
+            // PLACE ORDER - Main Function
+            // ============================================
 
+            function placeOrder(orderData) {
                 var btn = document.querySelector('.place-order-btn');
                 btn.textContent = 'Placing Order...';
                 btn.disabled = true;
 
-                fetch(API_URL + '/place-order', {
+                // Show loading overlay
+                var loadingOverlay = document.getElementById('loading-overlay');
+                if (loadingOverlay) {
+                    loadingOverlay.style.display = 'block';
+                }
+
+                // Use the full API URL - critical for mobile networks
+                var apiUrl = API_BASE_URL + API_ORDERS_ENDPOINT;
+
+                console.log('Submitting order to:', apiUrl);
+                console.log('Order data:', JSON.stringify(orderData));
+
+                // Make the API call with timeout and retry logic
+                submitOrderWithRetry(apiUrl, orderData, 3, 0);
+            }
+
+            // ============================================
+            // NETWORK ERROR HANDLING WITH RETRY
+            // ============================================
+
+            function submitOrderWithRetry(url, orderData, maxRetries, currentRetry) {
+                var controller = new AbortController();
+                var timeoutId = setTimeout(function () {
+                    controller.abort();
+                }, 30000); // 30 second timeout
+
+                fetch(url, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(order)
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(orderData),
+                    signal: controller.signal
                 })
-                    .then(function (res) {
-                        if (!res.ok) throw new Error('Server error');
-                        return res.json();
+                    .then(function (response) {
+                        clearTimeout(timeoutId);
+
+                        if (!response.ok) {
+                            return response.json().then(function (err) {
+                                throw new Error(err.message || 'Server error: ' + response.status);
+                            });
+                        }
+                        return response.json();
                     })
                     .then(function (data) {
-                        console.log('Order saved:', data);
-                        localStorage.removeItem('cart');
-                        localStorage.removeItem('checkoutCart');
-                        document.getElementById('success-order-id').textContent = 'Order ID: ' + (data.orderId || order.orderId);
-                        document.getElementById('success-modal').style.display = 'block';
+                        clearTimeout(timeoutId);
+                        console.log('Order saved successfully:', data);
+
+                        // Hide loading
+                        var loadingOverlay = document.getElementById('loading-overlay');
+                        if (loadingOverlay) {
+                            loadingOverlay.style.display = 'none';
+                        }
+
+                        // Handle successful order
+                        handleOrderSuccess(data, orderData);
                     })
-                    .catch(function (err) {
-                        console.error('Error:', err);
-                        alert('Failed to place order. Please try again.');
-                        btn.textContent = 'Place Order';
-                        btn.disabled = false;
+                    .catch(function (error) {
+                        clearTimeout(timeoutId);
+                        console.error('Error placing order:', error);
+
+                        // Check if it's a network error and we can retry
+                        var isNetworkError = error.name === 'AbortError' ||
+                            error.message.includes('network') ||
+                            error.message.includes('Failed to fetch');
+
+                        if (isNetworkError && currentRetry < maxRetries) {
+                            var retryCount = currentRetry + 1;
+                            console.log('Network error. Retrying (' + retryCount + '/' + maxRetries + ')...');
+
+                            // Show retry message
+                            var btn = document.querySelector('.place-order-btn');
+                            btn.textContent = 'Retrying... (' + retryCount + '/' + maxRetries + ')';
+
+                            // Wait before retrying (exponential backoff)
+                            setTimeout(function () {
+                                submitOrderWithRetry(url, orderData, maxRetries, retryCount);
+                            }, 2000 * retryCount); // 2s, 4s, 6s delay
+                        } else {
+                            // No more retries or not a network error
+                            handleOrderError(error);
+                        }
                     });
+            }
+
+            // ============================================
+            // ORDER SUCCESS HANDLER
+            // ============================================
+
+            function handleOrderSuccess(data, orderData) {
+                var btn = document.querySelector('.place-order-btn');
+                btn.textContent = 'Order Placed!';
+                btn.disabled = false;
+
+                // Store order ID for confirmation page
+                var orderId = data.orderId || orderData.orderId;
+                localStorage.setItem('lastOrderId', orderId);
+                localStorage.setItem('lastOrderData', JSON.stringify(orderData));
+
+                // Clear cart from localStorage
+                localStorage.removeItem('cart');
+                localStorage.removeItem('checkoutCart');
+
+                // Show success modal
+                var successModal = document.getElementById('success-modal');
+                var orderIdElement = document.getElementById('success-order-id');
+
+                if (orderIdElement) {
+                    orderIdElement.textContent = 'Order ID: ' + orderId;
+                }
+
+                if (successModal) {
+                    successModal.style.display = 'block';
+                }
+
+                // Log success
+                console.log('Order completed successfully!');
+            }
+
+            // ============================================
+            // ORDER ERROR HANDLER
+            // ============================================
+
+            function handleOrderError(error) {
+                // Hide loading
+                var loadingOverlay = document.getElementById('loading-overlay');
+                if (loadingOverlay) {
+                    loadingOverlay.style.display = 'none';
+                }
+
+                var btn = document.querySelector('.place-order-btn');
+                btn.textContent = 'Place Order';
+                btn.disabled = false;
+
+                // Show error message
+                var errorText = 'Failed to place order. ';
+
+                if (error.name === 'AbortError') {
+                    errorText += 'The request timed out. Please check your internet connection and try again.';
+                } else if (error.message.includes('network') || error.message.includes('Failed to fetch')) {
+                    errorText += 'Network error. Please check your internet connection (Jio/Airtel/WiFi) and try again.';
+                } else {
+                    errorText += error.message || 'Please try again.';
+                }
+
+                alert(errorText);
+            }
+
+            // ============================================
+            // FORM SUBMIT HANDLER
+            // ============================================
+
+            document.getElementById('checkout-form').addEventListener('submit', function (e) {
+                e.preventDefault();
+
+                // Validate form
+                var errors = validateForm();
+
+                if (errors.length > 0) {
+                    alert('Please fix the following errors:\n\n' + errors.join('\n'));
+                    return;
+                }
+
+                // Collect form data
+                var orderData = collectFormData();
+
+                // Place order
+                placeOrder(orderData);
             });
+
+            // ============================================
+            // INITIALIZE ON PAGE LOAD
+            // ============================================
 
             if (document.readyState === 'loading') {
                 document.addEventListener('DOMContentLoaded', init);

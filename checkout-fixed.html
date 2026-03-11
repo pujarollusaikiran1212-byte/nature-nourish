@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Nature Nourish</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header class="navbar">
+        <div class="container">
+            <div class="logo">Nature Nourish</div>
+            <nav class="nav-links">
+                <a href="index.html#home">Home</a>
+                <a href="index.html#products">Products</a>
+                <a href="index.html#cart">Cart</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="checkout-section">
+        <div class="container">
+            <h2 class="section-title">Checkout</h2>
+
+            <div id="checkout-container">
+                <div class="checkout-container">
+                    <div class="order-review">
+                        <h3>Order Summary</h3>
+                        <div id="checkout-items"></div>
+                        <div class="checkout-total">
+                            <h4>Total: Rs.<span id="total">0</span></h4>
+                        </div>
+
+                        <form class="checkout-form" id="checkout-form">
+                            <h3>Delivery Information</h3>
+                            <input type="text" id="full-name" placeholder="Full Name" required>
+                            <input type="email" id="email" placeholder="Email Address" required>
+                            <input type="tel" id="phone" placeholder="Mobile Number (10 digits)" pattern="[0-9]{10}"
+                                required>
+                            <select id="state" required>
+                                <option value="">Select State</option>
+                                <option value="Andhra Pradesh">Andhra Pradesh</option>
+                                <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                                <option value="Assam">Assam</option>
+                                <option value="Bihar">Bihar</option>
+                                <option value="Chhattisgarh">Chhattisgarh</option>
+                                <option value="Goa">Goa</option>
+                                <option value="Gujarat">Gujarat</option>
+                                <option value="Haryana">Haryana</option>
+                                <option value="Himachal Pradesh">Himachal Pradesh</option>
+                                <option value="Jharkhand">Jharkhand</option>
+                                <option value="Karnataka">Karnataka</option>
+                                <option value="Kerala">Kerala</option>
+                                <option value="Madhya Pradesh">Madhya Pradesh</option>
+                                <option value="Maharashtra">Maharashtra</option>
+                                <option value="Manipur">Manipur</option>
+                                <option value="Meghalaya">Meghalaya</option>
+                                <option value="Mizoram">Mizoram</option>
+                                <option value="Nagaland">Nagaland</option>
+                                <option value="Odisha">Odisha</option>
+                                <option value="Punjab">Punjab</option>
+                                <option value="Rajasthan">Rajasthan</option>
+                                <option value="Sikkim">Sikkim</option>
+                                <option value="Tamil Nadu">Tamil Nadu</option>
+                                <option value="Telangana">Telangana</option>
+                                <option value="Tripura">Tripura</option>
+                                <option value="Uttar Pradesh">Uttar Pradesh</option>
+                                <option value="Uttarakhand">Uttarakhand</option>
+                                <option value="West Bengal">West Bengal</option>
+                                <option value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</option>
+                                <option value="Chandigarh">Chandigarh</option>
+                                <option value="Dadra and Nagar Haveli and Daman and Diu">Dadra and Nagar Haveli and
+                                    Daman and Diu</option>
+                                <option value="Delhi">Delhi</option>
+                                <option value="Jammu and Kashmir">Jammu and Kashmir</option>
+                                <option value="Ladakh">Ladakh</option>
+                                <option value="Lakshadweep">Lakshadweep</option>
+                                <option value="Puducherry">Puducherry</option>
+                            </select>
+                            <input type="text" id="city" placeholder="City" required>
+                            <input type="text" id="pincode" placeholder="Postal Code (6 digits)" pattern="[0-9]{6}"
+                                required>
+                            <textarea id="address" placeholder="Complete Address" rows="4" required></textarea>
+
+                            <h3 style="margin-top: 2rem;">Payment Method</h3>
+                            <div class="payment-options">
+                                <label><input type="radio" name="payment" value="cod" checked> Cash on Delivery</label>
+                            </div>
+
+                            <!-- Price Summary Section -->
+                            <div class="price-summary">
+                                <h4>Price Details</h4>
+                                <div class="price-summary-box">
+                                    <div class="price-row">
+                                        <span>Subtotal</span>
+                                        <span>Rs.<span id="subtotal">0</span></span>
+                                    </div>
+                                    <div class="price-row">
+                                        <span>Shipping</span>
+                                        <span class="free-shipping">FREE</span>
+                                    </div>
+                                    <div class="price-row total">
+                                        <span>Total</span>
+                                        <span>Rs.<span id="summary-total">0</span></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="place-order-btn" id="place-order-btn">Place Order</button>
+                        </form>
+                    </div>
+
+                    <div id="empty-cart" style="display:none; text-align:center; padding: 60px;">
+                        <h3>Your cart is empty</h3>
+                        <p>Add products from the store first.</p>
+                        <a href="index.html#products" class="btn" style="display:inline-block; margin-top:15px;">Browse
+                            Products</a>
+                    </div>
+    </section>
+
+    <!-- Success Modal -->
+    <div id="success-modal" class="modal">
+        <div class="modal-content success-content">
+            <h2>Order Placed Successfully!</h2>
+            <p id="success-order-id"></p>
+            <p>Thank you for your order. We will contact you shortly.</p>
+            <button class="btn" onclick="window.location.href='order-confirmation.html'">View Order Details</button>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="modal" style="display:none;">
+        <div class="modal-content" style="text-align:center; padding: 40px;">
+            <div class="loading-spinner"></div>
+            <p>Placing your order...</p>
+            <p style="font-size: 0.9em; color: #666;">Please do not close this page</p>
+        </div>
+    </div>
+
+    <!-- Error Modal -->
+    <div id="error-modal" class="modal">
+        <div class="modal-content">
+            <h2 style="color: #dc3545;">Order Failed</h2>
+            <p id="error-message"></p>
+            <button class="btn" onclick="document.getElementById('error-modal').style.display='none'">Try Again</button>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // CONFIGURATION - Railway Backend URL
+        // ============================================
+
+        // IMPORTANT: Use FULL backend URL, NOT relative path
+        // This ensures orders work on all networks (Jio, Airtel, WiFi, etc.)
+        var API_BASE_URL = 'https://nature-nourish-production.up.railway.app';
+        var API_ORDERS_ENDPOINT = '/api/orders';
+
+        var cartItems = [];
+
+        // ============================================
+        // INITIALIZATION
+        // ============================================
+
+        function init() {
+            console.log('Checkout init - Loading cart...');
+            loadCart();
+        }
+
+        function loadCart() {
+            try {
+                // Try checkoutCart first, then fall back to cart
+                var cartData = localStorage.getItem('checkoutCart') || localStorage.getItem('cart');
+
+                if (cartData && cartData !== 'null' && cartData !== 'undefined') {
+                    cartItems = JSON.parse(cartData);
+                }
+
+                console.log('Cart items loaded:', cartItems);
+
+                if (!cartItems || !cartItems.length) {
+                    showEmptyCart();
+                } else {
+                    renderCheckout();
+                }
+            } catch (e) {
+                console.error('Error loading cart:', e);
+                showEmptyCart();
+            }
+        }
+
+        function showEmptyCart() {
+            document.getElementById('checkout-container').style.display = 'none';
+            document.getElementById('empty-cart').style.display = 'block';
+        }
+
+        // ============================================
+        // PRODUCT IMAGE MAPPING
+        // ============================================
+
+        function getProductImage(name) {
+            var images = {
+                'Solar Calm': 'solar calm.jpeg',
+                'Clearwave': 'clear wave.jpeg',
+                'Milk Cloud': 'milk cloud.jpeg',
+                'Glow Dust': 'glow dust.jpeg',
+                'Lavender Bliss': 'lavender bliss.jpeg',
+                'Rose Petal': 'rose petal.jpeg',
+                'Charcoal Cleanse': 'charcoal.jpeg',
+                'Charcoal': 'charcoal.jpeg',
+                'Aloe Vera Glow': 'aloe vera.jpeg',
+                'Aloe Vera': 'aloe vera.jpeg'
+            };
+            var cleanName = name ? name.replace(' (Bundle)', '').trim() : '';
+            return images[cleanName] || 'https://via.placeholder.com/80';
+        }
+
+        // ============================================
+        // RENDER CHECKOUT
+        // ============================================
+
+        function renderCheckout() {
+            document.getElementById('checkout-container').style.display = 'block';
+            document.getElementById('empty-cart').style.display = 'none';
+
+            var container = document.getElementById('checkout-items');
+            var html = '';
+            var total = 0;
+
+            for (var i = 0; i < cartItems.length; i++) {
+                var item = cartItems[i];
+                var qty = item.quantity || 1;
+                var price = item.price || 0;
+                var itemTotal = price * qty;
+                total += itemTotal;
+                var imageSrc = item.image || getProductImage(item.name);
+
+                html += '<div class="checkout-item">';
+                html += '<img src="' + imageSrc + '" alt="' + (item.name || 'Product') + '">';
+                html += '<div class="checkout-item-details">';
+                html += '<div class="checkout-item-name">' + (item.name || 'Product') + '</div>';
+                html += '<div class="checkout-item-price">Rs.' + price + ' x ' + qty + '</div>';
+                html += '</div>';
+                html += '<div class="checkout-item-total">Rs.' + itemTotal + '</div>';
+                html += '</div>';
+            }
+
+            container.innerHTML = html || '<p>No items</p>';
+
+            // Update all total displays
+            document.getElementById('total').textContent = total;
+            document.getElementById('subtotal').textContent = total;
+            document.getElementById('summary-total').textContent = total;
+        }
+
+        // ============================================
+        // VALIDATION FUNCTIONS
+        // ============================================
+
+        function validateForm() {
+            var errors = [];
+
+            var name = document.getElementById('full-name').value.trim();
+            var email = document.getElementById('email').value.trim();
+            var phone = document.getElementById('phone').value.trim();
+            var state = document.getElementById('state').value;
+            var city = document.getElementById('city').value.trim();
+            var pincode = document.getElementById('pincode').value.trim();
+            var address = document.getElementById('address').value.trim();
+
+            // Validate name
+            if (!name) {
+                errors.push('Please enter your full name');
+            } else if (name.length < 2) {
+                errors.push('Name must be at least 2 characters');
+            }
+
+            // Validate email
+            if (!email) {
+                errors.push('Please enter your email address');
+            } else if (!isValidEmail(email)) {
+                errors.push('Please enter a valid email address');
+            }
+
+            // Validate phone
+            if (!phone) {
+                errors.push('Please enter your phone number');
+            } else if (!/^\d{10}$/.test(phone)) {
+                errors.push('Phone number must be exactly 10 digits');
+            }
+
+            // Validate state
+            if (!state) {
+                errors.push('Please select your state');
+            }
+
+            // Validate city
+            if (!city) {
+                errors.push('Please enter your city');
+            }
+
+            // Validate pincode
+            if (!pincode) {
+                errors.push('Please enter your postal code');
+            } else if (!/^\d{6}$/.test(pincode)) {
+                errors.push('Postal code must be exactly 6 digits');
+            }
+
+            // Validate address
+            if (!address) {
+                errors.push('Please enter your complete address');
+            } else if (address.length < 10) {
+                errors.push('Please enter a complete address (at least 10 characters)');
+            }
+
+            // Validate cart
+            if (!cartItems || !cartItems.length) {
+                errors.push('Your cart is empty');
+            }
+
+            return errors;
+        }
+
+        function isValidEmail(email) {
+            var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+
+        // ============================================
+        // COLLECT FORM DATA
+        // ============================================
+
+        function collectFormData() {
+            var name = document.getElementById('full-name').value.trim();
+            var email = document.getElementById('email').value.trim();
+            var phone = document.getElementById('phone').value.trim();
+            var state = document.getElementById('state').value;
+            var city = document.getElementById('city').value.trim();
+            var pincode = document.getElementById('pincode').value.trim();
+            var address = document.getElementById('address').value.trim();
+
+            // Get payment method
+            var paymentMethodRadio = document.querySelector('input[name="payment"]:checked');
+            var paymentMethod = paymentMethodRadio ? paymentMethodRadio.value : 'cod';
+
+            // Calculate totals from cart items
+            var total = 0;
+            var items = [];
+
+            for (var i = 0; i < cartItems.length; i++) {
+                var item = cartItems[i];
+                var qty = item.quantity || 1;
+                var price = item.price || 0;
+                var itemTotal = price * qty;
+                total += itemTotal;
+
+                items.push({
+                    name: item.name,
+                    price: price,
+                    quantity: qty
+                });
+            }
+
+            // Return the order data in the format expected by backend
+            return {
+                // Generate unique order ID
+                orderId: 'ORD-' + Date.now() + '-' + Math.floor(Math.random() * 1000),
+
+                // Customer info
+                customerName: name,
+                email: email,
+                phone: phone,
+                address: address,
+                city: city,
+                state: state,
+                pincode: pincode,
+                postalCode: pincode, // Also send as postalCode for compatibility
+
+                // Items
+                items: items,
+
+                // Totals
+                subtotal: total,
+                total: total,
+
+                // Payment
+                paymentMethod: paymentMethod,
+
+                // Additional info
+                orderSource: 'Website'
+            };
+        }
+
+        // ============================================
+        // PLACE ORDER - Main Function
+        // ============================================
+
+        function placeOrder(orderData) {
+            var btn = document.getElementById('place-order-btn');
+            btn.textContent = 'Placing Order...';
+            btn.disabled = true;
+
+            // Show loading overlay
+            var loadingOverlay = document.getElementById('loading-overlay');
+            if (loadingOverlay) {
+                loadingOverlay.style.display = 'block';
+            }
+
+            // Use the full API URL - critical for mobile networks
+            var apiUrl = API_BASE_URL + API_ORDERS_ENDPOINT;
+
+            console.log('Submitting order to:', apiUrl);
+            console.log('Order data:', JSON.stringify(orderData));
+
+            // Make the API call with timeout and retry logic
+            submitOrderWithRetry(apiUrl, orderData, 3, 0);
+        }
+
+        // ============================================
+        // NETWORK ERROR HANDLING WITH RETRY
+        // ============================================
+
+        function submitOrderWithRetry(url, orderData, maxRetries, currentRetry) {
+            var controller = new AbortController();
+            var timeoutId = setTimeout(function () {
+                controller.abort();
+            }, 30000); // 30 second timeout
+
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(orderData),
+                signal: controller.signal
+            })
+                .then(function (response) {
+                    clearTimeout(timeoutId);
+
+                    if (!response.ok) {
+                        return response.json().then(function (err) {
+                            throw new Error(err.message || 'Server error: ' + response.status);
+                        });
+                    }
+                    return response.json();
+                })
+                .then(function (data) {
+                    clearTimeout(timeoutId);
+                    console.log('Order saved successfully:', data);
+
+                    // Hide loading
+                    var loadingOverlay = document.getElementById('loading-overlay');
+                    if (loadingOverlay) {
+                        loadingOverlay.style.display = 'none';
+                    }
+
+                    // Handle successful order
+                    handleOrderSuccess(data, orderData);
+                })
+                .catch(function (error) {
+                    clearTimeout(timeoutId);
+                    console.error('Error placing order:', error);
+
+                    // Check if it's a network error and we can retry
+                    var isNetworkError = error.name === 'AbortError' ||
+                        error.message.includes('network') ||
+                        error.message.includes('Failed to fetch');
+
+                    if (isNetworkError && currentRetry < maxRetries) {
+                        var retryCount = currentRetry + 1;
+                        console.log('Network error. Retrying (' + retryCount + '/' + maxRetries + ')...');
+
+                        // Show retry message
+                        var btn = document.getElementById('place-order-btn');
+                        btn.textContent = 'Retrying... (' + retryCount + '/' + maxRetries + ')';
+
+                        // Wait before retrying (exponential backoff)
+                        setTimeout(function () {
+                            submitOrderWithRetry(url, orderData, maxRetries, retryCount);
+                        }, 2000 * retryCount); // 2s, 4s, 6s delay
+                    } else {
+                        // No more retries or not a network error
+                        handleOrderError(error);
+                    }
+                });
+        }
+
+        // ============================================
+        // ORDER SUCCESS HANDLER
+        // ============================================
+
+        function handleOrderSuccess(data, orderData) {
+            var btn = document.getElementById('place-order-btn');
+            btn.textContent = 'Order Placed!';
+            btn.disabled = false;
+
+            // Store order ID for confirmation page
+            var orderId = data.orderId || orderData.orderId;
+            localStorage.setItem('lastOrderId', orderId);
+            localStorage.setItem('lastOrderData', JSON.stringify(orderData));
+
+            // Clear cart from localStorage
+            localStorage.removeItem('cart');
+            localStorage.removeItem('checkoutCart');
+
+            // Show success modal
+            var successModal = document.getElementById('success-modal');
+            var orderIdElement = document.getElementById('success-order-id');
+
+            if (orderIdElement) {
+                orderIdElement.textContent = 'Order ID: ' + orderId;
+            }
+
+            if (successModal) {
+                successModal.style.display = 'block';
+            }
+
+            // Log success
+            console.log('Order completed successfully!');
+        }
+
+        // ============================================
+        // ORDER ERROR HANDLER
+        // ============================================
+
+        function handleOrderError(error) {
+            // Hide loading
+            var loadingOverlay = document.getElementById('loading-overlay');
+            if (loadingOverlay) {
+                loadingOverlay.style.display = 'none';
+            }
+
+            var btn = document.getElementById('place-order-btn');
+            btn.textContent = 'Place Order';
+            btn.disabled = false;
+
+            // Show error modal
+            var errorModal = document.getElementById('error-modal');
+            var errorMessage = document.getElementById('error-message');
+
+            var errorText = 'Failed to place order. ';
+
+            if (error.name === 'AbortError') {
+                errorText += 'The request timed out. Please check your internet connection and try again.';
+            } else if (error.message.includes('network') || error.message.includes('Failed to fetch')) {
+                errorText += 'Network error. Please check your internet connection (Jio/Airtel/WiFi) and try again.';
+            } else {
+                errorText += error.message || 'Please try again.';
+            }
+
+            if (errorMessage) {
+                errorMessage.textContent = errorText;
+            }
+
+            if (errorModal) {
+                errorModal.style.display = 'block';
+            }
+        }
+
+        // ============================================
+        // FORM SUBMIT HANDLER
+        // ============================================
+
+        document.getElementById('checkout-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            // Validate form
+            var errors = validateForm();
+
+            if (errors.length > 0) {
+                alert('Please fix the following errors:\n\n' + errors.join('\n'));
+                return;
+            }
+
+            // Collect form data
+            var orderData = collectFormData();
+
+            // Place order
+            placeOrder(orderData);
+        });
+
+        // ============================================
+        // INITIALIZE ON PAGE LOAD
+        // ============================================
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+    </script>
+</body>
+
+</html>

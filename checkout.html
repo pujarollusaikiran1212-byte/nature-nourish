@@ -30,7 +30,7 @@
                         <h3>Order Summary</h3>
                         <div id="checkout-items"></div>
                         <div class="checkout-total">
-                            <h4>Total: Rs.<span id="checkout-total">0</span></h4>
+                            <h4>Total: Rs.<span id="total">0</span></h4>
                         </div>
 
                         <form class="checkout-form" id="checkout-form">
@@ -188,7 +188,7 @@
                 }
 
                 container.innerHTML = html || '<p>No items</p>';
-                document.getElementById('checkout-total').textContent = total;
+                document.getElementById('total').textContent = total;
             }
 
             document.getElementById('checkout-form').addEventListener('submit', function (e) {

@@ -197,12 +197,12 @@
                     var imageSrc = item.image || getProductImage(item.name);
 
                     html += '<div class="checkout-item">';
-                    html += '<img src="' + imageSrc + '" alt="' + (item.name || 'Product') + '" style="width:60px;height:60px;object-fit:cover;border-radius:6px;margin-right:12px;">';
-                    html += '<div style="flex:1;">';
-                    html += '<div style="font-weight:500;">' + (item.name || 'Product') + '</div>';
-                    html += '<div style="color:#666;font-size:0.9rem;">Rs.' + price + ' x ' + qty + '</div>';
+                    html += '<img src="' + imageSrc + '" alt="' + (item.name || 'Product') + '">';
+                    html += '<div class="checkout-item-details">';
+                    html += '<div class="checkout-item-name">' + (item.name || 'Product') + '</div>';
+                    html += '<div class="checkout-item-price">Rs.' + price + ' x ' + qty + '</div>';
                     html += '</div>';
-                    html += '<div style="font-weight:600;">Rs.' + itemTotal + '</div>';
+                    html += '<div class="checkout-item-total">Rs.' + itemTotal + '</div>';
                     html += '</div>';
                 }
 

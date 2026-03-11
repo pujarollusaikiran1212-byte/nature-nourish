@@ -454,6 +454,23 @@ p {
     object-fit: cover;
 }
 
+/* Product Image Responsive Fix */
+.product-image img {
+    width: 100%;
+    height: auto;
+    max-height: 500px;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto;
+}
+
+@media screen and (min-width:1024px) {
+    .product-image img {
+        max-width: 600px;
+        max-height: 450px;
+    }
+}
+
 .image-overlay {
     position: absolute;
     top: 16px;

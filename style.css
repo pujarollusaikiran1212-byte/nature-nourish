@@ -862,7 +862,8 @@ p {
 }
 
 .checkout-form input,
-.checkout-form textarea {
+.checkout-form textarea,
+.checkout-form select {
     width: 100%;
     padding: 14px;
     border: 1px solid var(--beige-soft);
@@ -870,6 +871,13 @@ p {
     font-size: 0.95rem;
     background: var(--bg-white);
     margin-bottom: 1rem;
+}
+
+.checkout-form select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
 }
 
 .checkout-form input:focus,

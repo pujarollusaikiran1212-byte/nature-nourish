@@ -12,7 +12,6 @@
         rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <style>
-        /* Checkout Page Specific Styles */
         .checkout-page {
             padding-top: 100px;
             min-height: 100vh;
@@ -82,11 +81,6 @@
             object-fit: cover;
             border-radius: var(--radius-sm);
             background: var(--bg-secondary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            color: var(--brown-luxury);
         }
 
         .order-item-details {
@@ -305,33 +299,28 @@
 </head>
 
 <body>
-    <!-- Navigation -->
     <header class="navbar">
         <div class="container">
-            <div class="logo">🌿 Nature Nourish</div>
+            <div class="logo">Nature Nourish</div>
             <nav class="nav-links">
                 <a href="index.html#home">Home</a>
                 <a href="index.html#products">Products</a>
-                <a href="index.html#cart">🛒 Cart (<span id="cart-count">0</span>)</a>
+                <a href="index.html#cart">Cart (<span id="cart-count">0</span>)</a>
             </nav>
         </div>
     </header>
 
-    <!-- Empty Cart Message -->
     <div id="empty-cart" class="empty-cart" style="display: none;">
         <h2>Your Cart is Empty</h2>
         <p>Looks like you haven't added any products yet.</p>
         <a href="index.html#products" class="btn-browse">Browse Products</a>
     </div>
 
-    <!-- Checkout Page -->
     <div id="checkout-page" class="checkout-page">
-        <!-- Error container -->
         <div id="error-container" style="display: none; max-width: 1100px; margin: 20px auto; padding: 0 20px;">
             <div id="error-message" class="error-message"></div>
 
             <div class="checkout-container">
-                <!-- Left Column - Form -->
                 <div class="checkout-main">
                     <h2 class="section-title">Order Summary</h2>
                     <div id="order-items">
@@ -419,54 +408,49 @@
                     </form>
                 </div>
 
-                <!-- Right Column - Price Summary -->
                 <div class="checkout-sidebar">
                     <div class="price-summary">
                         <h3
                             style="font-family: 'Playfair Display', serif; margin-bottom: 20px; color: var(--text-dark);">
                             Price Details</h3>
-                        <div class="price-row"><span>Subtotal</span><span id="subtotal">₹0</span></div>
+                        <div class="price-row"><span>Subtotal</span><span id="subtotal">0</span></div>
                         <div class="price-row"><span>Shipping</span><span style="color: #28a745;">FREE</span></div>
-                        <div class="price-row total"><span>Total</span><span id="total">₹0</span></div>
+                        <div class="price-row total"><span>Total</span><span id="total">0</span></div>
                     </div>
                 </div>
 
-                <!-- Success Modal -->
                 <div id="success-modal" class="success-modal">
                     <div class="success-content">
-                        <div class="success-icon">✅</div>
+                        <div class="success-icon"></div>
                         <h2>Order Placed Successfully!</h2>
                         <p id="order-id"></p>
-                        <p>Thank you for your order. We will deliver to your address soon!</p>
+                        <p>Thank you for your order!</p>
                         <a href="index.html#products" class="btn-browse" style="margin-top: 20px;">Continue Shopping</a>
                     </div>
 
                     <script>
-                        // Configuration
                         const API_URL = 'https://nature-nourish-production.up.railway.app';
-
                         console.log('Checkout initializing...');
 
-                        // Global state
                         let checkoutItems = [];
                         let isSubmitting = false;
 
-                        // Product emoji map
-                        function getProductEmoji(name) {
-                            const emojis = {
-                                'Solar Calm': '☀️',
-                                'Clearwave': '🌊',
-                                'Milk Cloud': '☁️',
-                                'Glow Dust': '✨',
-                                'Lavender Bliss': '💜',
-                                'Rose Petal': '🌹',
-                                'Charcoal Cleanse': '⚫',
-                                'Aloe Vera Glow': '🌿'
+                        function getProductImage(productName) {
+                            const cleanName = productName.replace(' (Bundle)', '');
+                            const images = {
+                                'Solar Calm': 'solar calm.jpeg',
+                                'Clearwave': 'clear wave.jpeg',
+                                'Milk Cloud': 'milk cloud.jpeg',
+                                'Glow Dust': 'glow dust.jpeg',
+                                'Lavender Bliss': 'lavender bliss.jpeg',
+                                'Rose Petal': 'rose petal.jpeg',
+                                'Charcoal Cleanse': 'charcoal.jpeg',
+                                'Aloe Vera Glow': 'aloe vera.jpeg'
                             };
-                            return emojis[name] || '🧴';
+                            const img = images[cleanName];
+                            return img ? 'https://naturenourish.in/' + encodeURIComponent(img) : '';
                         }
 
-                        // Show error
                         function showError(message) {
                             const errorContainer = document.getElementById('error-container');
                             const errorMessage = document.getElementById('error-message');
@@ -481,19 +465,21 @@
                             if (errorContainer) errorContainer.style.display = 'none';
                         }
 
-                        // Initialize
                         document.addEventListener('DOMContentLoaded', function () {
                             console.log('Checkout loaded');
                             updateCartCount();
                             loadCheckoutItems();
                         });
 
-                        // Update cart count in header
                         function updateCartCount() {
                             try {
-                                const savedCart = localStorage.getItem('cart');
-                                if (savedCart) {
-                                    const cart = JSON.parse(savedCart);
+                                let cartData = localStorage.getItem('checkoutCart');
+                                if (!cartData || cartData === 'null') {
+                                    cartData = localStorage.getItem('cart');
+                                }
+
+                                if (cartData && cartData !== 'null') {
+                                    const cart = JSON.parse(cartData);
                                     if (Array.isArray(cart)) {
                                         const count = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
                                         document.getElementById('cart-count').textContent = count;
@@ -504,7 +490,6 @@
                             }
                         }
 
-                        // Load checkout items
                         function loadCheckoutItems() {
                             console.log('Loading checkout items...');
                             hideError();
@@ -514,34 +499,48 @@
 
                                 // Try checkoutCart first
                                 const checkoutCart = localStorage.getItem('checkoutCart');
-                                if (checkoutCart && checkoutCart !== 'null' && checkoutCart !== '[]') {
+                                console.log('checkoutCart:', checkoutCart);
+                                if (checkoutCart && checkoutCart !== 'null' && checkoutCart !== '[]' && checkoutCart !== 'undefined') {
                                     try {
                                         cartData = JSON.parse(checkoutCart);
-                                    } catch (e) { }
+                                        console.log('Parsed checkoutCart:', cartData);
+                                    } catch (e) {
+                                        console.error('Error parsing checkoutCart:', e);
+                                    }
                                 }
 
                                 // Try cart
-                                if (!cartData || cartData.length === 0) {
+                                if (!cartData || !Array.isArray(cartData) || cartData.length === 0) {
                                     const cart = localStorage.getItem('cart');
-                                    if (cart && cart !== 'null' && cart !== '[]') {
+                                    console.log('cart:', cart);
+                                    if (cart && cart !== 'null' && cart !== '[]' && cart !== 'undefined') {
                                         try {
                                             cartData = JSON.parse(cart);
-                                        } catch (e) { }
+                                            console.log('Parsed cart:', cartData);
+                                        } catch (e) {
+                                            console.error('Error parsing cart:', e);
+                                        }
                                     }
                                 }
 
                                 // Try directProduct
                                 if (!cartData || cartData.length === 0) {
                                     const directProduct = localStorage.getItem('directProduct');
-                                    if (directProduct && directProduct !== 'null') {
+                                    console.log('directProduct:', directProduct);
+                                    if (directProduct && directProduct !== 'null' && directProduct !== 'undefined') {
                                         try {
                                             const product = JSON.parse(directProduct);
                                             if (product && product.name) {
                                                 cartData = [product];
+                                                console.log('Parsed directProduct:', product);
                                             }
-                                        } catch (e) { }
+                                        } catch (e) {
+                                            console.error('Error parsing directProduct:', e);
+                                        }
                                     }
                                 }
+
+                                console.log('Final cartData:', cartData);
 
                                 if (cartData && Array.isArray(cartData) && cartData.length > 0) {
                                     checkoutItems = cartData;
@@ -556,13 +555,11 @@
                             }
                         }
 
-                        // Show empty cart
                         function showEmptyCart() {
                             document.getElementById('checkout-page').style.display = 'none';
                             document.getElementById('empty-cart').style.display = 'block';
                         }
 
-                        // Render checkout
                         function renderCheckout() {
                             document.getElementById('checkout-page').style.display = 'block';
                             document.getElementById('empty-cart').style.display = 'none';
@@ -573,7 +570,6 @@
                             console.log('Checkout rendered with', checkoutItems.length, 'items');
                         }
 
-                        // Display order items
                         function displayOrderItems() {
                             const container = document.getElementById('order-items');
                             if (!container) return;
@@ -588,22 +584,22 @@
                                 const qty = parseInt(item.quantity) || 1;
                                 const price = parseFloat(item.price) || 0;
                                 const total = price * qty;
-                                const emoji = getProductEmoji(item.name);
+
+                                let imageSrc = item.image || getProductImage(item.name);
 
                                 html += '<div class="order-item">';
-                                html += '<div class="order-item-image">' + emoji + '</div>';
+                                html += '<img src="' + imageSrc + '" alt="' + (item.name || 'Product') + '" class="order-item-image" onerror="this.style.display=\'none\'">';
                                 html += '<div class="order-item-details">';
                                 html += '<div class="order-item-name">' + (item.name || 'Product') + '</div>';
-                                html += '<div class="order-item-price">₹' + price + ' × ' + qty + '</div>';
+                                html += '<div class="order-item-price">Rs.' + price + ' x ' + qty + '</div>';
                                 html += '</div>';
-                                html += '<div class="order-item-total">₹' + total + '</div>';
+                                html += '<div class="order-item-total">Rs.' + total + '</div>';
                                 html += '</div>';
                             });
 
                             container.innerHTML = html;
                         }
 
-                        // Calculate totals
                         function calculateTotals() {
                             let subtotal = 0;
                             checkoutItems.forEach(function (item) {
@@ -611,13 +607,12 @@
                             });
                             const total = subtotal;
 
-                            document.getElementById('subtotal').textContent = '₹' + subtotal;
-                            document.getElementById('total').textContent = '₹' + total;
+                            document.getElementById('subtotal').textContent = 'Rs.' + subtotal;
+                            document.getElementById('total').textContent = 'Rs.' + total;
 
                             return { subtotal, total };
                         }
 
-                        // Form submission
                         document.getElementById('checkout-form').addEventListener('submit', function (e) {
                             e.preventDefault();
 
@@ -627,7 +622,6 @@
                                 return;
                             }
 
-                            // Get form values
                             const customer = {
                                 name: document.getElementById('full-name').value,
                                 email: document.getElementById('email').value,
@@ -638,7 +632,6 @@
                                 address: document.getElementById('address').value
                             };
 
-                            // Validate
                             if (!customer.name || !customer.email || !customer.mobile || !customer.state ||
                                 !customer.city || !customer.pinCode || !customer.address) {
                                 alert('Please fill all required fields');
@@ -647,14 +640,12 @@
 
                             const { subtotal, total } = calculateTotals();
 
-                            // Build products array
                             const products = checkoutItems.map(item => ({
                                 name: item.name,
                                 price: parseFloat(item.price) || 0,
                                 quantity: parseInt(item.quantity) || 1
                             }));
 
-                            // Build order
                             const order = {
                                 orderId: 'ORD-' + Date.now(),
                                 customerName: customer.name,
@@ -674,7 +665,6 @@
 
                             console.log('Submitting order:', order);
 
-                            // Update button
                             const btn = document.querySelector('.btn-place-order');
                             btn.textContent = 'Placing Order...';
                             btn.disabled = true;
@@ -683,7 +673,6 @@
                             submitOrder(order);
                         });
 
-                        // Submit order
                         async function submitOrder(order) {
                             const controller = new AbortController();
                             const timeoutId = setTimeout(() => controller.abort(), 30000);
@@ -707,12 +696,10 @@
                                 const data = await res.json();
                                 console.log('Order saved:', data);
 
-                                // Clear cart
                                 localStorage.removeItem('cart');
                                 localStorage.removeItem('checkoutCart');
                                 localStorage.removeItem('directProduct');
 
-                                // Show success
                                 document.getElementById('order-id').textContent = 'Order ID: ' + (data.orderId || order.orderId);
                                 document.getElementById('success-modal').style.display = 'block';
 
@@ -731,7 +718,6 @@
 
                                 alert(msg);
 
-                                // Reset button
                                 const btn = document.querySelector('.btn-place-order');
                                 btn.textContent = 'Place Order';
                                 btn.disabled = false;
@@ -739,7 +725,6 @@
                             }
                         }
 
-                        // Global error handler
                         window.onerror = function (msg, url, line, col, error) {
                             console.error('Error:', { msg, url, line, col, error });
                             showError('An error occurred. Please refresh the page.');
